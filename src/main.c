@@ -62,7 +62,7 @@ static void quitDialogCancel( GtkWidget *widget, gpointer data ){
 void warn_missing_installer(GtkWidget *widget) {
         char msg1[1024];
 
-        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("ERROR:"), _("Could not launch installer:"), INSTALLER_BINARY);
+        //sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("ERROR:"), _("Could not launch installer:"), INSTALLER_BINARY);
 
         GtkWidget *label = gtk_label_new (&msg1[0]);
 
@@ -211,7 +211,7 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 
 	gtk_widget_show_all (GTK_WIDGET (applet->applet));
 
-	g_timeout_add(10000, (GtkFunction) applet_check_icon, (gpointer)applet);
+	//g_timeout_add(10000, (GtkFunction) applet_check_icon, (gpointer)applet);
 
 	applet_listener(applet);
 

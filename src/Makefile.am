@@ -15,8 +15,8 @@ libexec_PROGRAMS = streamer_applet
 streamer_applet_SOURCES = applet.h main.c 
 
 appletdir = $(datadir)/mate-panel/applets
-applet_DATA = org.mate.applets.SoftupdApplet.mate-panel-applet
+applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet
 
 servicedir = $(datadir)/dbus-1/services
-service_DATA = org.mate.panel.applet.SoftupdApplet.service
+service_DATA = org.mate.panel.applet.StreamerApplet.service
 

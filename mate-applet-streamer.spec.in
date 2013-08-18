@@ -66,8 +66,8 @@ rm -rf "${RPM_BUILD_ROOT}"
 %{iconsdir}/hicolor/22x22/apps/applet_streamer.png
 %{iconsdir}/hicolor/24x24/apps/applet_streamer.png
 %{iconsdir}/hicolor/32x32/apps/applet_streamer.png
-%{_datadir}/mate-panel/applets/org.mate.applets.SoftupdApplet.mate-panel-applet
-%{_datadir}/dbus-1/services/org.mate.panel.applet.SoftupdApplet.service
+%{_datadir}/mate-panel/applets/org.mate.applets.StreamerApplet.mate-panel-applet
+%{_datadir}/dbus-1/services/org.mate.panel.applet.StreamerApplet.service
 
 %changelog
 
