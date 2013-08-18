@@ -46,6 +46,7 @@ MAKEFILE_CC=`which gcc`
 AC_SUBST([MAKEFILE_CC])
 
 # libmatenotify or libnotify?
+EXIT_NOW="no"
 RPM_BUILDREQUIRES_NOTIFY=""
 RPM_REQUIRES_NOTIFY=""
 FORCE_NOTIFY="no"
@@ -104,7 +105,7 @@ fi
 # Check for packages
 PKG_CHECK_MODULES([GTK], [gtk+-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
-PKG_CHECK_MODULES([PKGKIT_BLIB], [packagekit-glib2])
+PKG_CHECK_MODULES([PKGKIT_GLIB], [packagekit-glib2])
 PKG_CHECK_MODULES([LIBMATEPANELAPPLET_4], [libmatepanelapplet-4.0], [FOUND_LMPA_4="yes"], [FOUND_LMPA_4="no"])
 PKG_CHECK_MODULES([LIBMATEPANELAPPLET_3], [libmatepanelapplet-3.0], [FOUND_LMPA_3="yes"], [FOUND_LMPA_3="no"])
 if test $FOUND_LMPA_4 = "yes" ; then
