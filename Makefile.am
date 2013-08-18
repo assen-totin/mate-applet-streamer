@@ -1,4 +1,4 @@
-# This file is a part of mate-applet-softupd
+# This file is a part of mate-applet-streamer
 # 
 # Author: Assen Totin <assen.totin@gmail.com>
 #
@@ -10,8 +10,8 @@ SUBDIRS = src images po
 
 dist_doc_DATA = AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README TODO
 
-EXTRA_DIST = mate-applet-softupd.spec
+EXTRA_DIST = mate-applet-streamer.spec
 
 rpm:
-	rpmbuild -bb --define "_builddir @TOPLEVELDIR@" mate-applet-softupd.spec
+	rpmbuild -bb --define "_builddir @TOPLEVELDIR@" mate-applet-streamer.spec
 
