@@ -1,0 +1,19 @@
+INSTALLATION
+============
+
+0. ./autogen.sh
+
+1. ./configure
+
+2. make
+
+3. (as root) make install
+
+
+
+UNINSTALL
+========
+
+make uninstall
+
+

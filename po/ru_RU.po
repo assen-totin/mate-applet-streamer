@@ -1,0 +1,61 @@
+# Russian translations for 1 package
+# Английские переводы для пакета 1.
+# Copyright (C) 2012 THE 1'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the SoftUpd package.
+# root <assen.totin@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-06-27 20:47+0300\n"
+"PO-Revision-Date: 2012-06-29 17:39+0300\n"
+"Last-Translator: root <assen.totin@gmail.com>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/main.c:46
+#, c-format
+msgid "Install updates?"
+msgstr "Обновить пакеты?"
+
+#: src/main.c:44
+#, c-format
+msgid "Pending updates: %u"
+msgstr "У %u пакетов есть обновления."
+
+#: src/main.c:77
+#, c-format
+msgid "You have %u updates. Click to proceed."
+msgstr "У %u пакетов есть обновления. Нажмите, чтобы продолжить."
+
+#: src/main.c:73 src/main.c:137
+msgid "Your system is up to date."
+msgstr "Новых пакетов нет."
+
+#: src/main.c:77
+#, c-format
+msgid "You have %u updates."
+msgstr "У %u пакетов есть обновления."
+
+#: src/main.c:73 src/main.c:137
+msgid "Software updates available."
+msgstr "Поступили новые пакеты."
+
+# src/main.c:73
+msgid "You have to update your system manually."
+msgstr "Вам надо установить обновления вручную."
+
+# src/main.c:73
+msgid "ERROR:"
+msgstr "ОШИБКА:"
+
+# src/main.c:73
+msgid "Could not launch installer:"
+msgstr "Не удалось запустить следующую программу:"
+

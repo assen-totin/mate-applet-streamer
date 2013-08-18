@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the SoftUpd package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-06-27 20:47+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.c:46
+#, c-format
+msgid "Install updates?"
+msgstr ""
+
+#: src/main.c:44
+#, c-format
+msgid "Pending updates: %u"
+msgstr ""
+
+#: src/main.c:77
+#, c-format
+msgid "You have %u updates. Click to proceed."
+msgstr ""
+
+#: src/main.c:73 src/main.c:137
+msgid "Your system is up to date."
+msgstr ""
+
+# src/main.c:73
+msgid "Software updates available."
+msgstr ""
+
+#: src/main.c:77
+#, c-format
+msgid "You have %u updates."
+msgstr ""
+
+# src/main.c:73
+msgid "You have to update your system manually."
+msgstr ""
+
+# src/main.c:73
+msgid "ERROR:"
+msgstr ""
+
+# src/main.c:73
+msgid "Could not launch installer:"
+msgstr ""
+
+

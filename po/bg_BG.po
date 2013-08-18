@@ -1,0 +1,60 @@
+# Bulgarian translations for SoftUpd package
+# Български превод за пакет SoftUpd.
+# Copyright (C) 2012 THE SoftUpd'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the SoftUpd package.
+# root <atotin@itdnet.net>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-06-27 20:47+0300\n"
+"PO-Revision-Date: 2012-06-27 21:04+0300\n"
+"Last-Translator: root <atotin@itdnet.net>\n"
+"Language-Team: Bulgarian\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/main.c:46
+#, c-format
+msgid "Install updates?"
+msgstr "Да ги инсталирам ли?"
+
+#: src/main.c:44
+#, c-format
+msgid "Pending updates: %u"
+msgstr "Чакащи пакети: %u"
+
+#: src/main.c:77
+#, c-format
+msgid "You have %u updates. Click to proceed."
+msgstr "Имате %u чакащи пакета. Щракнете с мишката."
+
+#: src/main.c:73 src/main.c:137
+msgid "Your system is up to date."
+msgstr "Нямате чакащи пакети."
+
+# src/main.c:73
+msgid "Software updates available."
+msgstr "Имате чакащи пакети."
+
+#: src/main.c:77
+#, c-format
+msgid "You have %u updates."
+msgstr "Имате %u чакащи пакета."
+
+# src/main.c:73
+msgid "You have to update your system manually."
+msgstr "Трябва ръчно да инсталирате пакетите."
+
+# src/main.c:73
+msgid "ERROR:"
+msgstr "ГРЕШКА:"
+
+# src/main.c:73
+msgid "Could not launch installer:"
+msgstr "Следната програма не може да бъде стартирана:"
+

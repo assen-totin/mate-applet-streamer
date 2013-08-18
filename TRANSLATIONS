@@ -1,0 +1,21 @@
+1. To create templates for translation: 
+
+# Get all strings from main.c
+xgettext -d streamer-s -k_ -o po/streamer.pot src/main.c
+
+2. To add your translation
+
+# Create a xx_XX directory inside po/
+mkdir po/xx_XX
+
+# Init your translation from template
+msginit -l xx_XX.UTF-8 -o po/xx_XX/streamer.po -i po/streamer.pot
+
+# Edit the new .po file and set the desired strings.
+
+3. To compile and install (will be automatically done by the Makefile):
+
+msgfmt -c -v -o po/xx_XX/streamer.mo po/xx_XX/streamer.po
+
+cp po/xx_XX/streamer.mo /usr/share/locale/xx_XX/LC_MESSAGES
+

@@ -1,0 +1,23 @@
+[Applet Factory]
+Id=StreamerAppletFactory
+Location=@LIBEXECDIR@/streamer_applet
+Name=Software Updates
+Name[en_GB]=Streamer Applet
+Name[bg_BG]=Радио аплет
+Name[ru_RU]=Радио аплет
+Description=Listen to online streams
+Description[en_GB]=Listen to online streams
+Description[bg_BG]=Слушайте онлайн радио
+Description[ru_RU]=Слушайте радио в сети
+
+[StreamerApplet]
+Name=Streamer Applet
+Name[en_GB]=Streamer Applet
+Name[bg_BG]=Радио аплет
+Name[ru_RU]=Радио аплет
+Description=Listen to online streams
+Description[en_GB]=Listen to online streams
+Description[bg_BG]=Слушайте онлайн радио
+Description[ru_RU]=Слушайте радио в сети
+Icon=applet_streamer
+MateComponentId=OAFIID:MATE_StreamerApplet
