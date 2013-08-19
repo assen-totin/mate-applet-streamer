@@ -46,7 +46,6 @@ MAKEFILE_CC=`which gcc`
 AC_SUBST([MAKEFILE_CC])
 
 # libmatenotify or libnotify?
-EXIT_NOW="no"
 RPM_BUILDREQUIRES_NOTIFY=""
 RPM_REQUIRES_NOTIFY=""
 FORCE_NOTIFY="no"
@@ -60,8 +59,7 @@ if test $FORCE_NOTIFY = "libmatenotify" ; then
 		RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libmatenotify-devel >= 1.2.0"
 		RPM_REQUIRES_NOTIFY="Requires: libmatenotify >= 1.2.0"
         else
-                EXIT_NOW="yes"
-                EXIT_MSG="Forced notification library $FORCE_NOTIFY not found. Cannot continue."
+                AC_MSG_ERROR(["Forced notification library $FORCE_NOTIFY not found. Cannot continue."])
         fi
 elif test $FORCE_NOTIFY = "libnotify" ; then
         if test $FOUND_LN = "yes" ; then
@@ -70,8 +68,7 @@ elif test $FORCE_NOTIFY = "libnotify" ; then
                 RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libnotify-devel >= 0.7.0"
                 RPM_REQUIRES_NOTIFY="Requires: libnotify >= 0.7.0"
         else
-                EXIT_NOW="yes"
-                EXIT_MSG="Forced notification library $FORCE_NOTIFY not found. Cannot continue."
+		AC_MSG_ERROR(["Forced notification library $FORCE_NOTIFY not found. Cannot continue."])
         fi
 else
 	if test $FOUND_LN = "yes" ; then
@@ -85,20 +82,76 @@ else
                 RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libmatenotify-devel >= 1.2.0"
                 RPM_REQUIRES_NOTIFY="Requires: libmatenotify >= 1.2.0"
 	else
-		EXIT_NOW="yes"
-		EXIT_MSG="Neither libnotify nor libmatenotify found. Cannot continue."
+		AC_MSG_ERROR(["Neither libnotify nor libmatenotify found. Cannot continue."])
 	fi
 fi
 
 AC_SUBST([RPM_BUILDREQUIRES_NOTIFY])
 AC_SUBST([RPM_REQUIRES_NOTIFY])
 
-if test $EXIT_NOW = "yes" ; then
-        echo
-        echo $EXIT_MSG
-        echo
-        exit
+# Check for GStreamer
+ECHO_BACKEND_GSTREAMER="no"
+FORCE_GSTREAMER="undef"
+TEST_GST_0_10="no"
+TEST_GST_1_0="no"
+HAVE_GSTREAMER="0"
+FOUND_GSTREAMER="no"
+FOUND_GSTREAMER_INTERFACES="no"
+FOUND_GSTREAMER_PLUGINS_BASE="no"
+FOUND_GSTREAMER_VIDEO="no"
+USE_GSTREAMER="no"
+RPM_REQUIRE_GSTREAMER=" "
+AC_ARG_ENABLE([gstreamer],[AS_HELP_STRING([--enable-gstreamer],[compile GStreamer version (default: try 1.0, if missing, try 0.10; to force, set to "1.0" or "0.10")])],[FORCE_GSTREAMER=$enableval])
+
+if test $FORCE_GSTREAMER = "1.0" ; then
+        TEST_GST_1_0="yes"
+elif test $FORCE_GSTREAMER = "0.10" ; then
+        TEST_GST_0_10="yes"
+elif test $FORCE_GSTREAMER = "undef" ; then
+        TEST_GST_0_10="yes";
+        TEST_GST_1_0="yes"
 fi
+
+if test $TEST_GST_0_10 = "yes" ; then
+        PKG_CHECK_MODULES([GSTREAMER_0_10], [gstreamer-0.10], [FOUND_GSTREAMER="0.10"], [FOUND_GSTREAMER="no"])
+        if test $FOUND_GSTREAMER = "0.10" ; then
+                PKG_CHECK_MODULES([GSTREAMER_INTERFACES_0_10], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
+                PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_0_10], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])
+        fi
+fi
+if test $TEST_GST_1_0 = "yes" ; then
+        PKG_CHECK_MODULES([GSTREAMER_1_0], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],[EMPTY=""])
+        if test $FOUND_GSTREAMER = "1.0" ; then
+                PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_1_0], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],[FOUND_GSTREAMER_PLUGINS_BASE="no"])
+                PKG_CHECK_MODULES([GSTREAMER_VIDEO_1_0], [gstreamer-video-1.0], [FOUND_GSTREAMER_VIDEO="yes"],[FOUND_GSTREAMER_VIDEO="no"])
+        fi
+fi
+
+if test $FOUND_GSTREAMER = "no" ; then
+        AC_MSG_ERROR(["*** GStreamer not found."])
+fi
+
+if test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+        AC_MSG_ERROR(["*** GStreamer found, but GStreamer-plugins-base not found."])
+elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+        AC_MSG_ERROR(["*** GStreamer found, but GStreamer-interfaces not found."])
+fi
+
+if test $FOUND_GSTREAMER = "0.10" ; then
+        RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
+        # Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
+        GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
+        GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
+        AC_DEFINE([HAVE_GST_0_10], [1], [GStreamer 0.10])
+elif test  $FOUND_GSTREAMER = "1.0" ; then
+        RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
+        GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0 gstreamer-video-1.0`
+        GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0 gstreamer-video-1.0`
+        AC_DEFINE([HAVE_GST_1_0], [1], [GStreamer 1.0])
+fi
+AC_SUBST([GSTREAMER_DASH_LIBS])
+AC_SUBST([GSTREAMER_DASH_CFLAGS])
+AC_SUBST([RPM_REQUIRE_GSTREAMER])
 
 # Checks for libraries.
 

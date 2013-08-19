@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  *  USA.
  *
- *  MATE Software Update applet written by Assen Totin <assen.totin@gmail.com>
+ *  MATE Streamer applet written by Assen Totin <assen.totin@gmail.com>
  *  
  */
 
@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <wait.h>
+#include <gst/gst.h>
 
 #ifdef HAVE_LIBMATENOTIFY
 	#include <libmatenotify/notify.h>
@@ -50,6 +51,7 @@ typedef struct {
 	char name[1024];
 	int status;
 	int unsigned timestamp;
+	GstElement *gstreamer_playbin2;
 } streamer_applet;
 
 // Prototypes
@@ -58,3 +60,8 @@ typedef struct {
 //void yum_main();
 //void aptcheck_main();
 //void aptget_main();
+
+void gstreamer_pause(streamer_applet *);
+void gstreamer_play(streamer_applet *);
+void gstreamer_init(streamer_applet *);
+

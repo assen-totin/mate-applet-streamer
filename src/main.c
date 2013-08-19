@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  *  USA.
  *
- *  MATE Software Update applet written by Assen Totin <assen.totin@gmail.com>
+ *  MATE Streamer applet written by Assen Totin <assen.totin@gmail.com>
  *  
  */
 

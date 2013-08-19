@@ -15,14 +15,11 @@ BuildRequires:  mate-panel-devel >= 1.3.0
 BuildRequires:  gettext-devel
 BuildRequires:  automake
 BuildRequires:  autoconf
-# Requires: and BuildRequires: for chosen backend
-@RPM_REQUIRES_BACKEND@
-@RPM_BUILDREQUIRES_BACKEND@
-@RPM_REQUIRES_INSTALLER@
-@RPM_BUILDREQUIRES_INSTALLER@
 # Requires: and BuildRequires: for chosen notification library
 @RPM_BUILDREQUIRES_NOTIFY@
 @RPM_REQUIRES_NOTIFY@
+# Requires: for GStreamer
+@RPM_REQUIRE_GSTREAMER@
 
 %description
 Software updates notification applet for the MATE desktop environment.
