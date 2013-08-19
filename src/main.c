@@ -96,22 +96,21 @@ static gboolean applet_on_left_click (GtkWidget *event_box, GdkEventButton *even
 		gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
 		// TODO: Record the current timestamp
 		
-		// TODO: tell the player to pause
-
+		// Tell the player to pause
+		gstreamer_pause(applet);
 		return TRUE;
 	}
 
         // If we are paused, then swap icon and pause
         if (applet->status == 0) {
 		applet->status = 1;
-                sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PAUSE);
+                sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PLAY);
                 sprintf(&msg[0], "%s%s", _("PAUSED: "), &applet->name[0]);
                 gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
                 gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
-                // TODO: tell the player to start
-                
+                // Tell the player to start
+                gstreamer_play(applet);
                 // TODO: reconnect if we have been paused for to long
-                
                 return TRUE;
 	}
                 
@@ -120,12 +119,10 @@ static gboolean applet_on_left_click (GtkWidget *event_box, GdkEventButton *even
 
 
 static gboolean applet_listener(streamer_applet *applet) {
-	#ifdef HAVE_YUM
-		g_timeout_add(REFRESH_TIME, (GtkFunction) yum_main, (gpointer)applet);
-		applet->loop = g_main_loop_new (NULL, FALSE);
-		g_main_loop_run (applet->loop);
-		return TRUE;
-	#endif
+	// Looks like we don't need this loop? 
+	//applet->loop = g_main_loop_new (NULL, FALSE);
+	//g_main_loop_run (applet->loop);
+	return TRUE;
 }
 
 
@@ -190,6 +187,11 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	sprintf(&applet->url[0], '\0');
 	// TODO: set applet->timestamp to current time
 
+	// TODO: Move the code to file loading function 
+	sprintf(&applet->url[0], "%s", "http://darik.hothost.bg");
+	sprintf(&applet->name[0], "%s", "Radio Gong");
+	gstreamer_init(applet);
+
 	// Get an image
 	char image_file[1024];
 	sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PAUSE);
@@ -202,7 +204,7 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	// Put the container into the applet
         gtk_container_add (GTK_CONTAINER (applet->applet), applet->event_box);
 
-        g_signal_connect (G_OBJECT (applet->event_box), "button_press_event", G_CALLBACK (applet_on_left_click), (gpointer)applet);
+        g_signal_connect(G_OBJECT(applet->event_box), "clicked", G_CALLBACK (applet_on_left_click), (gpointer)applet);
         g_signal_connect(G_OBJECT(applet->applet), "change_background", G_CALLBACK (applet_back_change), (gpointer)applet);
 	g_signal_connect(G_OBJECT(applet->applet), "destroy", G_CALLBACK(applet_destroy), (gpointer)applet);
 
