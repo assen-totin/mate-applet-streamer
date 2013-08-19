@@ -20,12 +20,12 @@
 APPLET_FLAGS=@APPLET_FLAGS@
 APPLET_LIBS=@APPLET_LIBS@
 
-AM_CPPFLAGS = @GTK_CFLAGS@ @APPLET_FLAGS@
-LDADD = @GTK_LIBS@ @APPLET_LIBS@
+AM_CPPFLAGS = @GTK_CFLAGS@ @APPLET_FLAGS@ @GSTREAMER_DASH_CFLAGS@
+LDADD = @GTK_LIBS@ @APPLET_LIBS@ @GSTREAMER_DASH_LIBS@
 
 libexec_PROGRAMS = streamer_applet
 
-streamer_applet_SOURCES = applet.h main.c 
+streamer_applet_SOURCES = applet.h main.c gstreamer.c 
 
 appletdir = $(datadir)/mate-panel/applets
 applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet
