@@ -76,15 +76,19 @@ void warn_missing_installer(GtkWidget *widget) {
         gtk_widget_show_all (GTK_WIDGET(quitDialog));
 }
 
-static gboolean applet_on_left_click (GtkWidget *event_box, GdkEventButton *event, streamer_applet *applet) {
+static gboolean applet_on_click (GtkWidget *event_box, GdkEventButton *event, streamer_applet *applet) {
 	static GtkWidget *label;
 	char msg[1024], image_file[1024];
+
+	// We only process left clicks here
+	if (event->button != 1)
+		return FALSE;
 
 	// No URL loaded? 
 	if (strlen(applet->url) == 0) {
 		push_notification(_("No stream selected."), _("Right-click to load one."), NULL);
 
-		return FALSE;
+		return TRUE;
 	}
 
 	// If we are playing, then swap icon and pause
@@ -105,24 +109,16 @@ static gboolean applet_on_left_click (GtkWidget *event_box, GdkEventButton *even
         if (applet->status == 0) {
 		applet->status = 1;
                 sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PLAY);
-                sprintf(&msg[0], "%s%s", _("PAUSED: "), &applet->name[0]);
+                sprintf(&msg[0], "%s%s", _("PLAYING: "), &applet->name[0]);
                 gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
                 gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
                 // Tell the player to start
                 gstreamer_play(applet);
-                // TODO: reconnect if we have been paused for to long
+                // TODO: reconnect if we have been paused for too long
                 return TRUE;
 	}
                 
 	return FALSE;
-}
-
-
-static gboolean applet_listener(streamer_applet *applet) {
-	// Looks like we don't need this loop? 
-	//applet->loop = g_main_loop_new (NULL, FALSE);
-	//g_main_loop_run (applet->loop);
-	return TRUE;
 }
 
 
@@ -183,14 +179,15 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 
 	// Init 
 	applet = g_malloc0(sizeof(streamer_applet));
+	applet->applet = applet_widget;
 	applet->status = 0;
 	sprintf(&applet->url[0], '\0');
 	// TODO: set applet->timestamp to current time
 
 	// TODO: Move the code to file loading function 
-	sprintf(&applet->url[0], "%s", "http://darik.hothost.bg");
-	sprintf(&applet->name[0], "%s", "Radio Gong");
-	gstreamer_init(applet);
+	//sprintf(&applet->url[0], "%s", "http://darik.hothost.bg");
+	//sprintf(&applet->name[0], "%s", "Radio Gong");
+	//gstreamer_init(applet);
 
 	// Get an image
 	char image_file[1024];
@@ -204,7 +201,7 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	// Put the container into the applet
         gtk_container_add (GTK_CONTAINER (applet->applet), applet->event_box);
 
-        g_signal_connect(G_OBJECT(applet->event_box), "clicked", G_CALLBACK (applet_on_left_click), (gpointer)applet);
+        g_signal_connect(G_OBJECT(applet->event_box), "button_press_event", G_CALLBACK (applet_on_click), (gpointer)applet);
         g_signal_connect(G_OBJECT(applet->applet), "change_background", G_CALLBACK (applet_back_change), (gpointer)applet);
 	g_signal_connect(G_OBJECT(applet->applet), "destroy", G_CALLBACK(applet_destroy), (gpointer)applet);
 
@@ -215,7 +212,8 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 
 	//g_timeout_add(10000, (GtkFunction) applet_check_icon, (gpointer)applet);
 
-	applet_listener(applet);
+        applet->loop = g_main_loop_new (NULL, FALSE);
+        g_main_loop_run (applet->loop);
 
 	return TRUE;
 }

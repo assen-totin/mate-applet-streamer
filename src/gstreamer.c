@@ -19,6 +19,7 @@
  */
 
 #include "applet.h"
+#include "../config.h"
 
 void gstreamer_pause(streamer_applet *applet) {
 	gst_element_set_state (applet->gstreamer_playbin2, GST_STATE_PAUSED);
@@ -36,18 +37,12 @@ void gstreamer_init(streamer_applet *applet) {
 	GstElement *pipeline = gst_pipeline_new ("my-pipeline");
 
 #ifdef HAVE_GST_0_10
-	applet->gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");
+	applet->gstreamer_playbin2 = gst_element_factory_make ("playbin2", NULL);
 #elif HAVE_GST_1_0
-	applet->gstreamer_playbin2 = gst_element_factory_make ("playbin", "playbin");
+	applet->gstreamer_playbin2 = gst_element_factory_make ("playbin", NULL);
 #endif
 
 	g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
-
-	GstElement *audiosink = gst_element_factory_make ("autoaudiosink", "audiosink");
-
-	gst_bin_add_many (GST_BIN (pipeline), audiosink, NULL);
-
-	g_object_set (G_OBJECT (applet->gstreamer_playbin2), "audio-sink", pipeline, NULL);
 
 	sleep(1);
 }
