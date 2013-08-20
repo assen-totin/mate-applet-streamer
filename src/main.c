@@ -48,8 +48,9 @@ void push_notification (gchar *title, gchar *body, gchar *icon) {
 
 
 static void quitDialogOK( GtkWidget *widget, gpointer data ){
-        streamer_applet *applet = data;
-        gtk_widget_destroy(applet->quitDialog);
+        //streamer_applet *applet = data;
+        GtkWidget *quitDialog = data;
+        gtk_widget_destroy(quitDialog);
 }
 
 
@@ -59,22 +60,75 @@ static void quitDialogCancel( GtkWidget *widget, gpointer data ){
 }
 
 
-void warn_missing_installer(GtkWidget *widget) {
+static void menu_cb_about (GtkAction *action, streamer_applet *applet) {
         char msg1[1024];
 
-        //sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("ERROR:"), _("Could not launch installer:"), INSTALLER_BINARY);
+        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
 
         GtkWidget *label = gtk_label_new (&msg1[0]);
 
-        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("Error"), GTK_WINDOW(widget), GTK_DIALOG_MODAL, NULL);
+        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 
         gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
 
         gtk_widget_show_all (GTK_WIDGET(quitDialog));
 }
+
+static void menu_cb_favourites (GtkAction *action, streamer_applet *applet) {
+        char msg1[1024];
+
+        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
+
+        GtkWidget *label = gtk_label_new (&msg1[0]);
+
+        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
+
+        gtk_widget_show_all (GTK_WIDGET(quitDialog));
+}
+
+static void menu_cb_recent (GtkAction *action, streamer_applet *applet) {
+        char msg1[1024];
+
+        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
+
+        GtkWidget *label = gtk_label_new (&msg1[0]);
+
+        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
+
+        gtk_widget_show_all (GTK_WIDGET(quitDialog));
+}
+
+
+static void menu_cb_all (GtkAction *action, streamer_applet *applet) {
+        char msg1[1024];
+
+        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
+
+        GtkWidget *label = gtk_label_new (&msg1[0]);
+
+        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
+
+        gtk_widget_show_all (GTK_WIDGET(quitDialog));
+}
+
 
 static gboolean applet_on_click (GtkWidget *event_box, GdkEventButton *event, streamer_applet *applet) {
 	static GtkWidget *label;
@@ -165,6 +219,14 @@ static void applet_destroy(MatePanelApplet *applet_widget, streamer_applet *appl
         return;
 }
 
+static const GtkActionEntry applet_menu_actions [] = {
+        { "Favourites", GTK_STOCK_PROPERTIES, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
+        { "Recent", GTK_STOCK_PROPERTIES, "_Recent", NULL, NULL, G_CALLBACK (menu_cb_recent) },
+        { "All", GTK_STOCK_PROPERTIES, "_All", NULL, NULL, G_CALLBACK (menu_cb_all) },
+        { "About", GTK_STOCK_ABOUT, NULL, "_About", NULL, G_CALLBACK (menu_cb_about) }
+};
+
+
 static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer data) {
 	streamer_applet *applet;
 
@@ -201,6 +263,12 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	// Put the container into the applet
         gtk_container_add (GTK_CONTAINER (applet->applet), applet->event_box);
 
+	// Menu
+	GtkActionGroup *action_group = gtk_action_group_new ("Streamer Applet Actions");
+	gtk_action_group_add_actions (action_group, applet_menu_actions, G_N_ELEMENTS (applet_menu_actions), applet);
+	mate_panel_applet_setup_menu_from_file(applet->applet, "/usr/share/mate-2.0/ui/streamer-applet-menu.xml", action_group);
+
+	// Signals
         g_signal_connect(G_OBJECT(applet->event_box), "button_press_event", G_CALLBACK (applet_on_click), (gpointer)applet);
         g_signal_connect(G_OBJECT(applet->applet), "change_background", G_CALLBACK (applet_back_change), (gpointer)applet);
 	g_signal_connect(G_OBJECT(applet->applet), "destroy", G_CALLBACK(applet_destroy), (gpointer)applet);

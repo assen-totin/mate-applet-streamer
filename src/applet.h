@@ -54,6 +54,19 @@ typedef struct {
 	GstElement *gstreamer_playbin2;
 } streamer_applet;
 
+static void menu_cb_favourites(GtkAction *, streamer_applet *);
+static void menu_cb_recent(GtkAction *, streamer_applet *);
+static void menu_cb_all(GtkAction *, streamer_applet *);
+static void menu_cb_about(GtkAction *, streamer_applet *);
+/*
+static const GtkActionEntry applet_menu_actions [] = {
+        { "Favourites", GTK_STOCK_PROPERTIES, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
+	{ "Recent", GTK_STOCK_PROPERTIES, "_Recent", NULL, NULL, G_CALLBACK (menu_cb_recent) },
+	{ "All", GTK_STOCK_PROPERTIES, "_All", NULL, NULL, G_CALLBACK (menu_cb_all) },
+        { "About", GTK_STOCK_ABOUT, NULL, "_About", NULL, G_CALLBACK (menu_cb_about) }
+};
+*/
+
 // Prototypes
 //gboolean packagekit_main();
 //int yumupdatesd_main();
