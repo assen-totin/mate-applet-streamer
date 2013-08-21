@@ -21,10 +21,6 @@
 #include "../config.h"
 #include "applet.h"
 
-#define _(String) gettext (String)
-
-void warn_missing_installer(GtkWidget *widget);
-
 void push_notification (gchar *title, gchar *body, gchar *icon) {
         NotifyNotification* notification;
 	GError* error = NULL;
@@ -43,90 +39,6 @@ void push_notification (gchar *title, gchar *body, gchar *icon) {
 
         g_object_unref (G_OBJECT (notification));
         notify_uninit ();
-}
-
-
-
-static void quitDialogOK( GtkWidget *widget, gpointer data ){
-        //streamer_applet *applet = data;
-        GtkWidget *quitDialog = data;
-        gtk_widget_destroy(quitDialog);
-}
-
-
-static void quitDialogCancel( GtkWidget *widget, gpointer data ){
-        GtkWidget *quitDialog = data;
-        gtk_widget_destroy(quitDialog);
-}
-
-
-static void menu_cb_about (GtkAction *action, streamer_applet *applet) {
-        char msg1[1024];
-
-        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
-
-        GtkWidget *label = gtk_label_new (&msg1[0]);
-
-        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
-
-        gtk_widget_show_all (GTK_WIDGET(quitDialog));
-}
-
-static void menu_cb_favourites (GtkAction *action, streamer_applet *applet) {
-        char msg1[1024];
-
-        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
-
-        GtkWidget *label = gtk_label_new (&msg1[0]);
-
-        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
-
-        gtk_widget_show_all (GTK_WIDGET(quitDialog));
-}
-
-static void menu_cb_recent (GtkAction *action, streamer_applet *applet) {
-        char msg1[1024];
-
-        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
-
-        GtkWidget *label = gtk_label_new (&msg1[0]);
-
-        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
-
-        gtk_widget_show_all (GTK_WIDGET(quitDialog));
-}
-
-
-static void menu_cb_all (GtkAction *action, streamer_applet *applet) {
-        char msg1[1024];
-
-        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
-
-        GtkWidget *label = gtk_label_new (&msg1[0]);
-
-        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
-
-        gtk_widget_show_all (GTK_WIDGET(quitDialog));
 }
 
 
@@ -246,6 +158,14 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	sprintf(&applet->url[0], '\0');
 	// TODO: set applet->timestamp to current time
 
+	// TODO: Check home dir, copy skel database
+	
+	// Connect DB
+	if (!sqlite_connect(applet)) {
+		push_notification(_("Streamer Applet Error"), _("Unable to connect to DB. Exiting."), NULL);
+		return FALSE;
+	} 
+
 	// TODO: Move the code to file loading function 
 	//sprintf(&applet->url[0], "%s", "http://darik.hothost.bg");
 	//sprintf(&applet->name[0], "%s", "Radio Gong");
@@ -277,8 +197,6 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), _("No stream selected. Right-click to load one."));
 
 	gtk_widget_show_all (GTK_WIDGET (applet->applet));
-
-	//g_timeout_add(10000, (GtkFunction) applet_check_icon, (gpointer)applet);
 
         applet->loop = g_main_loop_new (NULL, FALSE);
         g_main_loop_run (applet->loop);

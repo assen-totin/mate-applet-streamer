@@ -23,10 +23,14 @@
 #include <mate-panel-applet.h>
 #include <libintl.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <glib.h>
 #include <stdlib.h>
 #include <wait.h>
 #include <gst/gst.h>
+#include <sqlite3.h>
+#include <unistd.h>
+#include <pwd.h>
 
 #ifdef HAVE_LIBMATENOTIFY
 	#include <libmatenotify/notify.h>
@@ -34,12 +38,16 @@
 	#include <libnotify/notify.h>
 #endif
 
+#define _(String) gettext (String)
 #define APPLET_FACTORY "StreamerAppletFactory"
 #define APPLET_ID "StreamerApplet"
 #define APPLET_NAME "streamer"
 #define APPLET_ICON_PLAY "applet_streamer_play.png"
 #define APPLET_ICON_PAUSE "applet_streamer_pause.png"
 #define APPLET_VERSION "1"
+#define APPLET_HOME_DIR ".streamer_applet"
+#define APPLET_SQLITE_DB_FILENAME "streamer.sqlite"
+#define APPLET_SQLITE_DB_VERSION "1"
 
 typedef struct {
 	GMainLoop *loop;
@@ -51,6 +59,7 @@ typedef struct {
 	char name[1024];
 	int status;
 	int unsigned timestamp;
+	sqlite3 *sqlite;
 	GstElement *gstreamer_playbin2;
 } streamer_applet;
 

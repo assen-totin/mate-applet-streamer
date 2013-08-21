@@ -25,7 +25,7 @@ LDADD = @GTK_LIBS@ @APPLET_LIBS@ @GSTREAMER_DASH_LIBS@
 
 libexec_PROGRAMS = streamer_applet
 
-streamer_applet_SOURCES = applet.h main.c gstreamer.c 
+streamer_applet_SOURCES = applet.h main.c gstreamer.c menu.c 
 
 appletdir = $(datadir)/mate-panel/applets
 applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet
