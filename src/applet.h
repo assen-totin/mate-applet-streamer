@@ -31,6 +31,8 @@
 #include <sqlite3.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <fcntl.h>
+#include <errno.h>
 
 #ifdef HAVE_LIBMATENOTIFY
 	#include <libmatenotify/notify.h>

@@ -25,7 +25,7 @@ LDADD = @GTK_LIBS@ @APPLET_LIBS@ @GSTREAMER_DASH_LIBS@
 
 libexec_PROGRAMS = streamer_applet
 
-streamer_applet_SOURCES = applet.h main.c gstreamer.c menu.c 
+streamer_applet_SOURCES = applet.h util.c gstreamer.c menu.c main.c
 
 appletdir = $(datadir)/mate-panel/applets
 applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet
@@ -35,5 +35,8 @@ service_DATA = org.mate.panel.applet.StreamerApplet.service
 
 xmluidir = $(datadir)/mate-2.0/ui
 xmlui_DATA = streamer-applet-menu.xml
-EXTRA_DIST = streamer-applet-menu.xml
 
+sqlitedir = @SQLITE_SKEL_DIR@ 
+sqlite_DATA = streamer.sqlite
+
+EXTRA_DIST = streamer-applet-menu.xml streamer.sqlite

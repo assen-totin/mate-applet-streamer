@@ -159,6 +159,34 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	// TODO: set applet->timestamp to current time
 
 	// TODO: Check home dir, copy skel database
+	char applet_home_dir[1024], skel_file[1024];
+	struct stat stat_buf;
+	struct passwd *pw = getpwuid(getuid());
+	sprintf(&applet_home_dir[0], "%s/%s", pw->pw_dir, APPLET_HOME_DIR);
+	int stat_res = stat(&applet_home_dir[0], &stat_buf);
+        int errsv = errno;
+        if ((stat_res == 0) && (!S_ISDIR(stat_buf.st_mode))){
+			push_notification(_("Streamer Applet Error"), _("Cannot access configuration directory. Exiting."), NULL);
+			return FALSE;
+        }
+        else if (stat_res == -1) {
+                if (errsv == ENOENT) {
+                        int mkdir_res = mkdir(&applet_home_dir[0], 0755);
+                        if (mkdir_res == 1) {
+				push_notification(_("Streamer Applet Error"), _("Cannot create configuration directory. Exiting."), NULL);
+				return FALSE;
+			}
+                }
+                else {
+			push_notification(_("Streamer Applet Error"), _("Cannot verify configuration directory. Exiting."), NULL);
+			return FALSE;
+		}
+        }
+	sprintf(&skel_file[0], "%s/%s", APPLET_SKEL_PATH, APPLET_SQLITE_DB_FILENAME);
+	if (!cp(&applet_home_dir[0], &skel_file[0])) {
+		push_notification(_("Streamer Applet Error"), _("Cannot copy database file to configuration directory. Exiting."), NULL);
+		return FALSE;
+	}
 	
 	// Connect DB
 	if (!sqlite_connect(applet)) {
