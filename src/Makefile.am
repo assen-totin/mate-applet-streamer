@@ -21,11 +21,11 @@ APPLET_FLAGS=@APPLET_FLAGS@
 APPLET_LIBS=@APPLET_LIBS@
 
 AM_CPPFLAGS = @GTK_CFLAGS@ @APPLET_FLAGS@ @GSTREAMER_DASH_CFLAGS@
-LDADD = @GTK_LIBS@ @APPLET_LIBS@ @GSTREAMER_DASH_LIBS@
+LDADD = @GTK_LIBS@ @APPLET_LIBS@ @GSTREAMER_DASH_LIBS@ -lsqlite3
 
 libexec_PROGRAMS = streamer_applet
 
-streamer_applet_SOURCES = applet.h util.c gstreamer.c menu.c main.c
+streamer_applet_SOURCES = applet.h util.c gstreamer.c sqlite.c menu.c main.c
 
 appletdir = $(datadir)/mate-panel/applets
 applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet
@@ -36,7 +36,7 @@ service_DATA = org.mate.panel.applet.StreamerApplet.service
 xmluidir = $(datadir)/mate-2.0/ui
 xmlui_DATA = streamer-applet-menu.xml
 
-sqlitedir = @SQLITE_SKEL_DIR@ 
+sqlitedir = @SQLITE_SKEL_DIR@
 sqlite_DATA = streamer.sqlite
 
 EXTRA_DIST = streamer-applet-menu.xml streamer.sqlite

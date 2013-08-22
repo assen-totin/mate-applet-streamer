@@ -23,7 +23,7 @@
 
 // APPLET_SQLITE_DB_VERSION
 
-bool sqlite_connect(streamer_applet *applet) {
+gboolean sqlite_connect(streamer_applet *applet) {
 	char dbfile[1024];
 
 	struct passwd *pw = getpwuid(getuid());
@@ -36,7 +36,7 @@ bool sqlite_connect(streamer_applet *applet) {
 }
 
 
-bool sqlite_insert(streamer_applet *applet, char *sql) {
+gboolean sqlite_insert(streamer_applet *applet, char *sql) {
 	char *zErrMsg = 0;
 	int res = sqlite3_exec(applet->sqlite, sql, NULL, 0, &zErrMsg);
 	sqlite3_free(zErrMsg);
@@ -45,7 +45,7 @@ bool sqlite_insert(streamer_applet *applet, char *sql) {
 	return TRUE;
 }
 
-bool sqlite_delete(streamer_applet *applet, char *sql) {
+gboolean sqlite_delete(streamer_applet *applet, char *sql) {
         char *zErrMsg = 0;
         int res = sqlite3_exec(applet->sqlite, sql, NULL, 0, &zErrMsg);
         sqlite3_free(zErrMsg);
@@ -61,7 +61,7 @@ bool sqlite_delete(streamer_applet *applet, char *sql) {
 //char**    /* An array of strings representing column names */
 //);
 
-static int sqlite_callback(void *data, int argc, char **argv, char **azColName){
+int sqlite_callback(void *data, int argc, char **argv, char **azColName){
    int i;
    fprintf(stderr, "%s: ", (const char*)data);
    for(i=0; i<argc; i++){
@@ -71,7 +71,7 @@ static int sqlite_callback(void *data, int argc, char **argv, char **azColName){
    return 0;
 }
 
-bool sqlite_select(streamer_applet *applet, char *sql) {
+gboolean sqlite_select(streamer_applet *applet, char *sql) {
         char *zErrMsg = 0;
 	const char* data = "Callback function called";
         int res = sqlite3_exec(applet->sqlite, sql, sqlite_callback, (void*) data, &zErrMsg);

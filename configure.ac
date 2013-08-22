@@ -183,6 +183,11 @@ AC_CONFIG_FILES([src/org.mate.applets.StreamerApplet.mate-panel-applet src/org.m
 # Icons
 AC_DEFINE_UNQUOTED([APPLET_ICON_PATH], ["$PIXMAPDIR"], [Define icons location])
 
+# SQLite skeleton DB
+SQLITE_SKEL_DIR=$DATAROOTDIR/streamer_applet
+AC_DEFINE_UNQUOTED([APPLET_SKEL_PATH], ["$SQLITE_SKEL_DIR"], [Define SQLite skeleton DB location])
+AC_SUBST([SQLITE_SKEL_DIR])
+
 # Grand finale
 AC_OUTPUT
 

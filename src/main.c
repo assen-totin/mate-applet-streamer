@@ -135,7 +135,7 @@ static const GtkActionEntry applet_menu_actions [] = {
         { "Favourites", GTK_STOCK_PROPERTIES, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
         { "Recent", GTK_STOCK_PROPERTIES, "_Recent", NULL, NULL, G_CALLBACK (menu_cb_recent) },
         { "All", GTK_STOCK_PROPERTIES, "_All", NULL, NULL, G_CALLBACK (menu_cb_all) },
-        { "About", GTK_STOCK_ABOUT, NULL, "_About", NULL, G_CALLBACK (menu_cb_about) }
+        { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
 };
 
 
@@ -158,8 +158,8 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	sprintf(&applet->url[0], '\0');
 	// TODO: set applet->timestamp to current time
 
-	// TODO: Check home dir, copy skel database
-	char applet_home_dir[1024], skel_file[1024];
+	// Check home dir, copy skel database
+	char applet_home_dir[1024], skel_file[1024], local_file[1024];
 	struct stat stat_buf;
 	struct passwd *pw = getpwuid(getuid());
 	sprintf(&applet_home_dir[0], "%s/%s", pw->pw_dir, APPLET_HOME_DIR);
@@ -183,9 +183,23 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 		}
         }
 	sprintf(&skel_file[0], "%s/%s", APPLET_SKEL_PATH, APPLET_SQLITE_DB_FILENAME);
-	if (!cp(&applet_home_dir[0], &skel_file[0])) {
-		push_notification(_("Streamer Applet Error"), _("Cannot copy database file to configuration directory. Exiting."), NULL);
-		return FALSE;
+	sprintf(&local_file[0], "%s/%s/%s", pw->pw_dir, APPLET_HOME_DIR, APPLET_SQLITE_DB_FILENAME);
+	stat_res = stat(&local_file[0], &stat_buf);
+	errsv = errno;
+	if ((stat_res == 0) && (!S_ISREG(stat_buf.st_mode))){
+		push_notification(_("Streamer Applet Error"), _("Database file is not a regular file. Exiting."), NULL);
+	}
+	else if (stat_res == -1) {
+		if (errsv == ENOENT) {
+			if (!cp(&local_file[0], &skel_file[0])) {
+				push_notification(_("Streamer Applet Error"), _("Cannot copy database file to configuration directory. Exiting."), NULL);
+				return FALSE;
+			}
+		}
+		else {
+			push_notification(_("Streamer Applet Error"), _("Cannot verify database file. Exiting."), NULL);
+			return FALSE;
+		}
 	}
 	
 	// Connect DB

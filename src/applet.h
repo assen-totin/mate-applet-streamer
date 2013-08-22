@@ -65,10 +65,16 @@ typedef struct {
 	GstElement *gstreamer_playbin2;
 } streamer_applet;
 
-static void menu_cb_favourites(GtkAction *, streamer_applet *);
-static void menu_cb_recent(GtkAction *, streamer_applet *);
-static void menu_cb_all(GtkAction *, streamer_applet *);
-static void menu_cb_about(GtkAction *, streamer_applet *);
+void menu_cb_favourites(GtkAction *, streamer_applet *);
+void menu_cb_recent(GtkAction *, streamer_applet *);
+void menu_cb_all(GtkAction *, streamer_applet *);
+void menu_cb_about(GtkAction *, streamer_applet *);
+
+gboolean sqlite_connect(streamer_applet *);
+gboolean sqlite_insert(streamer_applet *, char *);
+gboolean sqlite_delete(streamer_applet *, char *);
+gboolean sqlite_select(streamer_applet *, char *);
+
 /*
 static const GtkActionEntry applet_menu_actions [] = {
         { "Favourites", GTK_STOCK_PROPERTIES, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
