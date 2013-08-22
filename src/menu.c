@@ -63,10 +63,30 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	GtkWidget *fav_table = gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(fav_table), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+	gtk_container_add (GTK_CONTAINER (fav_table), applet->tree_view);
 
 	GtkWidget *fav_hbox_1 = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(fav_hbox_1), fav_table, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(fav_hbox_1), fav_vbox_1, FALSE, FALSE, 0);
+
+
+	GtkTreeIter iter;
+	int i;
+/*
+	for (i=0; i<total_subs; i++) {
+        	gtk_list_store_append (applet->tree_store, &iter);
+		gtk_list_store_set (applet->tree_store, &iter, COL_NAME, &sub_array[i].sub[0], COL_URL, sub_array[i].time_from, -1);
+	}
+*/
+        for (i=0; i<5; i++) {
+                gtk_list_store_append (applet->tree_store, &iter);
+                gtk_list_store_set (applet->tree_store, &iter, COL_NAME, "Name Name Name", COL_URL, "URL URL URL", -1);
+        }
+
+	GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store);
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
+	gtk_tree_model_get_iter_first(model, &iter);
+	gtk_tree_selection_select_iter(selection, &iter);
 
 
 	// TODO: Prepare Icecast page
@@ -163,6 +183,9 @@ void create_view_and_model (streamer_applet *applet){
         // The tree view has acquired its own reference to the model, so we can drop ours. 
         // That way the model will be freed automatically when the tree view is destroyed 
         g_object_unref (model);
+
+        GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
+        gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
 }
 
 
@@ -192,4 +215,14 @@ void cell_edit_url(GtkCellRendererText *cell, gchar *path_string, gchar *new_tex
         }
 }
 
+void clear_store(streamer_applet *applet) {
+        GtkTreeIter iter;
+        gboolean flag = TRUE;
+
+        GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store);
+        gtk_tree_model_get_iter_first(model, &iter);
+
+        while (flag)
+                flag = gtk_list_store_remove (applet->tree_store, &iter);
+}
 
