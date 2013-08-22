@@ -51,6 +51,13 @@
 #define APPLET_SQLITE_DB_FILENAME "streamer.sqlite"
 #define APPLET_SQLITE_DB_VERSION "1"
 
+enum {
+        COL_NAME = 0,
+        COL_URL,
+        NUM_COLS
+};
+
+
 typedef struct {
 	GMainLoop *loop;
 	MatePanelApplet *applet;
@@ -63,6 +70,8 @@ typedef struct {
 	int unsigned timestamp;
 	sqlite3 *sqlite;
 	GstElement *gstreamer_playbin2;
+	GtkListStore *tree_store;
+	GtkWidget *tree_view;
 } streamer_applet;
 
 void menu_cb_favourites(GtkAction *, streamer_applet *);
@@ -95,3 +104,6 @@ void gstreamer_pause(streamer_applet *);
 void gstreamer_play(streamer_applet *);
 void gstreamer_init(streamer_applet *);
 
+void create_view_and_model (streamer_applet *);
+void cell_edit_name(GtkCellRendererText *, gchar *, gchar *, gpointer);
+void cell_edit_url(GtkCellRendererText *, gchar *, gchar *, gpointer);

@@ -53,7 +53,21 @@ void menu_cb_about (GtkAction *action, streamer_applet *applet) {
 
 void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	// TODO: Prepare Favourites page
-	GtkWidget *child_favourites  = gtk_label_new(_("Favourites support coming soon..."));
+	GtkWidget *butt_add = gtk_button_new_from_stock(GTK_STOCK_ADD);
+	GtkWidget *butt_del = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
+	GtkWidget *fav_vbox_1 = gtk_vbox_new (FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fav_vbox_1), butt_add, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fav_vbox_1), butt_del, FALSE, FALSE, 0);
+
+	create_view_and_model(applet);
+
+	GtkWidget *fav_table = gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(fav_table), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+
+	GtkWidget *fav_hbox_1 = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fav_hbox_1), fav_table, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fav_hbox_1), fav_vbox_1, FALSE, FALSE, 0);
+
 
 	// TODO: Prepare Icecast page
 	GtkWidget *child_icecast = gtk_label_new(_("Icecat support coming soon..."));
@@ -63,7 +77,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// First page - Favourites
 	GtkWidget *tab_label_1 = gtk_label_new(_("Favourites"));
-	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), child_favourites, tab_label_1);
+	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), fav_hbox_1, tab_label_1);
 
 	// Second page - Icecast
 	GtkWidget *tab_label_2 = gtk_label_new(_("Icecast"));
@@ -114,5 +128,68 @@ void menu_cb_favourites (GtkAction *action, streamer_applet *applet) {
         gtk_widget_show_all (GTK_WIDGET(quitDialog));
 }
 
+
+void create_view_and_model (streamer_applet *applet){
+        GtkCellRenderer *renderer;
+        GtkTreeModel *model;
+        GtkTreeIter iter;
+        GtkTreeViewColumn *column;
+
+        applet->tree_view = gtk_tree_view_new();
+        applet->tree_store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
+
+        // Column 1
+        renderer = gtk_cell_renderer_text_new();
+        g_object_set(renderer, "editable", TRUE, NULL);
+        g_signal_connect(renderer, "edited", (GCallback) cell_edit_name, applet->tree_view);
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view), -1, _("Name"), renderer, "text", COL_NAME, NULL);
+        //column = gtk_tree_view_get_column (GTK_TREE_VIEW (applet->tree_view), 0);
+        //gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_from, NULL, NULL);
+
+        // Column 2
+        renderer = gtk_cell_renderer_text_new();
+        g_object_set(renderer, "editable", TRUE, NULL);
+        g_signal_connect(renderer, "edited", (GCallback) cell_edit_url, applet->tree_view);
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view), -1, _("URL"), renderer, "text", COL_URL, NULL);
+        //column = gtk_tree_view_get_column (GTK_TREE_VIEW (applet->tree_view), 1);
+        //gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_to, NULL, NULL);
+
+        gtk_list_store_append (applet->tree_store, &iter);
+        gtk_list_store_set (applet->tree_store, &iter, COL_NAME, " ", COL_URL, 0, -1);
+
+        model = GTK_TREE_MODEL(applet->tree_store);
+        gtk_tree_view_set_model (GTK_TREE_VIEW (applet->tree_view), model);
+
+        // The tree view has acquired its own reference to the model, so we can drop ours. 
+        // That way the model will be freed automatically when the tree view is destroyed 
+        g_object_unref (model);
+}
+
+
+void cell_edit_name(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer data) {
+        GtkTreeIter iter;
+        GtkTreeModel *model;
+	streamer_applet *applet = data;
+
+        GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
+        gtk_tree_selection_get_selected(selection, &model, &iter);
+
+        if (gtk_tree_model_get_iter_from_string (model, &iter, path_string)) {
+                gtk_list_store_set (GTK_LIST_STORE(model), &iter, COL_NAME, new_text, -1);
+        }
+}
+
+void cell_edit_url(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer data) {
+        GtkTreeIter iter;
+        GtkTreeModel *model;
+        streamer_applet *applet = data;
+
+        GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
+        gtk_tree_selection_get_selected(selection, &model, &iter);
+
+        if (gtk_tree_model_get_iter_from_string (model, &iter, path_string)) {
+                gtk_list_store_set (GTK_LIST_STORE(model), &iter, COL_URL, new_text, -1);
+        }
+}
 
 
