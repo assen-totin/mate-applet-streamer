@@ -23,6 +23,10 @@
 
 // APPLET_SQLITE_DB_VERSION
 
+gboolean cb_true(void *data, int argc, char **argv, char **azColName) {
+	return TRUE;
+}
+
 gboolean sqlite_connect(streamer_applet *applet) {
 	char dbfile[1024];
 
@@ -38,7 +42,7 @@ gboolean sqlite_connect(streamer_applet *applet) {
 
 gboolean sqlite_insert(streamer_applet *applet, char *sql) {
 	char *zErrMsg = 0;
-	int res = sqlite3_exec(applet->sqlite, sql, NULL, 0, &zErrMsg);
+	int res = sqlite3_exec(applet->sqlite, sql, cb_true, 0, &zErrMsg);
 	sqlite3_free(zErrMsg);
 	if (res != SQLITE_OK)
 		return FALSE;
@@ -47,7 +51,7 @@ gboolean sqlite_insert(streamer_applet *applet, char *sql) {
 
 gboolean sqlite_delete(streamer_applet *applet, char *sql) {
         char *zErrMsg = 0;
-        int res = sqlite3_exec(applet->sqlite, sql, NULL, 0, &zErrMsg);
+        int res = sqlite3_exec(applet->sqlite, sql, cb_true, 0, &zErrMsg);
         sqlite3_free(zErrMsg);
         if (res != SQLITE_OK)
                 return FALSE;

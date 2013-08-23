@@ -132,9 +132,9 @@ static void applet_destroy(MatePanelApplet *applet_widget, streamer_applet *appl
 }
 
 static const GtkActionEntry applet_menu_actions [] = {
-        { "Favourites", GTK_STOCK_PROPERTIES, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
-        { "Recent", GTK_STOCK_PROPERTIES, "_Recent", NULL, NULL, G_CALLBACK (menu_cb_recent) },
-        { "All", GTK_STOCK_PROPERTIES, "_All", NULL, NULL, G_CALLBACK (menu_cb_all) },
+        { "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
+        { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, G_CALLBACK (menu_cb_recent) },
+        { "All", GTK_STOCK_EXECUTE, "_All", NULL, NULL, G_CALLBACK (menu_cb_all) },
         { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
 };
 

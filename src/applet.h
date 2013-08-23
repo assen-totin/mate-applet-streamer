@@ -52,8 +52,8 @@
 #define APPLET_SQLITE_DB_VERSION "1"
 
 enum {
-        COL_NAME = 0,
-        COL_URL,
+        COL_URL = 0,
+        COL_NAME,
         NUM_COLS
 };
 
@@ -107,3 +107,10 @@ void gstreamer_init(streamer_applet *);
 void create_view_and_model (streamer_applet *);
 void cell_edit_name(GtkCellRendererText *, gchar *, gchar *, gpointer);
 void cell_edit_url(GtkCellRendererText *, gchar *, gchar *, gpointer);
+void clear_store(streamer_applet *);
+void row_down(GtkWidget *, gpointer);
+void row_up(GtkWidget *, gpointer);
+void row_del(GtkWidget *, gpointer);
+void row_add(GtkWidget *, gpointer);
+gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+int cb_sql_fav(void *, int, char **, char **);
