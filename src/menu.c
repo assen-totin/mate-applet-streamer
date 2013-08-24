@@ -65,7 +65,6 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkTreeIter iter;
 
 	// Prepare Favourites page
-	// TODO: PLAY button callback
 	GtkWidget *butt_add = gtk_button_new_from_stock(GTK_STOCK_ADD);
 	GtkWidget *butt_del = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
 	GtkWidget *butt_up = gtk_button_new_from_stock(GTK_STOCK_GO_UP);
@@ -83,6 +82,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	g_signal_connect (G_OBJECT(butt_del), "clicked", G_CALLBACK (row_del), (gpointer) applet);
 	g_signal_connect (G_OBJECT(butt_up), "clicked", G_CALLBACK (row_up), (gpointer) applet);
 	g_signal_connect (G_OBJECT(butt_down), "clicked", G_CALLBACK (row_down), (gpointer) applet);
+	g_signal_connect (G_OBJECT(butt_play), "clicked", G_CALLBACK (row_play), (gpointer) applet);
 
 	create_view_and_model(applet);
 
@@ -320,6 +320,40 @@ void row_add (GtkWidget *widget, gpointer data){
 }
 
 
+void row_play (GtkWidget *widget, gpointer data) {
+	streamer_applet *applet = data;
+	gchar *name, *url;
+	GtkTreeIter iter;
+	char msg[1024], sql[1024], image_file[1024];
+	
+	GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store);
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
+	gtk_tree_selection_get_selected(selection, &model, &iter);
+	gtk_tree_model_get(model, &iter, COL_NAME, &name, COL_URL, &url, -1);
+
+        sprintf(&applet->url[0], "%s", url);
+        sprintf(&applet->name[0], "%s", name);
+
+	if (applet->status == 1)
+		gstreamer_pause(applet);
+
+        if (applet->status == 0) {
+                applet->status = 1;
+                sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PLAY);
+                gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
+        }
+
+	time_t now = time(NULL);
+	sprintf(&sql[0], "INSERT INTO recent (server_name, listen_url, unix_timestamp) VALUES ('%s','%s','%u') ", &applet->name[0], &applet->url[0], now);
+	sqlite_insert(applet, &sql[0]);
+
+	gst_element_set_state (applet->gstreamer_playbin2, GST_STATE_READY);
+	g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
+
+	gstreamer_play(applet);
+}
+
+
 void clear_store(streamer_applet *applet) {
         GtkTreeIter iter;
         gboolean flag = TRUE;
@@ -330,6 +364,7 @@ void clear_store(streamer_applet *applet) {
         while (flag)
                 flag = gtk_list_store_remove (applet->tree_store, &iter);
 }
+
 
 gboolean write_favourites(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data ){
         streamer_applet *applet = data;

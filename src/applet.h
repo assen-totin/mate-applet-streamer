@@ -33,6 +33,7 @@
 #include <pwd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <time.h>
 
 #ifdef HAVE_LIBMATENOTIFY
 	#include <libmatenotify/notify.h>
@@ -67,7 +68,7 @@ typedef struct {
 	char url[1024];
 	char name[1024];
 	int status;
-	int unsigned timestamp;
+	time_t timestamp;
 	sqlite3 *sqlite;
 	GstElement *gstreamer_playbin2;
 	GtkListStore *tree_store;
@@ -112,5 +113,6 @@ void row_down(GtkWidget *, gpointer);
 void row_up(GtkWidget *, gpointer);
 void row_del(GtkWidget *, gpointer);
 void row_add(GtkWidget *, gpointer);
+void row_play (GtkWidget *, gpointer);
 gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 int cb_sql_fav(void *, int, char **, char **);

@@ -64,9 +64,7 @@ static gboolean applet_on_click (GtkWidget *event_box, GdkEventButton *event, st
                 sprintf(&msg[0], "%s%s", _("PAUSED: "), &applet->name[0]);
                 gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
 		gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
-		// TODO: Record the current timestamp
-		
-		// Tell the player to pause
+		applet->timestamp = time(NULL);
 		gstreamer_pause(applet);
 		return TRUE;
 	}
@@ -78,7 +76,6 @@ static gboolean applet_on_click (GtkWidget *event_box, GdkEventButton *event, st
                 sprintf(&msg[0], "%s%s", _("PLAYING: "), &applet->name[0]);
                 gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
                 gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
-                // Tell the player to start
                 gstreamer_play(applet);
                 // TODO: reconnect if we have been paused for too long
                 return TRUE;
@@ -125,11 +122,28 @@ static void applet_back_change (MatePanelApplet *a, MatePanelAppletBackgroundTyp
 }
 
 static void applet_destroy(MatePanelApplet *applet_widget, streamer_applet *applet) {
+	sqlite3_close(applet->sqlite);
 	g_main_loop_quit(applet->loop);
         g_assert(applet);
         g_free(applet);
         return;
 }
+
+
+int cb_sql_recent(void *data, int argc, char **argv, char **azColName) {
+        streamer_applet *applet = data;
+	char msg[1024];
+
+        sprintf(&applet->url[0], "%s", argv[1]);
+        sprintf(&applet->name[0], "%s", argv[0]);
+	sprintf(&msg[0], "%s%s", _("PAUSED: "), &applet->name[0]);
+	gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
+
+	g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", argv[1], NULL);
+	
+        return 0;
+}
+
 
 static const GtkActionEntry applet_menu_actions [] = {
         { "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
@@ -156,7 +170,7 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	applet->applet = applet_widget;
 	applet->status = 0;
 	sprintf(&applet->url[0], '\0');
-	// TODO: set applet->timestamp to current time
+	applet->timestamp = time(NULL);
 
 	// Check home dir, copy skel database
 	char applet_home_dir[1024], skel_file[1024], local_file[1024];
@@ -208,10 +222,8 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 		return FALSE;
 	} 
 
-	// TODO: Move the code to file loading function 
-	//sprintf(&applet->url[0], "%s", "http://darik.hothost.bg");
-	//sprintf(&applet->name[0], "%s", "Radio Gong");
-	//gstreamer_init(applet);
+	// Init GStreamer
+	gstreamer_init(applet);
 
 	// Get an image
 	char image_file[1024];
@@ -238,8 +250,19 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	// Tooltip
 	gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), _("No stream selected. Right-click to load one."));
 
-	gtk_widget_show_all (GTK_WIDGET (applet->applet));
+        // Fetch last URL
+        char *zErrMsg = 0;
+        int res = sqlite3_exec(applet->sqlite, "SELECT * FROM recent ORDER BY unix_timestamp DESC LIMIT 1", cb_sql_recent, (void*) applet, &zErrMsg);
+        sqlite3_free(zErrMsg);
+        if (res != SQLITE_OK) {
+		push_notification(_("Streamer Applet Error"), _("Unable to read DB. Exiting"), NULL);
+		return FALSE;
+	}
 
+        // Show applet
+        gtk_widget_show_all (GTK_WIDGET (applet->applet));
+
+	// Run
         applet->loop = g_main_loop_new (NULL, FALSE);
         g_main_loop_run (applet->loop);
 
