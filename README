@@ -1,4 +1,17 @@
-This is a MATE panel applet toch allows you to lisnet to your favourite streaming media. 
+This is a MATE panel applet toch allows you to lisnet to your favourite 
+streaming media. 
+
+When the applet starts, it will load the last the radio station you listened 
+to. Click on the applet to toggle its state from "pause" to "play"; click it
+again to pause it.
+
+To manage your stations, right-click the applet and go to the "All" menu. 
+There you can add new stations (name and URL required, the URL includes the
+protocol), remove existing ones or begin playing one. You can also reorder the 
+stations there. When you click the "OK" button, the list will be saved as it
+appears (to cancel modifications, just close the window using the window 
+manager).
+
 
 
 IMPORTANT! This free softwarte is released with hope that it will be useful, 

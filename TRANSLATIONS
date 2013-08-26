@@ -1,7 +1,7 @@
 1. To create templates for translation: 
 
 # Get all strings from main.c
-xgettext -d streamer-s -k_ -o po/streamer.pot src/main.c
+xgettext -d streamer -s -k_ -o po/streamer.pot src/*.c
 
 2. To add your translation
 

@@ -146,9 +146,9 @@ int cb_sql_recent(void *data, int argc, char **argv, char **azColName) {
 
 
 static const GtkActionEntry applet_menu_actions [] = {
-        { "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
-        { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, G_CALLBACK (menu_cb_recent) },
-        { "All", GTK_STOCK_EXECUTE, "_All", NULL, NULL, G_CALLBACK (menu_cb_all) },
+	{ "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, NULL },
+        { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, NULL },
+        { "All", GTK_STOCK_EXECUTE, "_All Stations", NULL, NULL, G_CALLBACK (menu_cb_all) },
         { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
 };
 
@@ -216,11 +216,12 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 		}
 	}
 	
-	// Connect DB
+	// Test DB connection
 	if (!sqlite_connect(applet)) {
 		push_notification(_("Streamer Applet Error"), _("Unable to connect to DB. Exiting."), NULL);
 		return FALSE;
 	} 
+	sqlite3_close(applet->sqlite);
 
 	// Init GStreamer
 	gstreamer_init(applet);
@@ -241,6 +242,12 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	GtkActionGroup *action_group = gtk_action_group_new ("Streamer Applet Actions");
 	gtk_action_group_add_actions (action_group, applet_menu_actions, G_N_ELEMENTS (applet_menu_actions), applet);
 	mate_panel_applet_setup_menu_from_file(applet->applet, "/usr/share/mate-2.0/ui/streamer-applet-menu.xml", action_group);
+
+	// Merge menu
+	//GError **error;
+	//char ui[10240];
+	//sprintf(&ui[0], "<menu action='SubMenu1'>\n<menuitem action='All'/>\n<menuitem action='All'/></menu>");
+	//guint merge_id = gtk_ui_manager_add_ui_from_string (applet->applet->priv->ui_manager, &ui[0], -1, error);
 
 	// Signals
         g_signal_connect(G_OBJECT(applet->event_box), "button_press_event", G_CALLBACK (applet_on_click), (gpointer)applet);
