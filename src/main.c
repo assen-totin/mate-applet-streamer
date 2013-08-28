@@ -258,13 +258,20 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), _("No stream selected. Right-click to load one."));
 
         // Fetch last URL
+        if (!sqlite_connect(applet)) {
+                push_notification(_("Streamer Applet Error"), _("Unable to connect to DB. Exiting."), NULL);
+                return FALSE;
+        }
         char *zErrMsg = 0;
         int res = sqlite3_exec(applet->sqlite, "SELECT * FROM recent ORDER BY unix_timestamp DESC LIMIT 1", cb_sql_recent, (void*) applet, &zErrMsg);
-        sqlite3_free(zErrMsg);
         if (res != SQLITE_OK) {
-		push_notification(_("Streamer Applet Error"), _("Unable to read DB. Exiting"), NULL);
+		//push_notification(_("Streamer Applet Error"), _("Unable to read DB. Exiting"), NULL);
+		push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
+		sqlite3_free(zErrMsg);
 		return FALSE;
 	}
+	sqlite3_free(zErrMsg);
+	sqlite3_close(applet->sqlite);
 
         // Show applet
         gtk_widget_show_all (GTK_WIDGET (applet->applet));

@@ -34,13 +34,14 @@ static void quitDialogOK(GtkWidget *widget, gpointer data) {
 	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(applet->tree_view));
 	gtk_tree_model_foreach(model, write_favourites, applet);
 
-        gtk_widget_destroy(applet->quitDialog);
+        //gtk_widget_destroy(applet->quitDialog);
 }
 
 
-static void quitDialogCancel(GtkWidget *widget, gpointer data) {
-        GtkWidget *quitDialog = data;
-        gtk_widget_destroy(quitDialog);
+static void quitDialogClose(GtkWidget *widget, gpointer data) {
+	streamer_applet *applet = data;
+
+        gtk_widget_destroy(applet->quitDialog);
 }
 
 
@@ -95,8 +96,27 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	GtkWidget *fav_hbox_1 = gtk_hbox_new (FALSE, 0);
 
-	// TODO: Prepare Icecast page
-	GtkWidget *child_icecast = gtk_label_new(_("Icecat support coming soon..."));
+	// Prepare Icecast page
+	GtkWidget *butt_refresh = gtk_button_new_from_stock(GTK_STOCK_REFRESH);
+	GtkWidget *butt_copy = gtk_button_new_from_stock(GTK_STOCK_COPY);
+
+	GtkWidget *icecast_vbox_1 = gtk_vbox_new (FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(icecast_vbox_1), butt_refresh, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(icecast_vbox_1), butt_copy, FALSE, FALSE, 0);
+
+	g_signal_connect (G_OBJECT(butt_refresh), "clicked", G_CALLBACK (icecast_refresh), (gpointer) applet);
+	g_signal_connect (G_OBJECT(butt_copy), "clicked", G_CALLBACK (row_copy), (gpointer) applet);
+
+	create_view_and_model2(applet);
+
+	GtkTreeSelection *selection2 = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view2));
+	gtk_tree_selection_set_mode(selection2, GTK_SELECTION_SINGLE);
+	
+	GtkWidget *icecast_table = gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(icecast_table), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+	gtk_container_add (GTK_CONTAINER (icecast_table), applet->tree_view2);
+
+	GtkWidget *icecast_hbox_1 = gtk_hbox_new (FALSE, 0);
 
 	// Create notebook widget
 	GtkWidget *notebook = gtk_notebook_new();
@@ -108,29 +128,37 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Second page - Icecast
 	GtkWidget *tab_label_2 = gtk_label_new(_("Icecast"));
-	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), child_icecast, tab_label_2);
+	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), icecast_hbox_1, tab_label_2);
 
 	// Assemble all widgets
         applet->quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_APPLY, GTK_RESPONSE_OK);
+	GtkWidget *buttonClose = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
 
         gtk_dialog_set_default_response (GTK_DIALOG (applet->quitDialog), GTK_RESPONSE_CANCEL);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(applet->quitDialog)->vbox), notebook);
         g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) applet);
+	g_signal_connect (G_OBJECT(buttonClose), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 
         gtk_box_pack_start(GTK_BOX(fav_hbox_1), fav_table, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(fav_hbox_1), fav_vbox_1, FALSE, FALSE, 0);
 
+	gtk_box_pack_start(GTK_BOX(icecast_hbox_1), icecast_table, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(icecast_hbox_1), icecast_vbox_1, FALSE, FALSE, 0);
+
         gtk_widget_show_all(GTK_WIDGET(applet->quitDialog));
 
 	clear_store(applet);
+	clear_store2(applet);
 
 	// SQL query to fill the favourites page
+	sqlite_connect(applet);
         char *zErrMsg = 0;
         int res = sqlite3_exec(applet->sqlite, "SELECT * FROM favourites", cb_sql_fav, (void*) applet, &zErrMsg);
         sqlite3_free(zErrMsg);
         if (res != SQLITE_OK)
 		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
+	sqlite3_close(applet->sqlite);
 
         GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store);
         selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
@@ -138,6 +166,8 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
         gtk_tree_selection_select_iter(selection, &iter);
 
 	gtk_widget_grab_focus(fav_table);
+
+	// TODO: SQL query to fill the Icecast page
 }
 
 void menu_cb_recent (GtkAction *action, streamer_applet *applet) {
@@ -202,6 +232,47 @@ void create_view_and_model (streamer_applet *applet){
 
         model = GTK_TREE_MODEL(applet->tree_store);
         gtk_tree_view_set_model (GTK_TREE_VIEW (applet->tree_view), model);
+
+        // The tree view has acquired its own reference to the model, so we can drop ours. 
+        // That way the model will be freed automatically when the tree view is destroyed 
+        g_object_unref (model);
+}
+
+
+void create_view_and_model2 (streamer_applet *applet){
+        GtkCellRenderer *renderer1, *renderer2, *renderer3;
+        GtkTreeModel *model;
+        GtkTreeIter iter;
+        GtkTreeViewColumn *column;
+
+        applet->tree_view2 = gtk_tree_view_new();
+        applet->tree_store2 = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+        // Column 1
+        renderer1 = gtk_cell_renderer_text_new();
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view2), -1, _("Name"), renderer1, "text", COL_NAME2, NULL);
+        //column = gtk_tree_view_get_column (GTK_TREE_VIEW (applet->tree_view2), 0);
+        //gtk_tree_view_column_set_cell_data_func(column, renderer, NULL, NULL, NULL);
+        //g_object_set(renderer1, "editable", TRUE, NULL);
+        //g_signal_connect(renderer1, "edited", (GCallback) cell_edit_name, applet);
+
+        // Column 2
+        renderer2 = gtk_cell_renderer_text_new();
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view2), -1, _("URL"), renderer2, "text", COL_URL2, NULL);
+        //g_object_set(renderer2, "editable", TRUE, NULL);
+        //g_signal_connect(renderer2, "edited", (GCallback) cell_edit_url, applet);
+
+        // Column 3
+        renderer3 = gtk_cell_renderer_text_new();
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view2), -1, _("URL"), renderer2, "text", COL_GENRE2, NULL);
+        //g_object_set(renderer3, "editable", TRUE, NULL);
+        //g_signal_connect(renderer3, "edited", (GCallback) cell_edit_url, applet);
+
+        gtk_list_store_append (applet->tree_store2, &iter);
+        gtk_list_store_set (applet->tree_store2, &iter, COL_NAME, " ", COL_URL, " ", -1);
+
+        model = GTK_TREE_MODEL(applet->tree_store2);
+        gtk_tree_view_set_model (GTK_TREE_VIEW (applet->tree_view2), model);
 
         // The tree view has acquired its own reference to the model, so we can drop ours. 
         // That way the model will be freed automatically when the tree view is destroyed 
@@ -354,6 +425,41 @@ void row_play (GtkWidget *widget, gpointer data) {
 }
 
 
+void row_copy (GtkWidget *widget, gpointer data) {
+}
+
+
+void icecast_refresh (GtkWidget *widget, gpointer data) {
+	streamer_applet *applet = data;
+	char line[1024];
+
+	// Progress bar
+	GtkWidget *progress = gtk_progress_bar_new();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(progress), GTK_PROGRESS_LEFT_TO_RIGHT);
+	sprintf(&line[0], _("Downloading directory..."));
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), &line[0]);
+        gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0.01);
+
+	// Window
+	GtkWidget *popup = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet->quitDialog), GTK_DIALOG_MODAL, NULL);
+	GtkWidget *vbox1 = gtk_vbox_new (FALSE, 0);
+	gtk_widget_set_size_request(popup, 400, 50);
+	gtk_box_pack_start(GTK_BOX(vbox1), progress, TRUE, TRUE, 1);
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(popup))), vbox1);
+        gtk_widget_show_all(GTK_WIDGET(popup));
+
+        // Fetch new XML from icecast server
+        icecast_dnld(progress, applet);
+
+	// Process XML
+	icecast_xml(progress, applet);
+
+	//gtk_widget_destroy(popup);
+	
+	unlink(&applet->xmlfile[0]);
+}
+
+
 void clear_store(streamer_applet *applet) {
         GtkTreeIter iter;
         gboolean flag = TRUE;
@@ -363,6 +469,18 @@ void clear_store(streamer_applet *applet) {
 
         while (flag)
                 flag = gtk_list_store_remove (applet->tree_store, &iter);
+}
+
+
+void clear_store2(streamer_applet *applet) {
+        GtkTreeIter iter;
+        gboolean flag = TRUE;
+
+        GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store2);
+        gtk_tree_model_get_iter_first(model, &iter);
+
+        while (flag)
+                flag = gtk_list_store_remove (applet->tree_store2, &iter);
 }
 
 

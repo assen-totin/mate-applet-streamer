@@ -16,7 +16,9 @@ BuildRequires:  gettext-devel
 BuildRequires:  automake
 BuildRequires:  autoconf
 BuildRequires:  sqlite-devel
+BuildRequires:	libxml2-devel
 Requires:       sqlite
+Requires:	libxml2
 # Requires: and BuildRequires: for chosen notification library
 @RPM_BUILDREQUIRES_NOTIFY@
 @RPM_REQUIRES_NOTIFY@

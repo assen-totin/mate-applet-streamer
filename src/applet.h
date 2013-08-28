@@ -34,6 +34,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <time.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 #ifdef HAVE_LIBMATENOTIFY
 	#include <libmatenotify/notify.h>
@@ -51,6 +53,8 @@
 #define APPLET_HOME_DIR ".streamer_applet"
 #define APPLET_SQLITE_DB_FILENAME "streamer.sqlite"
 #define APPLET_SQLITE_DB_VERSION "1"
+#define ICECAST_URL_XML "http://dir.xiph.org/yp.xml"
+#define ICECAST_TMP_FILE "icecast_dnld"
 
 enum {
         COL_URL = 0,
@@ -58,6 +62,12 @@ enum {
         NUM_COLS
 };
 
+enum {
+        COL_URL2 = 0,
+        COL_NAME2,
+	COL_GENRE2,
+        NUM_COLS2
+};
 
 typedef struct {
 	GMainLoop *loop;
@@ -67,12 +77,15 @@ typedef struct {
 	GtkWidget *quitDialog;
 	char url[1024];
 	char name[1024];
+	char xmlfile[1024];
 	int status;
 	time_t timestamp;
 	sqlite3 *sqlite;
 	GstElement *gstreamer_playbin2;
 	GtkListStore *tree_store;
 	GtkWidget *tree_view;
+        GtkListStore *tree_store2;
+        GtkWidget *tree_view2;
 } streamer_applet;
 
 void menu_cb_favourites(GtkAction *, streamer_applet *);
@@ -106,13 +119,22 @@ void gstreamer_play(streamer_applet *);
 void gstreamer_init(streamer_applet *);
 
 void create_view_and_model (streamer_applet *);
+void create_view_and_model2 (streamer_applet *);
 void cell_edit_name(GtkCellRendererText *, gchar *, gchar *, gpointer);
 void cell_edit_url(GtkCellRendererText *, gchar *, gchar *, gpointer);
 void clear_store(streamer_applet *);
+void clear_store2(streamer_applet *);
 void row_down(GtkWidget *, gpointer);
 void row_up(GtkWidget *, gpointer);
 void row_del(GtkWidget *, gpointer);
 void row_add(GtkWidget *, gpointer);
-void row_play (GtkWidget *, gpointer);
+void row_play(GtkWidget *, gpointer);
+void row_copy(GtkWidget *, gpointer);
 gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 int cb_sql_fav(void *, int, char **, char **);
+void icecast_refresh(GtkWidget *, gpointer);
+
+gboolean icecast_dnld(GtkWidget *, streamer_applet *);
+gboolean icecast_xml(GtkWidget *, streamer_applet *);
+void print_element_names(xmlNode *, streamer_applet *applet);
+
