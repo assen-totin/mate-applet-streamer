@@ -72,7 +72,7 @@ gboolean icecast_dnld(streamer_applet *applet) {
                         break;
                 total_bytes += read_bytes;
 		//gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), total_bytes/remote_size);
-		applet->progress_ratio = total_bytes/remote_size;
+		applet->progress_ratio = total_bytes / ((double)remote_size);
 
                 if ((counter_realloc * chunk_size - total_bytes) < chunk_size) {
                         void *_tmp = realloc(buffer, (counter_realloc + 1) * chunk_size);
