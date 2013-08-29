@@ -21,7 +21,7 @@
 #include "../config.h"
 #include "applet.h"
 
-gboolean icecast_dnld(GtkWidget *progress, streamer_applet *applet) {
+gboolean icecast_dnld(streamer_applet *applet) {
         GFileInputStream *fis = NULL;
         GDataInputStream* dis = NULL;
         GError *err = NULL;
@@ -58,7 +58,7 @@ gboolean icecast_dnld(GtkWidget *progress, streamer_applet *applet) {
 		g_object_unref (info);
 	}
 */
-	guint remote_size = 4400000;
+	guint remote_size = 5000000;
 
         // fill buffer - start at 10K and realloc when needed. 
         int chunk_size = 10000;
@@ -71,7 +71,8 @@ gboolean icecast_dnld(GtkWidget *progress, streamer_applet *applet) {
                 if (read_bytes == 0 )
                         break;
                 total_bytes += read_bytes;
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), total_bytes/remote_size);
+		//gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), total_bytes/remote_size);
+		applet->progress_ratio = total_bytes/remote_size;
 
                 if ((counter_realloc * chunk_size - total_bytes) < chunk_size) {
                         void *_tmp = realloc(buffer, (counter_realloc + 1) * chunk_size);
@@ -93,9 +94,10 @@ gboolean icecast_dnld(GtkWidget *progress, streamer_applet *applet) {
 }
 
 
-gboolean icecast_xml (GtkWidget *progress, streamer_applet *applet) {
+gboolean icecast_xml (streamer_applet *applet) {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
+	GtkTreeIter iter;
 
 	// Initialize the library and check potential ABI mismatches
 	LIBXML_TEST_VERSION
@@ -110,8 +112,17 @@ gboolean icecast_xml (GtkWidget *progress, streamer_applet *applet) {
 	/* Get the root element node */
 	root_element = xmlDocGetRootElement(doc);
 
+	// Count entries
+	applet->xml_total_entries = count_elements(root_element, 0);
+
 	// Process recursively
 	print_element_names(root_element, applet);
+
+	// Flush last entry
+        if (strlen(&applet->xml_listen_url[0]) > 2){
+	        gtk_list_store_append (applet->tree_store2, &iter);
+                gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, &applet->xml_server_name[0], COL_URL2, &applet->xml_listen_url[0], COL_GENRE2, &applet->xml_genre[0], -1);
+	}
 
 	/* free the document */
 	xmlFreeDoc(doc);
@@ -124,28 +135,58 @@ gboolean icecast_xml (GtkWidget *progress, streamer_applet *applet) {
 void print_element_names(xmlNode * a_node, streamer_applet *applet) {
 	xmlNode *cur_node = NULL;
 	GtkTreeIter iter;
-	char server_name[1024], bitrate[1024], listen_url[1024], genre[1024];
-
-	memset(&listen_url[0], 0, 1024);
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next) {
-		if (cur_node->type == XML_ELEMENT_NODE) {
-		        if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"server_name"))
-				sprintf(&server_name[0], "%s", cur_node->children->content);
-			if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"bitrate"))
-				sprintf(&bitrate[0], "%s", cur_node->children->content);
-			if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"listen_url"))
-        	                sprintf(&listen_url[0], "%s", cur_node->children->content);
-			if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"genre"))
-				sprintf(&genre[0], "%s", cur_node->children->content);
-
-			if (strlen(&listen_url[0]) > 0) {
-				// Append the record to table
-			        gtk_list_store_append (applet->tree_store2, &iter);
-        			gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, &server_name[0], COL_URL2, &listen_url[0], COL_GENRE2, &genre[0], -1);
-			}
+		if ((cur_node->type == XML_ELEMENT_NODE) && (!xmlStrcmp(cur_node->name, (const xmlChar *)"entry")) && (strlen(&applet->xml_listen_url[0]) > 2)) {
+			// Flush to store
+        	        gtk_list_store_append (applet->tree_store2, &iter);
+                	gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, &applet->xml_server_name[0], COL_URL2, &applet->xml_listen_url[0], COL_GENRE2, &applet->xml_genre[0], -1);
+			applet->xml_curr_entries ++;
+			applet->progress_ratio = applet->xml_curr_entries / ((double)applet->xml_total_entries) ;
 		}
+
+		if ((cur_node->type == XML_ELEMENT_NODE) && (cur_node->children)){
+		        if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"server_name"))
+				sprintf(&applet->xml_server_name[0], "%s", cur_node->children->content);
+			if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"bitrate"))
+				sprintf(&applet->xml_bitrate[0], "%s", cur_node->children->content);
+			if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"listen_url"))
+        	                sprintf(&applet->xml_listen_url[0], "%s", cur_node->children->content);
+			if ( !xmlStrcmp(cur_node->name, (const xmlChar *)"genre"))
+				sprintf(&applet->xml_genre[0], "%s", cur_node->children->content);
+		}
+
 		print_element_names(cur_node->children, applet);
 	}
 }
+
+
+int count_elements(xmlNode * a_node, int counter) {
+        xmlNode *cur_node = NULL;
+
+        for (cur_node = a_node; cur_node; cur_node = cur_node->next) {
+                if ((cur_node->type == XML_ELEMENT_NODE) && (!xmlStrcmp(cur_node->name, (const xmlChar *)"entry"))) {
+			counter++;
+                }
+
+                counter = count_elements(cur_node->children, counter);
+        }
+
+	return counter;
+}
+
+
+int progress_update(void *data) {
+	streamer_applet *applet = data;
+
+	if (applet->progress_ratio > 1) {
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), 1);
+		return 0;
+	}
+
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), applet->progress_ratio);
+
+	return 1;
+}
+
 

@@ -75,6 +75,7 @@ typedef struct {
         GtkWidget *image;
         GtkWidget *event_box;
 	GtkWidget *quitDialog;
+	GtkWidget *progress;
 	char url[1024];
 	char name[1024];
 	char xmlfile[1024];
@@ -86,6 +87,13 @@ typedef struct {
 	GtkWidget *tree_view;
         GtkListStore *tree_store2;
         GtkWidget *tree_view2;
+	char xml_listen_url[1024];
+	char xml_server_name[1024];
+	char xml_bitrate[1024];
+	char xml_genre[1024];
+	int xml_total_entries;
+	int xml_curr_entries;
+	gdouble progress_ratio;
 } streamer_applet;
 
 void menu_cb_favourites(GtkAction *, streamer_applet *);
@@ -134,7 +142,8 @@ gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer
 int cb_sql_fav(void *, int, char **, char **);
 void icecast_refresh(GtkWidget *, gpointer);
 
-gboolean icecast_dnld(GtkWidget *, streamer_applet *);
-gboolean icecast_xml(GtkWidget *, streamer_applet *);
-void print_element_names(xmlNode *, streamer_applet *applet);
-
+gboolean icecast_dnld(streamer_applet *);
+gboolean icecast_xml(streamer_applet *);
+void print_element_names(xmlNode *, streamer_applet *);
+int count_elements(xmlNode * a_node, int counter);
+int progress_update(); 

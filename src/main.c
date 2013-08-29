@@ -171,6 +171,11 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	applet->status = 0;
 	sprintf(&applet->url[0], '\0');
 	applet->timestamp = time(NULL);
+	memset(&applet->xml_listen_url[0], '\0', 1024);
+	memset(&applet->xml_bitrate[0], '\0', 1024);
+	memset(&applet->xml_server_name[0], '\0', 1024);
+	memset(&applet->xml_genre[0], '\0', 1024);
+	applet->xml_curr_entries = 0;
 
 	// Check home dir, copy skel database
 	char applet_home_dir[1024], skel_file[1024], local_file[1024];
