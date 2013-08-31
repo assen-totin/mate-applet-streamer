@@ -142,7 +142,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Create notebook widget
 	GtkWidget *notebook = gtk_notebook_new();
-	gtk_widget_set_size_request (notebook, 500, 400);
+	gtk_widget_set_size_request (notebook, 640, 480);
 
 	// First page - Favourites
 	GtkWidget *tab_label_1 = gtk_label_new(_("Favourites"));
@@ -642,5 +642,7 @@ void icecast_search(GtkWidget *widget, gpointer data) {
         GtkTreeSelection *selection2 = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view2));
         gtk_tree_model_get_iter_first(model2, &iter2);
         gtk_tree_selection_select_iter(selection2, &iter2);
+
+	gtk_tree_view_columns_autosize(GTK_TREE_VIEW(applet->tree_view2));
 }
 
