@@ -76,8 +76,16 @@ static gboolean applet_on_click (GtkWidget *event_box, GdkEventButton *event, st
                 sprintf(&msg[0], "%s%s", _("PLAYING: "), &applet->name[0]);
                 gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
                 gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
+		
+		// Reconnect if we were paused for more than 10 seconds
+		time_t now = time(NULL);
+		if ((now - applet->timestamp) > 10) {
+			gst_element_set_state (applet->gstreamer_playbin2, GST_STATE_READY);
+			g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
+		}
+
                 gstreamer_play(applet);
-                // TODO: reconnect if we have been paused for too long
+
                 return TRUE;
 	}
                 
@@ -176,6 +184,7 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	memset(&applet->xml_server_name[0], '\0', 1024);
 	memset(&applet->xml_genre[0], '\0', 1024);
 	applet->xml_curr_entries = 0;
+	applet->icecast_total_entries = 0;
 
 	// Check home dir, copy skel database
 	char applet_home_dir[1024], skel_file[1024], local_file[1024];

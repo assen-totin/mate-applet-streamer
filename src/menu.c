@@ -118,7 +118,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	char line[1024];
 	applet->progress = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(applet->progress), GTK_PROGRESS_LEFT_TO_RIGHT);
-	sprintf(&line[0], _("FIXME from SQL..."));
+	sprintf(&line[0], _("Ready"));
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress), &line[0]);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), 0);
 
@@ -195,6 +195,11 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	selection2 = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view2));
 	gtk_tree_model_get_iter_first(model2, &iter2);
 	gtk_tree_selection_select_iter(selection2, &iter2);
+
+	if (applet->icecast_total_entries == 0) {
+        	sprintf(&line[0], _("No stations found. Press Refresh button to download stations."));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress), &line[0]);
+	}
 }
 
 void menu_cb_recent (GtkAction *action, streamer_applet *applet) {
@@ -609,6 +614,8 @@ int cb_sql_icecast(void *data, int argc, char **argv, char **azColName) {
 
         gtk_list_store_append (applet->tree_store2, &iter);
         gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, argv[0], COL_URL2, argv[1], COL_GENRE2, argv[2], -1);
+
+	applet->icecast_total_entries ++;
 
         return 0;
 }
