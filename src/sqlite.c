@@ -34,23 +34,23 @@ gboolean sqlite_connect(streamer_applet *applet) {
 
 	sprintf(&dbfile[0], "%s/%s/%s", pw->pw_dir, APPLET_HOME_DIR, APPLET_SQLITE_DB_FILENAME);
 	int res = sqlite3_open(&dbfile[0], &applet->sqlite);
-	if (res)
+	if (res) {
+		push_notification(_("Streamer Applet Error"), _("Unable to connect to DB."), NULL);
 		return FALSE;
+	}
 	return TRUE;
 }
 
 
 gboolean sqlite_insert(streamer_applet *applet, char *sql) {
-        if (!sqlite_connect(applet)) {
-                push_notification(_("Streamer Applet Error"), _("Unable to connect to DB."), NULL);
-                return FALSE;
-        }
+        //if (!sqlite_connect(applet)) 
+        //        return FALSE;
 
 	char *zErrMsg = 0;
 	int res = sqlite3_exec(applet->sqlite, sql, cb_true, 0, &zErrMsg);
 	sqlite3_free(zErrMsg);
 
-	sqlite3_close(applet->sqlite);
+	//sqlite3_close(applet->sqlite);
 
 	if (res != SQLITE_OK)
 		return FALSE;
@@ -58,10 +58,8 @@ gboolean sqlite_insert(streamer_applet *applet, char *sql) {
 }
 
 gboolean sqlite_delete(streamer_applet *applet, char *sql) {
-        if (!sqlite_connect(applet)) {
-                push_notification(_("Streamer Applet Error"), _("Unable to connect to DB."), NULL);
+        if (!sqlite_connect(applet)) 
                 return FALSE;
-        }
 
         char *zErrMsg = 0;
         int res = sqlite3_exec(applet->sqlite, sql, cb_true, 0, &zErrMsg);
@@ -92,10 +90,8 @@ int sqlite_callback(void *data, int argc, char **argv, char **azColName){
 }
 
 gboolean sqlite_select(streamer_applet *applet, char *sql) {
-        if (!sqlite_connect(applet)) {
-                push_notification(_("Streamer Applet Error"), _("Unable to connect to DB."), NULL);
+        if (!sqlite_connect(applet)) 
                 return FALSE;
-        }
 
         char *zErrMsg = 0;
 	const char* data = "Callback function called";

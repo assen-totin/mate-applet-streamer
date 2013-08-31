@@ -114,7 +114,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(icecast_table), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
 	gtk_container_add (GTK_CONTAINER (icecast_table), applet->tree_view2);
 
-	// Try to put the progress-bar here
+	// Progress-bar
 	char line[1024];
 	applet->progress = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(applet->progress), GTK_PROGRESS_LEFT_TO_RIGHT);
@@ -122,8 +122,18 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress), &line[0]);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), 0);
 
+	// Search field and button
+	applet->text = gtk_entry_new();
+	//gtk_entry_set_activates_default(GTK_ENTRY(applet->text), FALSE);
+	GtkWidget *butt_search = gtk_button_new_from_stock(GTK_STOCK_FIND);
+	g_signal_connect (G_OBJECT(butt_search), "clicked", G_CALLBACK (icecast_search), (gpointer) applet);
+	GtkWidget *icecast_hbox_2 = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(icecast_hbox_2), applet->text, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(icecast_hbox_2), butt_search, FALSE, FALSE, 0);
+
 	GtkWidget *icecast_vbox_2 = gtk_vbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_2), applet->progress, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(icecast_vbox_2), icecast_hbox_2, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_2), icecast_table, TRUE, TRUE, 0);
 
 	GtkWidget *icecast_hbox_1 = gtk_hbox_new (FALSE, 0);
@@ -144,7 +154,6 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Assemble window
         applet->quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        //GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_APPLY, GTK_RESPONSE_OK);
 	GtkWidget *buttonClose = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
 
         gtk_dialog_set_default_response (GTK_DIALOG (applet->quitDialog), GTK_RESPONSE_CANCEL);
@@ -152,6 +161,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
         //g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) applet);
 	g_signal_connect (G_OBJECT(buttonClose), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 
+	//gtk_window_set_default(GTK_WINDOW(applet->quitDialog), butt_search);
         gtk_widget_show_all(GTK_WIDGET(applet->quitDialog));
 
 	clear_store(applet);
@@ -598,8 +608,32 @@ int cb_sql_icecast(void *data, int argc, char **argv, char **azColName) {
         GtkTreeIter iter;
 
         gtk_list_store_append (applet->tree_store2, &iter);
-        gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, argv[0], COL_URL2, argv[1], COL_GENRE2, argv[2] -1);
+        gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, argv[0], COL_URL2, argv[1], COL_GENRE2, argv[2], -1);
 
         return 0;
+}
+
+void icecast_search(GtkWidget *widget, gpointer data) {
+	streamer_applet *applet = data;
+	GtkTreeIter iter2;
+
+	char query[1024];
+	strcpy(&query[0], (char *) gtk_entry_get_text(GTK_ENTRY(applet->text)));
+
+	clear_store2(applet);
+
+        sqlite_connect(applet);
+        char *zErrMsg2 = 0;
+	char sql[2048];
+	sprintf(&sql[0], "SELECT server_name, listen_url, genre FROM stations WHERE server_name LIKE '%%%s%%' OR listen_url LIKE '%%%s%%' OR genre LIKE '%%%s%%'", &query[0], &query[0], &query[0]);
+        int res = sqlite3_exec(applet->sqlite, &sql[0], cb_sql_icecast, (void*) applet, &zErrMsg2);
+        if (res != SQLITE_OK)
+                push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
+        sqlite3_close(applet->sqlite);
+
+        GtkTreeModel *model2 = GTK_TREE_MODEL(applet->tree_store2);
+        GtkTreeSelection *selection2 = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view2));
+        gtk_tree_model_get_iter_first(model2, &iter2);
+        gtk_tree_selection_select_iter(selection2, &iter2);
 }
 

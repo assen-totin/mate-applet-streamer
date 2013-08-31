@@ -76,6 +76,7 @@ typedef struct {
         GtkWidget *event_box;
 	GtkWidget *quitDialog;
 	GtkWidget *progress;
+	GtkWidget *text;
 	char url[1024];
 	char name[1024];
 	char xmlfile[1024];
@@ -143,6 +144,7 @@ gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer
 int cb_sql_fav(void *, int, char **, char **);
 int cb_sql_icecast(void *, int, char **, char **);
 void icecast_refresh(GtkWidget *, gpointer);
+void icecast_search(GtkWidget *, gpointer);
 
 gboolean icecast_dnld(streamer_applet *);
 gboolean icecast_xml(streamer_applet *);

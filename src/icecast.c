@@ -115,6 +115,9 @@ gboolean icecast_xml (streamer_applet *applet) {
 	// Count entries
 	applet->xml_total_entries = count_elements(root_element, 0);
 
+	// Clear table
+	clear_store2(applet);
+
 	// Process recursively
 	print_element_names(root_element, applet);
 
@@ -202,7 +205,7 @@ gboolean write_icecast(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
         char sql[2048];
         gchar *name, *url, *genre;
 
-        gtk_tree_model_get(model, iter, COL_NAME2, &name, COL_URL2, &url, COL_GENRE2, &genre -1);
+        gtk_tree_model_get(model, iter, COL_NAME2, &name, COL_URL2, &url, COL_GENRE2, &genre, -1);
         sprintf(&sql[0], "INSERT INTO stations (server_name, listen_url, genre) VALUES ('%s', '%s', '%s')", name, url, genre);
         sqlite_insert(applet, &sql[0]);
 
