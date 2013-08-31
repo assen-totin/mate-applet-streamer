@@ -72,6 +72,7 @@ enum {
 typedef struct {
 	GMainLoop *loop;
 	MatePanelApplet *applet;
+	GtkActionGroup *action_group;
         GtkWidget *image;
         GtkWidget *event_box;
 	GtkWidget *quitDialog;
@@ -94,7 +95,9 @@ typedef struct {
 	char xml_genre[1024];
 	int xml_total_entries;
 	int xml_curr_entries;
+	int icecast_total_entries;
 	gdouble progress_ratio;
+	char ui[8192];
 } streamer_applet;
 
 void menu_cb_favourites(GtkAction *, streamer_applet *);
@@ -117,11 +120,7 @@ static const GtkActionEntry applet_menu_actions [] = {
 */
 
 // Prototypes
-//gboolean packagekit_main();
-//int yumupdatesd_main();
-//void yum_main();
-//void aptcheck_main();
-//void aptget_main();
+void play_menu (GtkAction *, streamer_applet *);
 
 void gstreamer_pause(streamer_applet *);
 void gstreamer_play(streamer_applet *);

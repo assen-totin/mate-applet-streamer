@@ -152,8 +152,39 @@ int cb_sql_recent(void *data, int argc, char **argv, char **azColName) {
         return 0;
 }
 
+int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
+        streamer_applet *applet = data;
 
-static const GtkActionEntry applet_menu_actions [] = {
+	GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
+	g_checksum_update(checksum, argv[1], -1);
+
+        GtkActionEntry action;
+        action.name = g_checksum_get_string(checksum);
+        action.label = argv[0];
+        action.callback = G_CALLBACK(play_menu);
+
+        gtk_action_group_add_actions(applet->action_group, &action, 1, applet);
+
+	sprintf(&applet->ui[0], "%s<menuitem action='%s' />", &applet->ui[0], g_checksum_get_string(checksum));
+
+        return 0;
+}
+
+void play_menu (GtkAction *action, streamer_applet *applet) {
+
+}
+
+const gchar *ui1 = "<menu name='SubMenu1' action='Recent'>";
+
+const gchar *ui2 = "</menu><menu name='SubMenu2' action='Favourites'>";
+
+const gchar *ui3 = 
+"</menu>"
+"<menuitem name='MenuItem1' action='All' />"
+"<menuitem name='MenuItem2' action='About' />"
+;
+
+static const GtkActionEntry applet_menu_actions[] = {
 	{ "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, NULL },
         { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, NULL },
         { "All", GTK_STOCK_EXECUTE, "_All Stations", NULL, NULL, G_CALLBACK (menu_cb_all) },
@@ -163,6 +194,8 @@ static const GtkActionEntry applet_menu_actions [] = {
 
 static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer data) {
 	streamer_applet *applet;
+	char *zErrMsg;
+	int res;
 
 	if (strcmp (iid, APPLET_ID) != 0)
 		return FALSE;
@@ -185,6 +218,7 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	memset(&applet->xml_genre[0], '\0', 1024);
 	applet->xml_curr_entries = 0;
 	applet->icecast_total_entries = 0;
+	memset(&applet->ui[0], '\0', 8096);
 
 	// Check home dir, copy skel database
 	char applet_home_dir[1024], skel_file[1024], local_file[1024];
@@ -252,10 +286,32 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
 	// Put the container into the applet
         gtk_container_add (GTK_CONTAINER (applet->applet), applet->event_box);
 
+	// Menu action group
+	applet->action_group = gtk_action_group_new ("Streamer_Applet_Actions");
+	gtk_action_group_add_actions (applet->action_group, applet_menu_actions, G_N_ELEMENTS (applet_menu_actions), applet);
+
+        // Menu prepare - Recent & Fav
+        if (!sqlite_connect(applet))
+                return FALSE;
+        zErrMsg = 0;
+        res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url FROM recent GROUP BY listen_url ORDER BY unix_timestamp DESC LIMIT 10", cb_sql_recent_10, (void*) applet, &zErrMsg);
+        if (res != SQLITE_OK) {
+                push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
+                sqlite3_free(zErrMsg);
+                return FALSE;
+        }
+
+	sqlite3_close(applet->sqlite);
+
 	// Menu
-	GtkActionGroup *action_group = gtk_action_group_new ("Streamer Applet Actions");
-	gtk_action_group_add_actions (action_group, applet_menu_actions, G_N_ELEMENTS (applet_menu_actions), applet);
-	mate_panel_applet_setup_menu_from_file(applet->applet, "/usr/share/mate-2.0/ui/streamer-applet-menu.xml", action_group);
+	//GtkActionGroup *action_group = gtk_action_group_new ("Streamer Applet Actions");
+	//gtk_action_group_add_actions (action_group, applet_menu_actions, G_N_ELEMENTS (applet_menu_actions), applet);
+	//mate_panel_applet_setup_menu_from_file(applet->applet, "/usr/share/mate-2.0/ui/streamer-applet-menu.xml", action_group);
+	//mate_panel_applet_setup_menu_from_file(applet->applet, "/usr/share/mate-2.0/ui/streamer-applet-menu.xml", applet->action_group);
+	
+	char unf[8096];
+	sprintf(&unf[0], "%s %s %s %s", ui1, &applet->ui[0], ui2, ui3);
+	mate_panel_applet_setup_menu(applet->applet, &unf[0], applet->action_group);
 
 	// Merge menu
 	//GError **error;
@@ -276,8 +332,8 @@ static gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, g
                 push_notification(_("Streamer Applet Error"), _("Unable to connect to DB. Exiting."), NULL);
                 return FALSE;
         }
-        char *zErrMsg = 0;
-        int res = sqlite3_exec(applet->sqlite, "SELECT * FROM recent ORDER BY unix_timestamp DESC LIMIT 1", cb_sql_recent, (void*) applet, &zErrMsg);
+        zErrMsg = 0;
+        res = sqlite3_exec(applet->sqlite, "SELECT * FROM recent ORDER BY unix_timestamp DESC LIMIT 1", cb_sql_recent, (void*) applet, &zErrMsg);
         if (res != SQLITE_OK) {
 		//push_notification(_("Streamer Applet Error"), _("Unable to read DB. Exiting"), NULL);
 		push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
