@@ -138,12 +138,17 @@ void row_del(GtkWidget *, gpointer);
 void row_add(GtkWidget *, gpointer);
 void row_play(GtkWidget *, gpointer);
 void row_copy(GtkWidget *, gpointer);
+void save_favourites(streamer_applet *);
 gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 int cb_sql_fav(void *, int, char **, char **);
+int cb_sql_icecast(void *, int, char **, char **);
 void icecast_refresh(GtkWidget *, gpointer);
 
 gboolean icecast_dnld(streamer_applet *);
 gboolean icecast_xml(streamer_applet *);
 void print_element_names(xmlNode *, streamer_applet *);
 int count_elements(xmlNode * a_node, int counter);
-int progress_update(); 
+void save_icecast(streamer_applet *);
+gboolean write_icecast(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+
+

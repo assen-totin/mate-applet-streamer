@@ -71,8 +71,8 @@ gboolean icecast_dnld(streamer_applet *applet) {
                 if (read_bytes == 0 )
                         break;
                 total_bytes += read_bytes;
-		//gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), total_bytes/remote_size);
-		applet->progress_ratio = total_bytes / ((double)remote_size);
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), total_bytes / ((double)remote_size));
+		//applet->progress_ratio = total_bytes / ((double)remote_size);
 
                 if ((counter_realloc * chunk_size - total_bytes) < chunk_size) {
                         void *_tmp = realloc(buffer, (counter_realloc + 1) * chunk_size);
@@ -124,7 +124,7 @@ gboolean icecast_xml (streamer_applet *applet) {
                 gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, &applet->xml_server_name[0], COL_URL2, &applet->xml_listen_url[0], COL_GENRE2, &applet->xml_genre[0], -1);
 	}
 
-	/* free the document */
+	/* free the document, close transaction */
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
@@ -135,14 +135,15 @@ gboolean icecast_xml (streamer_applet *applet) {
 void print_element_names(xmlNode * a_node, streamer_applet *applet) {
 	xmlNode *cur_node = NULL;
 	GtkTreeIter iter;
+	char sql[1024];
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next) {
 		if ((cur_node->type == XML_ELEMENT_NODE) && (!xmlStrcmp(cur_node->name, (const xmlChar *)"entry")) && (strlen(&applet->xml_listen_url[0]) > 2)) {
-			// Flush to store
+			// Flush to store and SQL
         	        gtk_list_store_append (applet->tree_store2, &iter);
                 	gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, &applet->xml_server_name[0], COL_URL2, &applet->xml_listen_url[0], COL_GENRE2, &applet->xml_genre[0], -1);
 			applet->xml_curr_entries ++;
-			applet->progress_ratio = applet->xml_curr_entries / ((double)applet->xml_total_entries) ;
+			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), applet->xml_curr_entries / ((double)applet->xml_total_entries));
 		}
 
 		if ((cur_node->type == XML_ELEMENT_NODE) && (cur_node->children)){
@@ -176,17 +177,36 @@ int count_elements(xmlNode * a_node, int counter) {
 }
 
 
-int progress_update(void *data) {
-	streamer_applet *applet = data;
+void save_icecast(streamer_applet *applet) {
+        char sql[2048];
+        GtkTreeIter iter;
 
-	if (applet->progress_ratio > 1) {
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), 1);
-		return 0;
-	}
+        // Clear DB - implies connect/disconnect
+        sqlite_delete(applet, "DELETE FROM stations");
+        
+        // Open transaction for all inserts
+        sqlite_connect(applet);
+        sqlite3_exec(applet->sqlite, "BEGIN", 0, 0, 0);
 
-	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress), applet->progress_ratio);
+        // Get data from widget
+        GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(applet->tree_view2));
+        gtk_tree_model_foreach(model, write_icecast, applet);
 
-	return 1;
+        // Close transaction
+        sqlite3_exec(applet->sqlite, "COMMIT", 0, 0, 0);
+}
+
+
+gboolean write_icecast(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data ){
+        streamer_applet *applet = data;
+        char sql[2048];
+        gchar *name, *url, *genre;
+
+        gtk_tree_model_get(model, iter, COL_NAME2, &name, COL_URL2, &url, COL_GENRE2, &genre -1);
+        sprintf(&sql[0], "INSERT INTO stations (server_name, listen_url, genre) VALUES ('%s', '%s', '%s')", name, url, genre);
+        sqlite_insert(applet, &sql[0]);
+
+        return FALSE;
 }
 
 
