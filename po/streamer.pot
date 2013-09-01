@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-01 18:17+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/menu.c:389
+msgid "<enter name>"
+msgstr ""
+
+#: src/menu.c:389
+msgid "<enter url>"
+msgstr ""
+
+#: src/menu.c:35
+msgid "An applet which lets you listen to online radio streams."
+msgstr ""
+
+#: src/menu.c:35
+msgid "Assen Totin <assen.totin@gmail.com>"
+msgstr ""
+
+#: src/main.c:122
+msgid "Cannot access configuration directory. Exiting."
+msgstr ""
+
+#: src/main.c:148
+msgid "Cannot copy database file to configuration directory. Exiting."
+msgstr ""
+
+#: src/main.c:129
+msgid "Cannot create configuration directory. Exiting."
+msgstr ""
+
+#: src/main.c:134
+msgid "Cannot verify configuration directory. Exiting."
+msgstr ""
+
+#: src/main.c:153
+msgid "Cannot verify database file. Exiting."
+msgstr ""
+
+#: src/main.c:143
+msgid "Database file is not a regular file. Exiting."
+msgstr ""
+
+#: src/menu.c:566
+#, c-format
+msgid "Downloading directory..."
+msgstr ""
+
+#: src/menu.c:142
+msgid "Favourites"
+msgstr ""
+
+#: src/menu.c:257
+msgid "Genre"
+msgstr ""
+
+#: src/menu.c:146
+msgid "Icecast"
+msgstr ""
+
+#: src/menu.c:35 src/menu.c:39 src/menu.c:150
+msgid "MATE Streamer Applet"
+msgstr ""
+
+#: src/menu.c:210 src/menu.c:243
+msgid "Name"
+msgstr ""
+
+#: src/menu.c:193
+#, c-format
+msgid "No stations found. Press Refresh button to download stations."
+msgstr ""
+
+#: src/menu.c:629
+msgid "No stream selected."
+msgstr ""
+
+#: src/main.c:228
+msgid "No stream selected. Right-click to load one."
+msgstr ""
+
+#: src/gstreamer.c:29 src/menu.c:638 src/sqlite.c:78
+msgid "PAUSED: "
+msgstr ""
+
+#: src/gstreamer.c:41 src/menu.c:650
+msgid "PLAYING: "
+msgstr ""
+
+#: src/menu.c:573
+#, c-format
+msgid "Processing directory..."
+msgstr ""
+
+#: src/menu.c:115 src/menu.c:586
+#, c-format
+msgid "Ready"
+msgstr ""
+
+#: src/menu.c:629
+msgid "Right-click to load one."
+msgstr ""
+
+#: src/menu.c:580
+#, c-format
+msgid "Saving entries..."
+msgstr ""
+
+#: src/icecast.c:35 src/icecast.c:45 src/icecast.c:108 src/main.c:122
+#: src/main.c:129 src/main.c:134 src/main.c:143 src/main.c:148 src/main.c:153
+#: src/main.c:160 src/main.c:190 src/main.c:197 src/main.c:204 src/menu.c:169
+#: src/menu.c:184 src/menu.c:607 src/sqlite.c:33
+msgid "Streamer Applet Error"
+msgstr ""
+
+#: src/menu.c:216 src/menu.c:251
+msgid "URL"
+msgstr ""
+
+#: src/sqlite.c:33
+msgid "Unable to connect to DB."
+msgstr ""
+
+#: src/main.c:160
+msgid "Unable to connect to DB. Exiting."
+msgstr ""
+
+#: src/icecast.c:45
+msgid "Unable to create temporary file."
+msgstr ""
+
+#: src/icecast.c:108
+msgid "Unable to parse XML file."
+msgstr ""
+
+#: src/menu.c:169 src/menu.c:184 src/menu.c:607
+msgid "Unable to read DB."
+msgstr ""
+
+#: src/icecast.c:35
+msgid "Unable to read remote XML file."
+msgstr ""

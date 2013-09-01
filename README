@@ -6,12 +6,19 @@ to. Click on the applet to toggle its state from "pause" to "play"; click it
 again to pause it.
 
 To manage your stations, right-click the applet and go to the "All" menu. 
-There you can add new stations (name and URL required, the URL includes the
-protocol), remove existing ones or begin playing one. You can also reorder the 
-stations there. When you click the "OK" button, the list will be saved as it
-appears (to cancel modifications, just close the window using the window 
-manager).
 
+On the 'Favourites' tab you can add new stations (name and URL required, the 
+URL includes the protocol), remove existing ones or begin playing one. You 
+can also reorder the stations there. The list will be saved on each change.
+
+On the 'Icecast' tab you can download the full Icecast directory (it will be
+saved after this), search through it, listen to a station or copy one to the
+Favourites list.
+
+When the applet starts, it will also load the top 10 recent stations and the 
+top 10 favourites into two separate sub-menus in the right-click menu. From 
+them you can launch a station too. Due to MATE limitations, these two sub-
+menus cannot be updated dynamically and will only change on applet start. 
 
 
 IMPORTANT! This free softwarte is released with hope that it will be useful, 

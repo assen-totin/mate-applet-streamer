@@ -33,9 +33,6 @@ applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet
 servicedir = $(datadir)/dbus-1/services
 service_DATA = org.mate.panel.applet.StreamerApplet.service
 
-xmluidir = $(datadir)/mate-2.0/ui
-xmlui_DATA = streamer-applet-menu.xml
-
 sqlitedir = @SQLITE_SKEL_DIR@
 sqlite_DATA = streamer.sqlite
 
