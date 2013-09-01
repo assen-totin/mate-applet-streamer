@@ -1,60 +1,158 @@
-# Bulgarian translations for SoftUpd package
-# Български превод за пакет SoftUpd.
-# Copyright (C) 2012 THE SoftUpd'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the SoftUpd package.
-# root <atotin@itdnet.net>, 2012.
+# English translations for PACKAGE package.
+# Copyright (C) 2013 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# root <assen.totin@gmail.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 20:47+0300\n"
-"PO-Revision-Date: 2012-06-27 21:04+0300\n"
-"Last-Translator: root <atotin@itdnet.net>\n"
+"POT-Creation-Date: 2013-09-01 18:17+0300\n"
+"PO-Revision-Date: 2013-09-01 18:20+0300\n"
+"Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: English\n"
-"Language: en\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/main.c:46
+#: src/menu.c:389
+msgid "<enter name>"
+msgstr "<enter name>"
+
+#: src/menu.c:389
+msgid "<enter url>"
+msgstr "<enter url>"
+
+#: src/menu.c:35
+msgid "An applet which lets you listen to online radio streams."
+msgstr "An applet which lets you listen to online radio streams."
+
+#: src/menu.c:35
+msgid "Assen Totin <assen.totin@gmail.com>"
+msgstr "Assen Totin <assen.totin@gmail.com>"
+
+#: src/main.c:122
+msgid "Cannot access configuration directory. Exiting."
+msgstr "Cannot access configuration directory. Exiting."
+
+#: src/main.c:148
+msgid "Cannot copy database file to configuration directory. Exiting."
+msgstr "Cannot copy database file to configuration directory. Exiting."
+
+#: src/main.c:129
+msgid "Cannot create configuration directory. Exiting."
+msgstr "Cannot create configuration directory. Exiting."
+
+#: src/main.c:134
+msgid "Cannot verify configuration directory. Exiting."
+msgstr "Cannot verify configuration directory. Exiting."
+
+#: src/main.c:153
+msgid "Cannot verify database file. Exiting."
+msgstr "Cannot verify database file. Exiting."
+
+#: src/main.c:143
+msgid "Database file is not a regular file. Exiting."
+msgstr "Database file is not a regular file. Exiting."
+
+#: src/menu.c:566
 #, c-format
-msgid "Install updates?"
-msgstr "Install updates?"
+msgid "Downloading directory..."
+msgstr "Downloading directory..."
 
-#: src/main.c:44
+#: src/menu.c:142
+msgid "Favourites"
+msgstr "Favourites"
+
+#: src/menu.c:257
+msgid "Genre"
+msgstr "Genre"
+
+#: src/menu.c:146
+msgid "Icecast"
+msgstr "Icecast"
+
+#: src/menu.c:35 src/menu.c:39 src/menu.c:150
+msgid "MATE Streamer Applet"
+msgstr "MATE Streamer Applet"
+
+#: src/menu.c:210 src/menu.c:243
+msgid "Name"
+msgstr "Name"
+
+#: src/menu.c:193
 #, c-format
-msgid "Pending updates: %u"
-msgstr "Pending updates: %u"
+msgid "No stations found. Press Refresh button to download stations."
+msgstr "No stations found. Press Refresh button to download stations."
 
-#: src/main.c:77
+#: src/menu.c:629
+msgid "No stream selected."
+msgstr "No stream selected."
+
+#: src/main.c:228
+msgid "No stream selected. Right-click to load one."
+msgstr "No stream selected. Right-click to load one."
+
+#: src/gstreamer.c:29 src/menu.c:638 src/sqlite.c:78
+msgid "PAUSED: "
+msgstr "PAUSED: "
+
+#: src/gstreamer.c:41 src/menu.c:650
+msgid "PLAYING: "
+msgstr "PLAYING: "
+
+#: src/menu.c:573
 #, c-format
-msgid "You have %u updates. Click to proceed."
-msgstr "You have %u updates. Click to proceed."
+msgid "Processing directory..."
+msgstr "Processing directory..."
 
-#: src/main.c:73 src/main.c:137
-msgid "Your system is up to date."
-msgstr "Your system is up to date."
-
-# src/main.c:73
-msgid "Software updates available."
-msgstr "Software updates available."
-
-#: src/main.c:77
+#: src/menu.c:115 src/menu.c:586
 #, c-format
-msgid "You have %u updates."
-msgstr "You have %u updates."
+msgid "Ready"
+msgstr "Ready"
 
-# src/main.c:73
-msgid "You have to update your system manually."
-msgstr "You have to update your system manually."
+#: src/menu.c:629
+msgid "Right-click to load one."
+msgstr "Right-click to load one."
 
-# src/main.c:73
-msgid "ERROR:"
-msgstr "ERROR:"
+#: src/menu.c:580
+#, c-format
+msgid "Saving entries..."
+msgstr "Saving entries..."
 
-# src/main.c:73
-msgid "Could not launch installer:"
-msgstr "Could not launch installer:"
+#: src/icecast.c:35 src/icecast.c:45 src/icecast.c:108 src/main.c:122
+#: src/main.c:129 src/main.c:134 src/main.c:143 src/main.c:148 src/main.c:153
+#: src/main.c:160 src/main.c:190 src/main.c:197 src/main.c:204 src/menu.c:169
+#: src/menu.c:184 src/menu.c:607 src/sqlite.c:33
+msgid "Streamer Applet Error"
+msgstr "Streamer Applet Error"
 
+#: src/menu.c:216 src/menu.c:251
+msgid "URL"
+msgstr "URL"
+
+#: src/sqlite.c:33
+msgid "Unable to connect to DB."
+msgstr "Unable to connect to DB."
+
+#: src/main.c:160
+msgid "Unable to connect to DB. Exiting."
+msgstr "Unable to connect to DB. Exiting."
+
+#: src/icecast.c:45
+msgid "Unable to create temporary file."
+msgstr "Unable to create temporary file."
+
+#: src/icecast.c:108
+msgid "Unable to parse XML file."
+msgstr "Unable to parse XML file."
+
+#: src/menu.c:169 src/menu.c:184 src/menu.c:607
+msgid "Unable to read DB."
+msgstr "Unable to read DB."
+
+#: src/icecast.c:35
+msgid "Unable to read remote XML file."
+msgstr "Unable to read remote XML file."

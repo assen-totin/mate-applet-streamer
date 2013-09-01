@@ -1,15 +1,15 @@
-# Russian translations for 1 package
-# Английские переводы для пакета 1.
-# Copyright (C) 2012 THE 1'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the SoftUpd package.
-# root <assen.totin@gmail.com>, 2012.
+# Russian translations for PACKAGE package
+# Английские переводы для пакета PACKAGE.
+# Copyright (C) 2013 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# root <assen.totin@gmail.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 20:47+0300\n"
-"PO-Revision-Date: 2012-06-29 17:39+0300\n"
+"POT-Creation-Date: 2013-09-01 18:17+0300\n"
+"PO-Revision-Date: 2013-09-01 18:19+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -19,43 +19,142 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/main.c:46
+#: src/menu.c:389
+msgid "<enter name>"
+msgstr "<введите имя>"
+
+#: src/menu.c:389
+msgid "<enter url>"
+msgstr "<введите адрес (URL)>"
+
+#: src/menu.c:35
+msgid "An applet which lets you listen to online radio streams."
+msgstr "Программа для прослушивания онлайн радио."
+
+#: src/menu.c:35
+msgid "Assen Totin <assen.totin@gmail.com>"
+msgstr "Асен Тотин <assen.totin@gmail.com>"
+
+#: src/main.c:122
+msgid "Cannot access configuration directory. Exiting."
+msgstr "Нет доступа к директории конфигурации. Запуск прекращается."
+
+#: src/main.c:148
+msgid "Cannot copy database file to configuration directory. Exiting."
+msgstr "Не удалось скопировать базу в конфигурационную директорию. Запуск прекращается."
+
+#: src/main.c:129
+msgid "Cannot create configuration directory. Exiting."
+msgstr "Не удалось создать конфигурационную директорию. Запуск прекращается."
+
+#: src/main.c:134
+msgid "Cannot verify configuration directory. Exiting."
+msgstr "Не удалось прочесть конфигурационную директорию. Запуск прекращается."
+
+#: src/main.c:153
+msgid "Cannot verify database file. Exiting."
+msgstr "Не удалось прочесть безу данных. Запуск прекращается."
+
+#: src/main.c:143
+msgid "Database file is not a regular file. Exiting."
+msgstr "База данных не читается. Запуск прекращается."
+
+#: src/menu.c:566
 #, c-format
-msgid "Install updates?"
-msgstr "Обновить пакеты?"
+msgid "Downloading directory..."
+msgstr "Получение списка..."
 
-#: src/main.c:44
+#: src/menu.c:142
+msgid "Favourites"
+msgstr "Любимые"
+
+#: src/menu.c:257
+msgid "Genre"
+msgstr "Жанр"
+
+#: src/menu.c:146
+msgid "Icecast"
+msgstr "Icecast"
+
+#: src/menu.c:35 src/menu.c:39 src/menu.c:150
+msgid "MATE Streamer Applet"
+msgstr "Программа для онлайн радио"
+
+#: src/menu.c:210 src/menu.c:243
+msgid "Name"
+msgstr "Имя"
+
+#: src/menu.c:193
 #, c-format
-msgid "Pending updates: %u"
-msgstr "У %u пакетов есть обновления."
+msgid "No stations found. Press Refresh button to download stations."
+msgstr "Список пуст. Нажмите Refresh для скачивания списка."
 
-#: src/main.c:77
+#: src/menu.c:629
+msgid "No stream selected."
+msgstr "Не выбрана станция."
+
+#: src/main.c:228
+msgid "No stream selected. Right-click to load one."
+msgstr "Не выбрана станция. Нажмите правой кнопкой мыши."
+
+#: src/gstreamer.c:29 src/menu.c:638 src/sqlite.c:78
+msgid "PAUSED: "
+msgstr "ПАУЗА: "
+
+#: src/gstreamer.c:41 src/menu.c:650
+msgid "PLAYING: "
+msgstr "ИГРАЕТ: "
+
+#: src/menu.c:573
 #, c-format
-msgid "You have %u updates. Click to proceed."
-msgstr "У %u пакетов есть обновления. Нажмите, чтобы продолжить."
+msgid "Processing directory..."
+msgstr "Идет обработка..."
 
-#: src/main.c:73 src/main.c:137
-msgid "Your system is up to date."
-msgstr "Новых пакетов нет."
-
-#: src/main.c:77
+#: src/menu.c:115 src/menu.c:586
 #, c-format
-msgid "You have %u updates."
-msgstr "У %u пакетов есть обновления."
+msgid "Ready"
+msgstr "Готовность"
 
-#: src/main.c:73 src/main.c:137
-msgid "Software updates available."
-msgstr "Поступили новые пакеты."
+#: src/menu.c:629
+msgid "Right-click to load one."
+msgstr "Нажмите правой кнопкой мыши."
 
-# src/main.c:73
-msgid "You have to update your system manually."
-msgstr "Вам надо установить обновления вручную."
+#: src/menu.c:580
+#, c-format
+msgid "Saving entries..."
+msgstr "Идет запись..."
 
-# src/main.c:73
-msgid "ERROR:"
-msgstr "ОШИБКА:"
+#: src/icecast.c:35 src/icecast.c:45 src/icecast.c:108 src/main.c:122
+#: src/main.c:129 src/main.c:134 src/main.c:143 src/main.c:148 src/main.c:153
+#: src/main.c:160 src/main.c:190 src/main.c:197 src/main.c:204 src/menu.c:169
+#: src/menu.c:184 src/menu.c:607 src/sqlite.c:33
+msgid "Streamer Applet Error"
+msgstr "Программа онлайн радио"
 
-# src/main.c:73
-msgid "Could not launch installer:"
-msgstr "Не удалось запустить следующую программу:"
+#: src/menu.c:216 src/menu.c:251
+msgid "URL"
+msgstr "URL"
 
+#: src/sqlite.c:33
+msgid "Unable to connect to DB."
+msgstr "Нет связи с базой данных."
+
+#: src/main.c:160
+msgid "Unable to connect to DB. Exiting."
+msgstr "Нет связи с базой данных. Запуск прекращается."
+
+#: src/icecast.c:45
+msgid "Unable to create temporary file."
+msgstr "Не удалось создать временный файл."
+
+#: src/icecast.c:108
+msgid "Unable to parse XML file."
+msgstr "Не удалось прочесть XML файл."
+
+#: src/menu.c:169 src/menu.c:184 src/menu.c:607
+msgid "Unable to read DB."
+msgstr "Не удалось прочесть базу данных."
+
+#: src/icecast.c:35
+msgid "Unable to read remote XML file."
+msgstr "Не удалось скачать XML файл."

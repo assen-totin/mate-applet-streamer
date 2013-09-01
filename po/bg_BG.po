@@ -1,16 +1,16 @@
-# Bulgarian translations for SoftUpd package
-# Български превод за пакет SoftUpd.
-# Copyright (C) 2012 THE SoftUpd'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the SoftUpd package.
-# root <atotin@itdnet.net>, 2012.
+# Bulgarian translations for PACKAGE package
+# Български превод за пакет PACKAGE.
+# Copyright (C) 2013 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# root <assen.totin@gmail.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 20:47+0300\n"
-"PO-Revision-Date: 2012-06-27 21:04+0300\n"
-"Last-Translator: root <atotin@itdnet.net>\n"
+"POT-Creation-Date: 2013-09-01 18:17+0300\n"
+"PO-Revision-Date: 2013-09-01 18:19+0300\n"
+"Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Bulgarian\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
@@ -18,43 +18,142 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/main.c:46
+#: src/menu.c:389
+msgid "<enter name>"
+msgstr "<въведете име>"
+
+#: src/menu.c:389
+msgid "<enter url>"
+msgstr "<въведете URL>"
+
+#: src/menu.c:35
+msgid "An applet which lets you listen to online radio streams."
+msgstr "Аплет за слушане на онлайн радио."
+
+#: src/menu.c:35
+msgid "Assen Totin <assen.totin@gmail.com>"
+msgstr "Асен Тотин <assen.totin@gmail.com>"
+
+#: src/main.c:122
+msgid "Cannot access configuration directory. Exiting."
+msgstr "Конфигурационната директория е недостъпна. Аплетът не може да стартира."
+
+#: src/main.c:148
+msgid "Cannot copy database file to configuration directory. Exiting."
+msgstr "Базата не може да бъде копирана в конфигурационната директория. Аплетът не може да стартира."
+
+#: src/main.c:129
+msgid "Cannot create configuration directory. Exiting."
+msgstr "Конфигурационната директория не може да бъде създадена. Аплетът не може да стартира."
+
+#: src/main.c:134
+msgid "Cannot verify configuration directory. Exiting."
+msgstr "Конфигурационната директория не може да бъде прочетена. Аплетът не може да стартира."
+
+#: src/main.c:153
+msgid "Cannot verify database file. Exiting."
+msgstr "Базата данни не може да бъде прочетена. Аплетът не може да стартира."
+
+#: src/main.c:143
+msgid "Database file is not a regular file. Exiting."
+msgstr "Базата данни е повредена. Аплетът не може да стартира."
+
+#: src/menu.c:566
 #, c-format
-msgid "Install updates?"
-msgstr "Да ги инсталирам ли?"
+msgid "Downloading directory..."
+msgstr "Получаване на списъка..."
 
-#: src/main.c:44
+#: src/menu.c:142
+msgid "Favourites"
+msgstr "Любими"
+
+#: src/menu.c:257
+msgid "Genre"
+msgstr "Жанр"
+
+#: src/menu.c:146
+msgid "Icecast"
+msgstr "Icecast"
+
+#: src/menu.c:35 src/menu.c:39 src/menu.c:150
+msgid "MATE Streamer Applet"
+msgstr "MATE радио аплет"
+
+#: src/menu.c:210 src/menu.c:243
+msgid "Name"
+msgstr "Име"
+
+#: src/menu.c:193
 #, c-format
-msgid "Pending updates: %u"
-msgstr "Чакащи пакети: %u"
+msgid "No stations found. Press Refresh button to download stations."
+msgstr "Списъкът е празен. Натиснете Refresh за обновяване."
 
-#: src/main.c:77
+#: src/menu.c:629
+msgid "No stream selected."
+msgstr "Не е избрано радио."
+
+#: src/main.c:228
+msgid "No stream selected. Right-click to load one."
+msgstr "Не е избрано радио. Щракнете с десен бутон на мишката."
+
+#: src/gstreamer.c:29 src/menu.c:638 src/sqlite.c:78
+msgid "PAUSED: "
+msgstr "ПАУЗА: "
+
+#: src/gstreamer.c:41 src/menu.c:650
+msgid "PLAYING: "
+msgstr "СЛУШАТЕ: "
+
+#: src/menu.c:573
 #, c-format
-msgid "You have %u updates. Click to proceed."
-msgstr "Имате %u чакащи пакета. Щракнете с мишката."
+msgid "Processing directory..."
+msgstr "Обработване на списъка..."
 
-#: src/main.c:73 src/main.c:137
-msgid "Your system is up to date."
-msgstr "Нямате чакащи пакети."
-
-# src/main.c:73
-msgid "Software updates available."
-msgstr "Имате чакащи пакети."
-
-#: src/main.c:77
+#: src/menu.c:115 src/menu.c:586
 #, c-format
-msgid "You have %u updates."
-msgstr "Имате %u чакащи пакета."
+msgid "Ready"
+msgstr "Готово"
 
-# src/main.c:73
-msgid "You have to update your system manually."
-msgstr "Трябва ръчно да инсталирате пакетите."
+#: src/menu.c:629
+msgid "Right-click to load one."
+msgstr "Щракнете с десен бутон на мишката."
 
-# src/main.c:73
-msgid "ERROR:"
-msgstr "ГРЕШКА:"
+#: src/menu.c:580
+#, c-format
+msgid "Saving entries..."
+msgstr "Записване..."
 
-# src/main.c:73
-msgid "Could not launch installer:"
-msgstr "Следната програма не може да бъде стартирана:"
+#: src/icecast.c:35 src/icecast.c:45 src/icecast.c:108 src/main.c:122
+#: src/main.c:129 src/main.c:134 src/main.c:143 src/main.c:148 src/main.c:153
+#: src/main.c:160 src/main.c:190 src/main.c:197 src/main.c:204 src/menu.c:169
+#: src/menu.c:184 src/menu.c:607 src/sqlite.c:33
+msgid "Streamer Applet Error"
+msgstr "Грешка на радио аплета"
 
+#: src/menu.c:216 src/menu.c:251
+msgid "URL"
+msgstr "URL"
+
+#: src/sqlite.c:33
+msgid "Unable to connect to DB."
+msgstr "Няма връзка с базата данни."
+
+#: src/main.c:160
+msgid "Unable to connect to DB. Exiting."
+msgstr "Unable to connect to DB. Аплетът не може да стартира."
+
+#: src/icecast.c:45
+msgid "Unable to create temporary file."
+msgstr "Не може да се създаде временен файл."
+
+#: src/icecast.c:108
+msgid "Unable to parse XML file."
+msgstr "XML файлът не се чете."
+
+#: src/menu.c:169 src/menu.c:184 src/menu.c:607
+msgid "Unable to read DB."
+msgstr "Базата данни е недостъпна."
+
+#: src/icecast.c:35
+msgid "Unable to read remote XML file."
+msgstr "XML файлът не може да бъде свален."
