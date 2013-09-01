@@ -93,15 +93,16 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 
         GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
         g_checksum_update(checksum, argv[1], -1);
-/*
+
         GList *list = gtk_action_group_list_actions(applet->action_group);
-        while (existing_action = GTK_ACTION(g_list_next(list))) {
+        for(element = g_list_first(list); element; element = g_list_next(element)) {
+                existing_action = element->data;
                 if (!strcmp(gtk_action_get_name(existing_action), g_checksum_get_string(checksum))) {
                         match = TRUE;
                         break;
                 }
         }
-*/
+
 	if (!match) {
         	action.name = g_checksum_get_string(checksum);
 	        action.label = argv[0];
