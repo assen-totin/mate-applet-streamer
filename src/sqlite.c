@@ -89,6 +89,7 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 	gboolean match = FALSE;
 	GtkAction *existing_action;
 	GtkActionEntry action;
+	GList *element;
 	int i;
 
         GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
