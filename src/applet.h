@@ -56,6 +56,22 @@
 #define ICECAST_URL_XML "http://dir.xiph.org/yp.xml"
 #define ICECAST_TMP_FILE "icecast_dnld"
 
+// Menu strings
+static const gchar *ui1 = 
+"<menu name='SubMenu1' action='Recent'>"
+;
+
+static const gchar *ui2 = 
+"</menu>"
+"<menu name='SubMenu2' action='Favourites'>"
+;
+
+static const gchar *ui3 =
+"</menu>"
+"<menuitem name='MenuItem1' action='All' />"
+"<menuitem name='MenuItem2' action='About' />"
+;
+
 enum {
         COL_URL = 0,
         COL_NAME,
@@ -68,6 +84,12 @@ enum {
 	COL_GENRE2,
         NUM_COLS2
 };
+
+struct url_hash {
+	char hash[64];
+	char url[1024];
+	char name[1024];
+} url_hash;
 
 typedef struct {
 	GMainLoop *loop;
@@ -97,35 +119,44 @@ typedef struct {
 	int xml_curr_entries;
 	int icecast_total_entries;
 	gdouble progress_ratio;
-	char ui[8192];
+	char ui_fav[10240];
+	char ui_recent[1024];
+	struct url_hash hash_fav[10];
+	struct url_hash hash_recent[10];
 } streamer_applet;
 
-void menu_cb_favourites(GtkAction *, streamer_applet *);
-void menu_cb_recent(GtkAction *, streamer_applet *);
-void menu_cb_all(GtkAction *, streamer_applet *);
-void menu_cb_about(GtkAction *, streamer_applet *);
+// util.c
+void push_notification (gchar *, gchar *, gchar *);
+gboolean cp(const char *, const char *);
 
-gboolean sqlite_connect(streamer_applet *);
-gboolean sqlite_insert(streamer_applet *, char *);
-gboolean sqlite_delete(streamer_applet *, char *);
-gboolean sqlite_select(streamer_applet *, char *);
-
-/*
-static const GtkActionEntry applet_menu_actions [] = {
-        { "Favourites", GTK_STOCK_PROPERTIES, "_Favourites", NULL, NULL, G_CALLBACK (menu_cb_favourites) },
-	{ "Recent", GTK_STOCK_PROPERTIES, "_Recent", NULL, NULL, G_CALLBACK (menu_cb_recent) },
-	{ "All", GTK_STOCK_PROPERTIES, "_All", NULL, NULL, G_CALLBACK (menu_cb_all) },
-        { "About", GTK_STOCK_ABOUT, NULL, "_About", NULL, G_CALLBACK (menu_cb_about) }
-};
-*/
-
-// Prototypes
-void play_menu (GtkAction *, streamer_applet *);
-
+// gstreamer.c
 void gstreamer_pause(streamer_applet *);
 void gstreamer_play(streamer_applet *);
 void gstreamer_init(streamer_applet *);
 
+// sqlite.c
+gboolean sqlite_connect(streamer_applet *);
+gboolean sqlite_insert(streamer_applet *, char *);
+gboolean sqlite_select(streamer_applet *, char *);
+int cb_sql_true(void *, int, char **, char **);
+int cb_sql_recent(void *, int, char **, char **);
+int cb_sql_recent_10(void *, int, char **, char **);
+int cb_sql_fav(void *, int, char **, char **);
+int cb_sql_fav_10(void *, int, char **, char **);
+int cb_sql_icecast(void *, int, char **, char **);
+
+// icecast.c
+gboolean icecast_dnld(streamer_applet *);
+gboolean icecast_xml(streamer_applet *);
+void print_elements(xmlNode *, streamer_applet *);
+int count_elements(xmlNode *, int);
+void save_icecast(streamer_applet *);
+gboolean write_icecast(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+
+//menu.c
+void quitDialogClose(GtkWidget *, gpointer);
+void menu_cb_all(GtkAction *, streamer_applet *);
+void menu_cb_about(GtkAction *, streamer_applet *);
 void create_view_and_model (streamer_applet *);
 void create_view_and_model2 (streamer_applet *);
 void cell_edit_name(GtkCellRendererText *, gchar *, gchar *, gpointer);
@@ -140,16 +171,20 @@ void row_play(GtkWidget *, gpointer);
 void row_copy(GtkWidget *, gpointer);
 void save_favourites(streamer_applet *);
 gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
-int cb_sql_fav(void *, int, char **, char **);
-int cb_sql_icecast(void *, int, char **, char **);
 void icecast_refresh(GtkWidget *, gpointer);
 void icecast_search(GtkWidget *, gpointer);
+void play_menu (GtkAction *, streamer_applet *);
+void do_play(streamer_applet *);
+gboolean on_left_click (GtkWidget *, GdkEventButton *, streamer_applet *);
 
-gboolean icecast_dnld(streamer_applet *);
-gboolean icecast_xml(streamer_applet *);
-void print_element_names(xmlNode *, streamer_applet *);
-int count_elements(xmlNode * a_node, int counter);
-void save_icecast(streamer_applet *);
-gboolean write_icecast(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+// main.c
+void applet_back_change (MatePanelApplet *, MatePanelAppletBackgroundType, GdkColor *, GdkPixmap *, streamer_applet *);
+void applet_destroy(MatePanelApplet *, streamer_applet *);
 
-
+// Menu skeleton
+static const GtkActionEntry applet_menu_actions[] = {
+        { "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, NULL },
+        { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, NULL },
+        { "All", GTK_STOCK_EXECUTE, "_All Stations", NULL, NULL, G_CALLBACK (menu_cb_all) },
+        { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
+};

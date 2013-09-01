@@ -119,7 +119,7 @@ gboolean icecast_xml (streamer_applet *applet) {
 	clear_store2(applet);
 
 	// Process recursively
-	print_element_names(root_element, applet);
+	print_elements(root_element, applet);
 
 	// Flush last entry
         if (strlen(&applet->xml_listen_url[0]) > 2){
@@ -135,7 +135,7 @@ gboolean icecast_xml (streamer_applet *applet) {
 }
 
 
-void print_element_names(xmlNode * a_node, streamer_applet *applet) {
+void print_elements(xmlNode * a_node, streamer_applet *applet) {
 	xmlNode *cur_node = NULL;
 	GtkTreeIter iter;
 	char sql[1024];
@@ -160,7 +160,7 @@ void print_element_names(xmlNode * a_node, streamer_applet *applet) {
 				sprintf(&applet->xml_genre[0], "%s", cur_node->children->content);
 		}
 
-		print_element_names(cur_node->children, applet);
+		print_elements(cur_node->children, applet);
 	}
 }
 

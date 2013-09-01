@@ -21,12 +21,6 @@
 #include "../config.h"
 #include "applet.h"
 
-void quitDialogOK(GtkWidget *widget, gpointer data) {
-        streamer_applet *applet = data;
-
-        gtk_widget_destroy(applet->quitDialog);
-}
-
 
 void quitDialogClose(GtkWidget *widget, gpointer data) {
 	streamer_applet *applet = data;
@@ -47,7 +41,7 @@ void menu_cb_about (GtkAction *action, streamer_applet *applet) {
 
         gtk_dialog_set_default_response (GTK_DIALOG (applet->quitDialog), GTK_RESPONSE_CANCEL);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(applet->quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) applet);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 
         gtk_widget_show_all (GTK_WIDGET(applet->quitDialog));
 }
@@ -158,7 +152,6 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
         gtk_dialog_set_default_response (GTK_DIALOG (applet->quitDialog), GTK_RESPONSE_CANCEL);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(applet->quitDialog)->vbox), notebook);
-        //g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) applet);
 	g_signal_connect (G_OBJECT(buttonClose), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 
 	//gtk_window_set_default(GTK_WINDOW(applet->quitDialog), butt_search);
@@ -200,41 +193,6 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
         	sprintf(&line[0], _("No stations found. Press Refresh button to download stations."));
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress), &line[0]);
 	}
-}
-
-void menu_cb_recent (GtkAction *action, streamer_applet *applet) {
-        char msg1[1024];
-
-        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
-
-        GtkWidget *label = gtk_label_new (&msg1[0]);
-
-        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
-
-        gtk_widget_show_all (GTK_WIDGET(quitDialog));
-}
-
-
-void menu_cb_favourites (GtkAction *action, streamer_applet *applet) {
-        char msg1[1024];
-
-        sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
-
-        GtkWidget *label = gtk_label_new (&msg1[0]);
-
-        GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), label);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
-
-        gtk_widget_show_all (GTK_WIDGET(quitDialog));
 }
 
 
@@ -441,7 +399,6 @@ void row_play (GtkWidget *widget, gpointer data) {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
-	char msg[1024], sql[1024], image_file[1024];
 	
 	if (!strcmp(gtk_widget_get_name(widget), "play_favourites")) {
 		model = GTK_TREE_MODEL(applet->tree_store);
@@ -459,23 +416,7 @@ void row_play (GtkWidget *widget, gpointer data) {
         sprintf(&applet->url[0], "%s", url);
         sprintf(&applet->name[0], "%s", name);
 
-	if (applet->status == 1)
-		gstreamer_pause(applet);
-
-        if (applet->status == 0) {
-                applet->status = 1;
-                sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PLAY);
-                gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
-        }
-
-	time_t now = time(NULL);
-	sprintf(&sql[0], "INSERT INTO recent (server_name, listen_url, unix_timestamp) VALUES ('%s','%s','%u') ", &applet->name[0], &applet->url[0], now);
-	sqlite_insert(applet, &sql[0]);
-
-	gst_element_set_state (applet->gstreamer_playbin2, GST_STATE_READY);
-	g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
-
-	gstreamer_play(applet);
+	do_play(applet);
 }
 
 
@@ -511,6 +452,58 @@ void row_copy (GtkWidget *widget, gpointer data) {
 }
 
 
+void play_menu (GtkAction *action, streamer_applet *applet) {
+	int i;
+	gboolean match = FALSE;
+	
+        for (i=0; i<10; i++) {
+                if (!strcmp(gtk_action_get_name(action), &applet->hash_recent[i].hash[0])) {
+			strcpy(&applet->url[0], &applet->hash_recent[i].url[0]);
+			strcpy(&applet->name[0], &applet->hash_recent[i].name[0]);
+			match = TRUE;
+                        break;
+                }
+        }
+
+	if (!match) {
+	        for (i=0; i<10; i++) {
+        	        if (!strcmp(gtk_action_get_name(action), &applet->hash_fav[i].hash[0])) {
+                	        strcpy(&applet->url[0], &applet->hash_fav[i].url[0]);
+                        	strcpy(&applet->name[0], &applet->hash_fav[i].name[0]);
+	                        match = TRUE;
+        	                break;
+                	}
+        	}
+	}
+
+	if (match) 
+		do_play(applet);
+}
+
+
+void do_play(streamer_applet *applet) {
+	char msg[1024], sql[1024], image_file[1024];
+
+        if (applet->status == 1)
+                gstreamer_pause(applet);
+
+        if (applet->status == 0) {
+                applet->status = 1;
+                sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PLAY);
+                gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
+        }
+
+        time_t now = time(NULL);
+        sprintf(&sql[0], "INSERT INTO recent (server_name, listen_url, unix_timestamp) VALUES ('%s','%s','%u') ", &applet->name[0], &applet->url[0], now);
+        sqlite_insert(applet, &sql[0]);
+
+        gst_element_set_state (applet->gstreamer_playbin2, GST_STATE_READY);
+        g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
+
+        gstreamer_play(applet);
+}
+
+
 void save_favourites(streamer_applet *applet) {
         char sql[2048];
         GtkTreeIter iter;
@@ -539,6 +532,29 @@ gboolean write_favourites(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *i
         sqlite_insert(applet, &sql[0]);
 
         return FALSE;
+}
+
+void clear_store(streamer_applet *applet) {
+        GtkTreeIter iter;
+        gboolean flag = TRUE;
+
+        GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store);
+        gtk_tree_model_get_iter_first(model, &iter);
+
+        while (flag)
+                flag = gtk_list_store_remove (applet->tree_store, &iter);
+}
+
+
+void clear_store2(streamer_applet *applet) {
+        GtkTreeIter iter;
+        gboolean flag = TRUE;
+
+        GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store2);
+        gtk_tree_model_get_iter_first(model, &iter);
+
+        while (flag)
+                flag = gtk_list_store_remove (applet->tree_store2, &iter);
 }
 
 
@@ -573,53 +589,6 @@ void icecast_refresh (GtkWidget *widget, gpointer data) {
 }
 
 
-void clear_store(streamer_applet *applet) {
-        GtkTreeIter iter;
-        gboolean flag = TRUE;
-
-        GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store);
-        gtk_tree_model_get_iter_first(model, &iter);
-
-        while (flag)
-                flag = gtk_list_store_remove (applet->tree_store, &iter);
-}
-
-
-void clear_store2(streamer_applet *applet) {
-        GtkTreeIter iter;
-        gboolean flag = TRUE;
-
-        GtkTreeModel *model = GTK_TREE_MODEL(applet->tree_store2);
-        gtk_tree_model_get_iter_first(model, &iter);
-
-        while (flag)
-                flag = gtk_list_store_remove (applet->tree_store2, &iter);
-}
-
-
-int cb_sql_fav(void *data, int argc, char **argv, char **azColName) {
-	streamer_applet *applet = data;
-        GtkTreeIter iter;
-
-        gtk_list_store_append (applet->tree_store, &iter);
-        gtk_list_store_set (applet->tree_store, &iter, COL_NAME, argv[0], COL_URL, argv[1], -1);
-
-	return 0;
-}
-
-
-int cb_sql_icecast(void *data, int argc, char **argv, char **azColName) {
-        streamer_applet *applet = data;
-        GtkTreeIter iter;
-
-        gtk_list_store_append (applet->tree_store2, &iter);
-        gtk_list_store_set (applet->tree_store2, &iter, COL_NAME2, argv[0], COL_URL2, argv[1], COL_GENRE2, argv[2], -1);
-
-	applet->icecast_total_entries ++;
-
-        return 0;
-}
-
 void icecast_search(GtkWidget *widget, gpointer data) {
 	streamer_applet *applet = data;
 	GtkTreeIter iter2;
@@ -644,5 +613,56 @@ void icecast_search(GtkWidget *widget, gpointer data) {
         gtk_tree_selection_select_iter(selection2, &iter2);
 
 	gtk_tree_view_columns_autosize(GTK_TREE_VIEW(applet->tree_view2));
+}
+
+
+gboolean on_left_click (GtkWidget *event_box, GdkEventButton *event, streamer_applet *applet) {
+        static GtkWidget *label;
+        char msg[1024], image_file[1024];
+
+        // We only process left clicks here
+        if (event->button != 1)
+                return FALSE;
+
+        // No URL loaded? 
+        if (strlen(applet->url) == 0) {
+                push_notification(_("No stream selected."), _("Right-click to load one."), NULL);
+
+                return TRUE;
+        }
+
+        // If we are playing, then swap icon and pause
+        if (applet->status == 1) {
+                applet->status = 0;
+                sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PAUSE);
+                sprintf(&msg[0], "%s%s", _("PAUSED: "), &applet->name[0]);
+                gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
+                gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
+                applet->timestamp = time(NULL);
+                gstreamer_pause(applet);
+                return TRUE;
+        }
+
+        // If we are paused, then swap icon and pause
+        if (applet->status == 0) {
+                applet->status = 1;
+                sprintf(&image_file[0], "%s/%s", APPLET_ICON_PATH, APPLET_ICON_PLAY);
+                sprintf(&msg[0], "%s%s", _("PLAYING: "), &applet->name[0]);
+                gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
+                gtk_image_set_from_file(GTK_IMAGE(applet->image), &image_file[0]);
+
+                // Reconnect if we were paused for more than 10 seconds
+                time_t now = time(NULL);
+                if ((now - applet->timestamp) > 10) {
+                        gst_element_set_state (applet->gstreamer_playbin2, GST_STATE_READY);
+                        g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
+                }
+
+                gstreamer_play(applet);
+
+                return TRUE;
+        }
+
+        return FALSE;
 }
 
