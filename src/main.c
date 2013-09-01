@@ -67,15 +67,6 @@ void applet_destroy(MatePanelApplet *applet_widget, streamer_applet *applet) {
 }
 
 
-/*
-static const GtkActionEntry applet_menu_actions[] = {
-	{ "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, NULL },
-        { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, NULL },
-        { "All", GTK_STOCK_EXECUTE, "_All Stations", NULL, NULL, G_CALLBACK (menu_cb_all) },
-        { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
-};
-*/
-
 gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer data) {
 	streamer_applet *applet;
 	char *zErrMsg;
