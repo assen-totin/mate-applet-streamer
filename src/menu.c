@@ -393,33 +393,6 @@ void row_add (GtkWidget *widget, gpointer data){
 }
 
 
-void row_play (GtkWidget *widget, gpointer data) {
-	streamer_applet *applet = data;
-	gchar *name, *url;
-	GtkTreeIter iter;
-	GtkTreeModel *model;
-	GtkTreeSelection *selection;
-	
-	if (!strcmp(gtk_widget_get_name(widget), "play_favourites")) {
-		model = GTK_TREE_MODEL(applet->tree_store);
-		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
-		gtk_tree_selection_get_selected(selection, &model, &iter);
-		gtk_tree_model_get(model, &iter, COL_NAME, &name, COL_URL, &url, -1);
-	}
-	else {
-                model = GTK_TREE_MODEL(applet->tree_store2);
-                selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view2));
-                gtk_tree_selection_get_selected(selection, &model, &iter);
-                gtk_tree_model_get(model, &iter, COL_NAME2, &name, COL_URL2, &url, -1);
-	}
-
-        sprintf(&applet->url[0], "%s", url);
-        sprintf(&applet->name[0], "%s", name);
-
-	do_play(applet);
-}
-
-
 void row_copy (GtkWidget *widget, gpointer data) {
 	streamer_applet *applet = data;
 	GtkTreeIter iter, iter2, sibling;
@@ -440,7 +413,7 @@ void row_copy (GtkWidget *widget, gpointer data) {
                 gtk_tree_selection_select_iter(selection, &sibling);
         }
 
-        if (iter.stamp)
+        if (sibling.stamp)
                 gtk_list_store_insert_before (applet->tree_store, &iter, &sibling);
         else
                 gtk_list_store_append (applet->tree_store, &iter);
@@ -449,6 +422,33 @@ void row_copy (GtkWidget *widget, gpointer data) {
         gtk_tree_selection_select_iter(selection, &iter);
 
         save_favourites(applet);
+}
+
+
+void row_play (GtkWidget *widget, gpointer data) {
+        streamer_applet *applet = data;
+        gchar *name, *url;
+        GtkTreeIter iter;
+        GtkTreeModel *model;
+        GtkTreeSelection *selection;
+
+        if (!strcmp(gtk_widget_get_name(widget), "play_favourites")) {
+                model = GTK_TREE_MODEL(applet->tree_store);
+                selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view));
+                gtk_tree_selection_get_selected(selection, &model, &iter);
+                gtk_tree_model_get(model, &iter, COL_NAME, &name, COL_URL, &url, -1);
+        }
+        else {
+                model = GTK_TREE_MODEL(applet->tree_store2);
+                selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view2));
+                gtk_tree_selection_get_selected(selection, &model, &iter);
+                gtk_tree_model_get(model, &iter, COL_NAME2, &name, COL_URL2, &url, -1);
+        }
+
+        sprintf(&applet->url[0], "%s", url);
+        sprintf(&applet->name[0], "%s", name);
+
+        do_play(applet);
 }
 
 
