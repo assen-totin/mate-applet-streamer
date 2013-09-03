@@ -36,4 +36,4 @@ service_DATA = org.mate.panel.applet.StreamerApplet.service
 sqlitedir = @SQLITE_SKEL_DIR@
 sqlite_DATA = streamer.sqlite
 
-EXTRA_DIST = streamer-applet-menu.xml streamer.sqlite
+EXTRA_DIST = streamer.sqlite
