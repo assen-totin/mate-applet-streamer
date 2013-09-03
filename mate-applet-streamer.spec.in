@@ -59,10 +59,10 @@ rm -rf "${RPM_BUILD_ROOT}"
 %files -f mate-applet-streamer.lang
 
 %defattr(-, root, root, -)
-%doc AUTHOR BUGS COPYING ChangeLog NEWS README TODO
+%doc AUTHORS BUGS COPYING ChangeLog NEWS README TODO
 %{_libexecdir}/streamer_applet
-%{pixmapdir}/applet_streamer_on.png
-%{pixmapdir}/applet_streamer_off.png
+%{pixmapdir}/applet_streamer_pause.png
+%{pixmapdir}/applet_streamer_play.png
 %{iconsdir}/hicolor/16x16/apps/applet_streamer.png
 %{iconsdir}/hicolor/22x22/apps/applet_streamer.png
 %{iconsdir}/hicolor/24x24/apps/applet_streamer.png
