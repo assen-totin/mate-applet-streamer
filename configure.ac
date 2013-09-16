@@ -133,17 +133,21 @@ fi
 
 if test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
         AC_MSG_ERROR(["*** GStreamer found, but GStreamer-plugins-base not found."])
-elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
-        AC_MSG_ERROR(["*** GStreamer found, but GStreamer-interfaces not found."])
 fi
 
 if test $FOUND_GSTREAMER = "0.10" ; then
+	if test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+        	AC_MSG_ERROR(["*** GStreamer found, but GStreamer-interfaces not found."])
+	fi
         RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
         # Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
         GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
         GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
         AC_DEFINE([HAVE_GST_0_10], [1], [GStreamer 0.10])
 elif test  $FOUND_GSTREAMER = "1.0" ; then
+	if test $FOUND_GSTREAMER_VIDEO = "no" ; then
+        	AC_MSG_ERROR(["*** GStreamer found, but GStreamer-video not found."])
+	fi
         RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
         GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0 gstreamer-video-1.0`
         GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0 gstreamer-video-1.0`
