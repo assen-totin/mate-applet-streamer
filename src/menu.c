@@ -494,8 +494,10 @@ void do_play(streamer_applet *applet) {
         }
 
         time_t now = time(NULL);
+	sqlite_connect(applet);
         sprintf(&sql[0], "INSERT INTO recent (server_name, listen_url, unix_timestamp) VALUES ('%s','%s','%u') ", &applet->name[0], &applet->url[0], now);
         sqlite_insert(applet, &sql[0]);
+	sqlite3_close(applet->sqlite);
 
         gst_element_set_state (applet->gstreamer_playbin2, GST_STATE_READY);
         g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
