@@ -1,3 +1,8 @@
+Sep 26, 2013 - Version 0.0.2
+============================
+* Updated autoconf to accept a non-standard libexec dir
+* More conservative DB writes: write earlier, close earlier
+  to prevent data loss in some cases
 
 Sep 1, 2013 - Version 0.0.1
 ============================
