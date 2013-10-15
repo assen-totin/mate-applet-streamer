@@ -1,3 +1,7 @@
+Oct 16, 2013 - Version 0.0.3
+============================
+* Update in libexec dir handling.
+
 Sep 26, 2013 - Version 0.0.2
 ============================
 * Updated autoconf to accept a non-standard libexec dir
