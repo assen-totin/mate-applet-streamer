@@ -198,7 +198,7 @@ AC_SUBST([APPLET_LIBS])
 AC_CONFIG_FILES([Makefile src/Makefile po/Makefile.in po/Makefile images/Makefile])
 
 # Service files
-AC_CONFIG_FILES([src/org.mate.applets.StreamerApplet.mate-panel-applet src/org.mate.panel.applet.StreamerApplet.service mate-applet-streamer.spec])
+AC_CONFIG_FILES([src/org.mate.applets.StreamerApplet.mate-panel-applet src/org.mate.panel.applet.StreamerApplet.service src/StreamerAppletFactory.server mate-applet-streamer.spec])
 
 # Icons
 AC_DEFINE_UNQUOTED([APPLET_ICON_PATH], ["$PIXMAPDIR"], [Define icons location])

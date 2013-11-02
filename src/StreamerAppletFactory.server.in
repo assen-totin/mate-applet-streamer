@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <oaf_info>
 <oaf_server iid="OAFIID:StreamerApplet_Factory" type="exe"
-            location="/usr/libexec/streamer_applet">
+            location="@LIBEXECDIR@/streamer_applet">
 
         <oaf_attribute name="repo_ids" type="stringv">
                 <item value="IDL:Bonobo/GenericFactory:1.0"/>
