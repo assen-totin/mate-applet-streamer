@@ -18,8 +18,8 @@
  *  
  */
 
-#include "applet.h"
 #include "../config.h"
+#include "applet.h"
 
 void gstreamer_pause(streamer_applet *applet) {
 	char msg[1024];
