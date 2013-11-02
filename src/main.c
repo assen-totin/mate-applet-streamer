@@ -22,7 +22,7 @@
 #include "applet.h"
 
 
-void applet_back_change (MatePanelApplet *a, MatePanelAppletBackgroundType type, GdkColor *color, GdkPixmap *pixmap, streamer_applet *applet) {
+void applet_back_change (MyPanelApplet *a, MyPanelAppletBackgroundType type, GdkColor *color, GdkPixmap *pixmap, streamer_applet *applet) {
         /* taken from the TrashApplet */
         GtkRcStyle *rc_style;
         GtkStyle *style;
@@ -58,7 +58,7 @@ void applet_back_change (MatePanelApplet *a, MatePanelAppletBackgroundType type,
 
 }
 
-void applet_destroy(MatePanelApplet *applet_widget, streamer_applet *applet) {
+void applet_destroy(MyPanelApplet *applet_widget, streamer_applet *applet) {
 	sqlite3_close(applet->sqlite);
 	g_main_loop_quit(applet->loop);
         g_assert(applet);
@@ -67,13 +67,13 @@ void applet_destroy(MatePanelApplet *applet_widget, streamer_applet *applet) {
 }
 
 
-gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer data) {
+gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer data) {
 	streamer_applet *applet;
 	char *zErrMsg;
 	int res, i;
 	char ui[24576];
 
-	if (strcmp (iid, APPLET_ID) != 0)
+	if (strcmp (iid, APPLET_ID) != 0) 
 		return FALSE;
 
 	// i18n
@@ -101,6 +101,10 @@ gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer
 		memset(&applet->hash_fav[i].hash[0], '\0', 64);
 		memset(&applet->hash_recent[i].hash[0], '\0', 64);
 	}
+
+#ifdef HAVE_GNOME_2
+        applet->bonobo_counter = 0;
+#endif
 
 	// Check home dir, copy skel database
 	char applet_home_dir[1024], skel_file[1024], local_file[1024];
@@ -169,8 +173,10 @@ gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer
         gtk_container_add (GTK_CONTAINER (applet->applet), applet->event_box);
 
 	// Define menu action group
+#ifdef HAVE_MATE
 	applet->action_group = gtk_action_group_new ("Streamer_Applet_Actions");
-	gtk_action_group_add_actions (applet->action_group, applet_menu_actions, G_N_ELEMENTS (applet_menu_actions), applet);
+	gtk_action_group_add_actions (applet->action_group, applet_menu_actions_mate, G_N_ELEMENTS (applet_menu_actions_mate), applet);
+#endif
 
         // Get last 10 entried from Recent & Fav, then fetch last URL
         if (!sqlite_connect(applet))
@@ -202,7 +208,20 @@ gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer
 
 	// Build menu
 	sprintf(&ui[0], "%s %s %s %s %s", ui1, &applet->ui_recent[0], ui2, &applet->ui_fav[0], ui3);
+#ifdef HAVE_MATE
 	mate_panel_applet_setup_menu(applet->applet, &ui[0], applet->action_group);
+#elif HAVE_GNOME_2
+	BonoboUIVerb bnb1 = BONOBO_UI_UNSAFE_VERB ("All", G_CALLBACK (menu_cb_all));
+	applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb1;
+	applet->bonobo_counter++;
+	BonoboUIVerb bnb2 = BONOBO_UI_UNSAFE_VERB ("About", G_CALLBACK (menu_cb_about));
+	applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb2;
+	applet->bonobo_counter++;
+	BonoboUIVerb bnb3 = BONOBO_UI_VERB_END;
+	applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb3;
+	applet->bonobo_counter++;
+	panel_applet_setup_menu(applet->applet, &ui[0], applet->applet_menu_actions_gnome, applet);
+#endif
 
 	// Merge menu
 	//GError **error;
@@ -228,5 +247,9 @@ gboolean applet_main (MatePanelApplet *applet_widget, const gchar *iid, gpointer
 	return TRUE;
 }
 
+#ifdef HAVE_MATE
 MATE_PANEL_APPLET_OUT_PROCESS_FACTORY (APPLET_FACTORY, PANEL_TYPE_APPLET, APPLET_NAME, applet_main, NULL)
+#elif HAVE_GNOME_2
+PANEL_APPLET_BONOBO_FACTORY (APPLET_FACTORY, PANEL_TYPE_APPLET, APPLET_NAME, APPLET_VERSION, applet_main, NULL)
+#endif
 

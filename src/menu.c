@@ -31,18 +31,13 @@ void quitDialogClose(GtkWidget *widget, gpointer data) {
 
 void menu_cb_about (GtkAction *action, streamer_applet *applet) {
         char msg1[1024];
-
         sprintf(&msg1[0], "%s\n\n%s\n\n%s", _("MATE Streamer Applet"), _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
-
         GtkWidget *label = gtk_label_new (&msg1[0]);
-
         applet->quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-
         gtk_dialog_set_default_response (GTK_DIALOG (applet->quitDialog), GTK_RESPONSE_CANCEL);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(applet->quitDialog)->vbox), label);
         g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
-
         gtk_widget_show_all (GTK_WIDGET(applet->quitDialog));
 }
 
@@ -452,10 +447,40 @@ void row_play (GtkWidget *widget, gpointer data) {
 }
 
 
+void play_menu_bonobo (BonoboUIComponent *ui_container, gpointer data, char *cname) {
+	streamer_applet *applet = data;
+	int i;
+	gboolean match = FALSE;
+ 
+       for (i=0; i<10; i++) {
+                if (!strcmp(cname, &applet->hash_recent[i].hash[0])) {
+                        strcpy(&applet->url[0], &applet->hash_recent[i].url[0]);
+                        strcpy(&applet->name[0], &applet->hash_recent[i].name[0]);
+                        match = TRUE;
+                        break;
+                }
+        }
+
+        if (!match) {
+                for (i=0; i<10; i++) {
+                        if (!strcmp(cname, &applet->hash_fav[i].hash[0])) {
+                                strcpy(&applet->url[0], &applet->hash_fav[i].url[0]);
+                                strcpy(&applet->name[0], &applet->hash_fav[i].name[0]);
+                                match = TRUE;
+                                break;
+                        }
+                }
+        }
+
+        if (match)
+                do_play(applet);
+}
+
+
 void play_menu (GtkAction *action, streamer_applet *applet) {
 	int i;
 	gboolean match = FALSE;
-	
+
         for (i=0; i<10; i++) {
                 if (!strcmp(gtk_action_get_name(action), &applet->hash_recent[i].hash[0])) {
 			strcpy(&applet->url[0], &applet->hash_recent[i].url[0]);
@@ -476,7 +501,7 @@ void play_menu (GtkAction *action, streamer_applet *applet) {
         	}
 	}
 
-	if (match) 
+	if (match)  
 		do_play(applet);
 }
 

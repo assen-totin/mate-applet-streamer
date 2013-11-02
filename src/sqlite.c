@@ -95,6 +95,7 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
         GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
         g_checksum_update(checksum, argv[1], -1);
 
+#ifdef HAVE_MATE
         GList *list = gtk_action_group_list_actions(applet->action_group);
         for(element = g_list_first(list); element; element = g_list_next(element)) {
                 existing_action = element->data;
@@ -113,6 +114,13 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 	}
 
         sprintf(&applet->ui_recent[0], "%s<menuitem action='%s' />", &applet->ui_recent[0], g_checksum_get_string(checksum));
+#elif HAVE_GNOME_2
+        BonoboUIVerb bnb = BONOBO_UI_UNSAFE_VERB_DATA (g_checksum_get_string(checksum), G_CALLBACK (play_menu_bonobo), applet);
+        applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb;
+
+	sprintf(&applet->ui_recent[0], "%s<menuitem name='Bonobo%u' verb='%s' label='%s' />", &applet->ui_recent[0], applet->bonobo_counter, g_checksum_get_string(checksum), argv[0]);
+	applet->bonobo_counter++;
+#endif
 
         for (i=0; i<10; i++) {
 		if (strlen(&applet->hash_recent[i].hash[0]) == 0) {
@@ -154,6 +162,7 @@ int cb_sql_fav_10(void *data, int argc, char **argv, char **azColName) {
         GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
         g_checksum_update(checksum, argv[1], -1);
 
+#ifdef HAVE_MATE
 	GList *list = gtk_action_group_list_actions(applet->action_group);
 	for(element = g_list_first(list); element; element = g_list_next(element)) {
 		existing_action = element->data;
@@ -172,6 +181,13 @@ int cb_sql_fav_10(void *data, int argc, char **argv, char **azColName) {
 	}
 
         sprintf(&applet->ui_fav[0], "%s<menuitem action='%s' />", &applet->ui_fav[0], g_checksum_get_string(checksum));
+#elif HAVE_GNOME_2
+        BonoboUIVerb bnb = BONOBO_UI_UNSAFE_VERB_DATA (g_checksum_get_string(checksum), G_CALLBACK (play_menu_bonobo), applet);
+        applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb;
+
+        sprintf(&applet->ui_fav[0], "%s<menuitem name='Bonobo%u' verb='%s' label='%s' />", &applet->ui_fav[0], applet->bonobo_counter, g_checksum_get_string(checksum), argv[0]);
+        applet->bonobo_counter++;
+#endif
 
         for (i=0; i<10; i++) {
                 if (strlen(&applet->hash_fav[i].hash[0]) == 0) {

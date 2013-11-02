@@ -20,7 +20,6 @@
 
 #include <string.h>
 #include <unistd.h>
-#include <mate-panel-applet.h>
 #include <libintl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -37,15 +36,27 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#ifdef HAVE_MATE
+	#include <mate-panel-applet.h>
+#elif HAVE_GNOME_2
+	#include <panel-applet.h>
+#endif
+
 #ifdef HAVE_LIBMATENOTIFY
 	#include <libmatenotify/notify.h>
 #elif HAVE_LIBNOTIFY
 	#include <libnotify/notify.h>
 #endif
 
+#ifdef HAVE_MATE
+	#define APPLET_FACTORY "StreamerAppletFactory"
+	#define APPLET_ID "StreamerApplet"
+#elif HAVE_GNOME_2
+	#define APPLET_FACTORY "OAFIID:StreamerApplet_Factory"
+	#define APPLET_ID "OAFIID:StreamerApplet"
+#endif
+
 #define _(String) gettext (String)
-#define APPLET_FACTORY "StreamerAppletFactory"
-#define APPLET_ID "StreamerApplet"
 #define APPLET_NAME "streamer"
 #define APPLET_ICON_PLAY "applet_streamer_play.png"
 #define APPLET_ICON_PAUSE "applet_streamer_pause.png"
@@ -57,20 +68,35 @@
 #define ICECAST_TMP_FILE "icecast_dnld"
 
 // Menu strings
+#ifdef HAVE_MATE
 static const gchar *ui1 = 
 "<menu name='SubMenu1' action='Recent'>"
 ;
-
 static const gchar *ui2 = 
 "</menu>"
 "<menu name='SubMenu2' action='Favourites'>"
 ;
-
 static const gchar *ui3 =
 "</menu>"
 "<menuitem name='MenuItem1' action='All' />"
 "<menuitem name='MenuItem2' action='About' />"
 ;
+#elif HAVE_GNOME_2
+static const gchar *ui1 =
+"<popup name='button3'>"
+"<submenu name='SubMenu1' label='Recent'>"
+;
+static const gchar *ui2 =
+"</submenu>"
+"<submenu name='SubMenu2' label='Favourites'>"
+;
+static const gchar *ui3 =
+"</submenu>"
+"<menuitem name='MenuItem1' verb='All' label='All'/>"
+"<menuitem name='MenuItem2' verb='About' label='About' pixtype='stock' pixname='gnome-stock-about'/>"
+"</popup>"
+;
+#endif
 
 enum {
         COL_URL = 0,
@@ -91,9 +117,17 @@ struct url_hash {
 	char name[1024];
 } url_hash;
 
+#ifdef HAVE_MATE
+        typedef MatePanelApplet MyPanelApplet;
+	typedef MatePanelAppletBackgroundType MyPanelAppletBackgroundType;
+#elif HAVE_GNOME_2
+        typedef PanelApplet MyPanelApplet;
+	typedef PanelAppletBackgroundType MyPanelAppletBackgroundType;
+#endif
+
 typedef struct {
+        MyPanelApplet *applet;
 	GMainLoop *loop;
-	MatePanelApplet *applet;
 	GtkActionGroup *action_group;
         GtkWidget *image;
         GtkWidget *event_box;
@@ -123,11 +157,16 @@ typedef struct {
 	char ui_recent[1024];
 	struct url_hash hash_fav[10];
 	struct url_hash hash_recent[10];
+#ifdef HAVE_GNOME_2
+	BonoboUIVerb applet_menu_actions_gnome[23];
+	int bonobo_counter;
+#endif
 } streamer_applet;
 
 // util.c
 void push_notification (gchar *, gchar *, gchar *);
 gboolean cp(const char *, const char *);
+void debug(char *);
 
 // gstreamer.c
 void gstreamer_pause(streamer_applet *);
@@ -174,17 +213,19 @@ gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer
 void icecast_refresh(GtkWidget *, gpointer);
 void icecast_search(GtkWidget *, gpointer);
 void play_menu (GtkAction *, streamer_applet *);
+void play_menu_bonobo (BonoboUIComponent *, gpointer, char *);
 void do_play(streamer_applet *);
 gboolean on_left_click (GtkWidget *, GdkEventButton *, streamer_applet *);
 
 // main.c
-void applet_back_change (MatePanelApplet *, MatePanelAppletBackgroundType, GdkColor *, GdkPixmap *, streamer_applet *);
-void applet_destroy(MatePanelApplet *, streamer_applet *);
+void applet_back_change (MyPanelApplet *, MyPanelAppletBackgroundType, GdkColor *, GdkPixmap *, streamer_applet *);
+void applet_destroy(MyPanelApplet *, streamer_applet *);
 
-// Menu skeleton
-static const GtkActionEntry applet_menu_actions[] = {
+// Menu skeleton - MATE version
+static const GtkActionEntry applet_menu_actions_mate[] = {
         { "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, NULL },
         { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, NULL },
         { "All", GTK_STOCK_EXECUTE, "_All Stations", NULL, NULL, G_CALLBACK (menu_cb_all) },
         { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
 };
+

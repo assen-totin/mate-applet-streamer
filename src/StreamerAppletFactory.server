@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<oaf_info>
+<oaf_server iid="OAFIID:StreamerApplet_Factory" type="exe"
+            location="/usr/libexec/streamer_applet">
+
+        <oaf_attribute name="repo_ids" type="stringv">
+                <item value="IDL:Bonobo/GenericFactory:1.0"/>
+                <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string" value="Streamer Applet Factory"/>
+        <oaf_attribute name="name-en_GB" type="string" value="Streamer Applet Factory"/>
+        <oaf_attribute name="name-bg_BG" type="string" value="Радио аплет"/>
+        <oaf_attribute name="name-ru_RU" type="string" value="Радио аплет"/>
+        <oaf_attribute name="description" type="string" value="Factory to create the Streamer applet"/>
+        <oaf_attribute name="description-en_GB" type="string" value="Factory to create the Streamer applet"/>
+        <oaf_attribute name="description-bg_BG" type="string" value="Слушайте онлайн радио"/>
+        <oaf_attribute name="description-ru_RU" type="string" value="Слушайте радио в сети"/>
+
+</oaf_server>
+
+<oaf_server iid="OAFIID:StreamerApplet" type="factory"
+            location="OAFIID:StreamerApplet_Factory">
+
+        <oaf_attribute name="repo_ids" type="stringv">
+                <item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+                <item value="IDL:Bonobo/Control:1.0"/>
+                <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string" value="Streamer Applet"/>
+        <oaf_attribute name="name-en_GB" type="string" value="Streamer Applet Factory"/>
+        <oaf_attribute name="name-bg_BG" type="string" value="Радио аплет"/>
+        <oaf_attribute name="name-ru_RU" type="string" value="Радио аплет"/>
+        <oaf_attribute name="description" type="string" value="Online Radio applet"/>
+        <oaf_attribute name="description-en_GB" type="string" value="Factory to create the Streamer applet"/>
+        <oaf_attribute name="description-bg_BG" type="string" value="Слушайте онлайн радио"/>
+        <oaf_attribute name="description-ru_RU" type="string" value="Слушайте радио в сети"/>
+        <oaf_attribute name="panel:icon" type="string" value="applet_streamer.48.png"/>
+</oaf_server>
+</oaf_info>
