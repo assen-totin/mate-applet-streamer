@@ -1,3 +1,7 @@
+Nov 3, 2013 - Version 0.0.4
+===========================
+* Backport to GNOME-2 for RHEL6 and derivatives.
+
 Oct 16, 2013 - Version 0.0.3
 ============================
 * Update in libexec dir handling.

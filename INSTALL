@@ -1,3 +1,18 @@
+REQUIREMENTS
+============
+The applet should build and install on MATE Desktop and on legacy GNOME2
+(e.g., RHEL 6 and derivatives like CentOS).
+
+The applet's main requirements are:
+- development packages for MATE or GNOME2 panel
+- sqlite3 (plus corresponding development package if separate)
+- libxml2 (plus corresponding development package if separate)
+- gstreamer 0.10 or 1.0:
+-- gstreamer (plus corresponding development packages if separate), 
+-- gstreamer-plugins-base,
+-- gstreamer-plugins-bad or gstreamer-plugins-ugly (for MP3 decoding).
+
+
 INSTALLATION
 ============
 

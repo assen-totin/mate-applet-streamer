@@ -1,5 +1,5 @@
-AC_PREREQ([2.66])
-AC_INIT([mate-applet-streamer], [0.0.3], [assen.totin@gmail.com])
+AC_PREREQ([2.63])
+AC_INIT([mate-applet-streamer], [0.0.4], [assen.totin@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([-Wall])
@@ -35,7 +35,7 @@ TOPLEVELDIR=`pwd`
 AC_SUBST([TOPLEVELDIR])
 
 # gettext
-AM_GNU_GETTEXT_VERSION(0.18.1)
+AM_GNU_GETTEXT_VERSION(0.17)
 AM_GNU_GETTEXT([external])
 if test $USE_NLS != "yes" ; then
         echo "*** gettext not found. You're losing internationalization."
@@ -52,7 +52,7 @@ AC_SUBST([MAKEFILE_CC])
 RPM_BUILDREQUIRES_NOTIFY=""
 RPM_REQUIRES_NOTIFY=""
 FORCE_NOTIFY="no"
-AC_ARG_ENABLE([notify],[AS_HELP_STRING([--enable-notify],[use the specified notificatin library: libnotify, libmatenotify (default: pick up the first available from the list)])],[FORCE_NOTIFY=$enableval])
+AC_ARG_ENABLE([notify],[AS_HELP_STRING([--enable-notify],[use the specified notification library: libnotify, libmatenotify (default: pick up the first available from the list)])],[FORCE_NOTIFY=$enableval])
 PKG_CHECK_MODULES([LIBMATENOTIFY], [libmatenotify], [FOUND_LMN="yes"], [FOUND_LMN="no"])
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify], [FOUND_LN="yes"], [FOUND_LN="no"])
 if test $FORCE_NOTIFY = "libmatenotify" ; then
@@ -126,7 +126,6 @@ if test $TEST_GST_1_0 = "yes" ; then
         PKG_CHECK_MODULES([GSTREAMER_1_0], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],[EMPTY=""])
         if test $FOUND_GSTREAMER = "1.0" ; then
                 PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_1_0], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],[FOUND_GSTREAMER_PLUGINS_BASE="no"])
-                PKG_CHECK_MODULES([GSTREAMER_VIDEO_1_0], [gstreamer-video-1.0], [FOUND_GSTREAMER_VIDEO="yes"],[FOUND_GSTREAMER_VIDEO="no"])
         fi
 fi
 
@@ -148,12 +147,9 @@ if test $FOUND_GSTREAMER = "0.10" ; then
         GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
         AC_DEFINE([HAVE_GST_0_10], [1], [GStreamer 0.10])
 elif test  $FOUND_GSTREAMER = "1.0" ; then
-	if test $FOUND_GSTREAMER_VIDEO = "no" ; then
-        	AC_MSG_ERROR(["*** GStreamer found, but GStreamer-video not found."])
-	fi
         RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
-        GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0 gstreamer-video-1.0`
-        GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0 gstreamer-video-1.0`
+        GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0`
+        GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0`
         AC_DEFINE([HAVE_GST_1_0], [1], [GStreamer 1.0])
 fi
 AC_SUBST([GSTREAMER_DASH_LIBS])
@@ -171,10 +167,20 @@ PKG_CHECK_MODULES([GTK], [gtk+-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([LIBMATEPANELAPPLET_4], [libmatepanelapplet-4.0], [FOUND_LMPA_4="yes"], [FOUND_LMPA_4="no"])
 PKG_CHECK_MODULES([LIBMATEPANELAPPLET_3], [libmatepanelapplet-3.0], [FOUND_LMPA_3="yes"], [FOUND_LMPA_3="no"])
+PKG_CHECK_MODULES([LIBPANELAPPLET_2], [libpanelapplet-2.0], [FOUND_LPA_2="yes"], [FOUND_LPA_2="no"])
 if test $FOUND_LMPA_4 = "yes" ; then
 	LIBMATEPANELAPPLET="libmatepanelapplet-4.0"
+	HAVE_MATE="1"
+	AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
 elif test $FOUND_LMPA_3 = "yes" ; then
 	LIBMATEPANELAPPLET="libmatepanelapplet-3.0"
+	HAVE_MATE="1"
+	AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
+elif test $FOUND_LPA_2 = "yes" ; then
+	LIBMATEPANELAPPLET="libpanelapplet-2.0"
+	HAVE_GNOME_2="1"
+	AC_DEFINE([HAVE_GNOME_2], [1], [Define if we have GNOME-2 Desktop Environment])
+	AC_DEFINE_UNQUOTED([GNOMELOCALEDIR], ["$LOCALEDIR"], [GNOME-2 specific locale dir variable])
 else
 	AC_MSG_ERROR(["*** libmatepanelapplet not found."])
 fi
@@ -188,7 +194,7 @@ AC_SUBST([APPLET_LIBS])
 AC_CONFIG_FILES([Makefile src/Makefile po/Makefile.in po/Makefile images/Makefile])
 
 # Service files
-AC_CONFIG_FILES([src/org.mate.applets.StreamerApplet.mate-panel-applet src/org.mate.panel.applet.StreamerApplet.service mate-applet-streamer.spec])
+AC_CONFIG_FILES([src/org.mate.applets.StreamerApplet.mate-panel-applet src/org.mate.panel.applet.StreamerApplet.service src/StreamerAppletFactory.server mate-applet-streamer.spec])
 
 # Icons
 AC_DEFINE_UNQUOTED([APPLET_ICON_PATH], ["$PIXMAPDIR"], [Define icons location])

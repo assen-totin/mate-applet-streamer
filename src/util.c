@@ -27,10 +27,14 @@ void push_notification (gchar *title, gchar *body, gchar *icon) {
 
         notify_init(PACKAGE_NAME);
 
-#ifdef HAVE_LIBMATENOTIFY
+#ifdef HAVE_MATE
+	#ifdef HAVE_LIBMATENOTIFY
         notification = notify_notification_new (title, body, icon, NULL);
-#elif HAVE_LIBNOTIFY
+	#elif HAVE_LIBNOTIFY
         notification = notify_notification_new (title, body, icon);
+	#endif
+#elif HAVE_GNOME_2
+	notification = notify_notification_new (title, body, icon, NULL);
 #endif
 
         notify_notification_set_timeout (notification, 5000);
@@ -94,3 +98,8 @@ gboolean cp(const char *to, const char *from) {
 		return FALSE;
 }
 
+void debug(char *s) {
+	FILE *fp = fopen("/tmp/streamer_applet", "a");
+	fprintf(fp, "%s\n", s);
+	fclose(fp);
+}
