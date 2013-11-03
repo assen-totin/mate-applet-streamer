@@ -162,6 +162,11 @@ if test $FOUND_LIBXML2 = "no" ; then
 	AC_MSG_ERROR(["*** libxml2 not found."])
 fi
 
+PKG_CHECK_MODULES([SQLITE3], [sqlite3], [FOUND_SQLITE3="yes"], [FOUND_SQLITE3="no"])
+if test $FOUND_SQLITE3 = "no" ; then
+        AC_MSG_ERROR(["*** sqlite3 not found."])
+fi
+
 # Check for packages
 PKG_CHECK_MODULES([GTK], [gtk+-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])

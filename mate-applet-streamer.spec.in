@@ -72,6 +72,9 @@ rm -rf "${RPM_BUILD_ROOT}"
 %{_datadir}/streamer_applet/streamer.sqlite
 
 %changelog
+* Wed Nov 3 2013 Assen Totin <assen.totin@gmail.com>
+- Release 0.0.4
+
 * Wed Oct 16 2013 Assen Totin <assen.totin@gmail.com>
 - Release 0.0.3
 
