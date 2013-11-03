@@ -447,37 +447,8 @@ void row_play (GtkWidget *widget, gpointer data) {
 }
 
 
-void play_menu_bonobo (BonoboUIComponent *ui_container, gpointer data, char *cname) {
-	streamer_applet *applet = data;
-	int i;
-	gboolean match = FALSE;
- 
-       for (i=0; i<10; i++) {
-                if (!strcmp(cname, &applet->hash_recent[i].hash[0])) {
-                        strcpy(&applet->url[0], &applet->hash_recent[i].url[0]);
-                        strcpy(&applet->name[0], &applet->hash_recent[i].name[0]);
-                        match = TRUE;
-                        break;
-                }
-        }
-
-        if (!match) {
-                for (i=0; i<10; i++) {
-                        if (!strcmp(cname, &applet->hash_fav[i].hash[0])) {
-                                strcpy(&applet->url[0], &applet->hash_fav[i].url[0]);
-                                strcpy(&applet->name[0], &applet->hash_fav[i].name[0]);
-                                match = TRUE;
-                                break;
-                        }
-                }
-        }
-
-        if (match)
-                do_play(applet);
-}
-
-
-void play_menu (GtkAction *action, streamer_applet *applet) {
+#ifdef HAVE_MATE
+void play_menu_mate (GtkAction *action, streamer_applet *applet) {
 	int i;
 	gboolean match = FALSE;
 
@@ -504,6 +475,36 @@ void play_menu (GtkAction *action, streamer_applet *applet) {
 	if (match)  
 		do_play(applet);
 }
+#elif HAVE_GNOME_2
+void play_menu_gnome (BonoboUIComponent *ui_container, gpointer data, char *cname) {
+        streamer_applet *applet = data;
+        int i;
+        gboolean match = FALSE;
+
+       for (i=0; i<10; i++) {
+                if (!strcmp(cname, &applet->hash_recent[i].hash[0])) {
+                        strcpy(&applet->url[0], &applet->hash_recent[i].url[0]);
+                        strcpy(&applet->name[0], &applet->hash_recent[i].name[0]);
+                        match = TRUE;
+                        break;
+                }
+        }
+
+        if (!match) {
+                for (i=0; i<10; i++) {
+                        if (!strcmp(cname, &applet->hash_fav[i].hash[0])) {
+                                strcpy(&applet->url[0], &applet->hash_fav[i].url[0]);
+                                strcpy(&applet->name[0], &applet->hash_fav[i].name[0]);
+                                match = TRUE;
+                                break;
+                        }
+                }
+        }
+
+        if (match)
+                do_play(applet);
+}
+#endif
 
 
 void do_play(streamer_applet *applet) {

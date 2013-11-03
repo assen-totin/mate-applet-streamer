@@ -212,10 +212,13 @@ void save_favourites(streamer_applet *);
 gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 void icecast_refresh(GtkWidget *, gpointer);
 void icecast_search(GtkWidget *, gpointer);
-void play_menu (GtkAction *, streamer_applet *);
-void play_menu_bonobo (BonoboUIComponent *, gpointer, char *);
 void do_play(streamer_applet *);
 gboolean on_left_click (GtkWidget *, GdkEventButton *, streamer_applet *);
+#ifdef HAVE_MATE
+void play_menu_mate (GtkAction *, streamer_applet *);
+#elif HAVE_GNOME_2
+void play_menu_gnome (BonoboUIComponent *, gpointer, char *);
+#endif
 
 // main.c
 void applet_back_change (MyPanelApplet *, MyPanelAppletBackgroundType, GdkColor *, GdkPixmap *, streamer_applet *);

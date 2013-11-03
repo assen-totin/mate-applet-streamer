@@ -108,14 +108,14 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 	if (!match) {
         	action.name = g_checksum_get_string(checksum);
 	        action.label = argv[0];
-        	action.callback = G_CALLBACK(play_menu);
+        	action.callback = G_CALLBACK(play_menu_mate);
 
 	        gtk_action_group_add_actions(applet->action_group, &action, 1, applet);
 	}
 
         sprintf(&applet->ui_recent[0], "%s<menuitem action='%s' />", &applet->ui_recent[0], g_checksum_get_string(checksum));
 #elif HAVE_GNOME_2
-        BonoboUIVerb bnb = BONOBO_UI_UNSAFE_VERB_DATA (g_checksum_get_string(checksum), G_CALLBACK (play_menu_bonobo), applet);
+        BonoboUIVerb bnb = BONOBO_UI_UNSAFE_VERB_DATA (g_checksum_get_string(checksum), G_CALLBACK (play_menu_gnome), applet);
         applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb;
 
 	sprintf(&applet->ui_recent[0], "%s<menuitem name='Bonobo%u' verb='%s' label='%s' />", &applet->ui_recent[0], applet->bonobo_counter, g_checksum_get_string(checksum), argv[0]);
@@ -175,14 +175,14 @@ int cb_sql_fav_10(void *data, int argc, char **argv, char **azColName) {
 	if (!match) {
         	action.name = g_checksum_get_string(checksum);
 	        action.label = argv[0];
-        	action.callback = G_CALLBACK(play_menu);
+        	action.callback = G_CALLBACK(play_menu_mate);
 
 	        gtk_action_group_add_actions(applet->action_group, &action, 1, applet);
 	}
 
         sprintf(&applet->ui_fav[0], "%s<menuitem action='%s' />", &applet->ui_fav[0], g_checksum_get_string(checksum));
 #elif HAVE_GNOME_2
-        BonoboUIVerb bnb = BONOBO_UI_UNSAFE_VERB_DATA (g_checksum_get_string(checksum), G_CALLBACK (play_menu_bonobo), applet);
+        BonoboUIVerb bnb = BONOBO_UI_UNSAFE_VERB_DATA (g_checksum_get_string(checksum), G_CALLBACK (play_menu_gnome), applet);
         applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb;
 
         sprintf(&applet->ui_fav[0], "%s<menuitem name='Bonobo%u' verb='%s' label='%s' />", &applet->ui_fav[0], applet->bonobo_counter, g_checksum_get_string(checksum), argv[0]);
