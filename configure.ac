@@ -48,6 +48,43 @@ AC_PROG_CC
 MAKEFILE_CC=`which gcc`
 AC_SUBST([MAKEFILE_CC])
 
+# Check for packages
+PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+
+PKG_CHECK_MODULES([GLIB], [glib-2.0])
+
+RPM_BUILDREQUIRES_PANEL=""
+RPM_REQUIRES_PANEL=""
+HAVE_MATE="0"
+HAVE_GNOME_2="0"
+PKG_CHECK_MODULES([LIBMATEPANELAPPLET_4], [libmatepanelapplet-4.0], [FOUND_LMPA_4="yes"], [FOUND_LMPA_4="no"])
+PKG_CHECK_MODULES([LIBMATEPANELAPPLET_3], [libmatepanelapplet-3.0], [FOUND_LMPA_3="yes"], [FOUND_LMPA_3="no"])
+PKG_CHECK_MODULES([LIBPANELAPPLET_2], [libpanelapplet-2.0], [FOUND_LPA_2="yes"], [FOUND_LPA_2="no"])
+if test $FOUND_LMPA_4 = "yes" ; then
+        LIBMATEPANELAPPLET="libmatepanelapplet-4.0"
+        HAVE_MATE="1"
+        AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
+        RPM_BUILDREQUIRES_PANEL="BuildRequires: mate-panel-devel >= 1.3.0"
+        RPM_REQUIRES_PANEL="Requires: mate-panel >= 1.3.0"
+elif test $FOUND_LMPA_3 = "yes" ; then
+        LIBMATEPANELAPPLET="libmatepanelapplet-3.0"
+        HAVE_MATE="1"
+        AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
+        RPM_BUILDREQUIRES_PANEL="BuildRequires: mate-panel-devel >= 1.3.0"
+        RPM_REQUIRES_PANEL="Requires: mate-panel >= 1.3.0"
+elif test $FOUND_LPA_2 = "yes" ; then
+        LIBMATEPANELAPPLET="libpanelapplet-2.0"
+        HAVE_GNOME_2="1"
+        AC_DEFINE([HAVE_GNOME_2], [1], [Define if we have GNOME-2 Desktop Environment])
+        AC_DEFINE_UNQUOTED([GNOMELOCALEDIR], ["$LOCALEDIR"], [GNOME-2 specific locale dir variable])
+        RPM_BUILDREQUIRES_PANEL="BuildRequires: gnome-panel-devel >= 2.30.0"
+        RPM_REQUIRES_PANEL="Requires: gnome-panel >= 2.30.0"
+else
+        AC_MSG_ERROR(["*** libmatepanelapplet not found."])
+fi
+AC_SUBST([RPM_REQUIRES_PANEL])
+AC_SUBST([RPM_BUILDREQUIRES_PANEL])
+
 # libmatenotify or libnotify?
 RPM_BUILDREQUIRES_NOTIFY=""
 RPM_REQUIRES_NOTIFY=""
@@ -68,17 +105,27 @@ elif test $FORCE_NOTIFY = "libnotify" ; then
         if test $FOUND_LN = "yes" ; then
                 SELECTED_NOTIFY="libnotify"
 		AC_DEFINE([HAVE_LIBNOTIFY],[1],[Define if libnotify was found])
-                RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libnotify-devel >= 0.7.0"
-                RPM_REQUIRES_NOTIFY="Requires: libnotify >= 0.7.0"
+		if test $HAVE_MATE = "1" ; then
+	                RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libnotify-devel >= 0.7.0"
+        	        RPM_REQUIRES_NOTIFY="Requires: libnotify >= 0.7.0"
+		elif test $HAVE_GNOME_2 = "1" ; then
+			RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libnotify-devel >= 0.5.0"
+			RPM_REQUIRES_NOTIFY="Requires: libnotify >= 0.5.0"
+		fi
         else
 		AC_MSG_ERROR(["Forced notification library $FORCE_NOTIFY not found. Cannot continue."])
         fi
 else
 	if test $FOUND_LN = "yes" ; then
                 SELECTED_NOTIFY="libnotify"
-		AC_DEFINE([HAVE_LIBNOTIFY],[1],[Define if libnotify was found])	
-                RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libnotify-devel >= 0.7.0"
-                RPM_REQUIRES_NOTIFY="Requires: libnotify >= 0.7.0"
+		AC_DEFINE([HAVE_LIBNOTIFY],[1],[Define if libnotify was found])
+		if test $HAVE_MATE = "1" ; then
+	                RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libnotify-devel >= 0.7.0"
+        	        RPM_REQUIRES_NOTIFY="Requires: libnotify >= 0.7.0"
+		elif test $HAVE_GNOME_2 = "1" ; then
+                        RPM_BUILDREQUIRES_NOTIFY="BuildRequires: libnotify-devel >= 0.5.0"
+                        RPM_REQUIRES_NOTIFY="Requires: libnotify >= 0.5.0"
+                fi
 	elif test $FOUND_LMN = "yes" ; then
 		SELECTED_NOTIFY="libmatenotify"
 		AC_DEFINE([HAVE_LIBMATENOTIFY],[1],[Define if libmatenotify was found])
@@ -104,6 +151,7 @@ FOUND_GSTREAMER_PLUGINS_BASE="no"
 FOUND_GSTREAMER_VIDEO="no"
 USE_GSTREAMER="no"
 RPM_REQUIRE_GSTREAMER=" "
+RPM_BUILDREQUIRE_GSTREAMER=" "
 AC_ARG_ENABLE([gstreamer],[AS_HELP_STRING([--enable-gstreamer],[compile GStreamer version (default: try 1.0, if missing, try 0.10; to force, set to "1.0" or "0.10")])],[FORCE_GSTREAMER=$enableval])
 
 if test $FORCE_GSTREAMER = "1.0" ; then
@@ -142,12 +190,14 @@ if test $FOUND_GSTREAMER = "0.10" ; then
         	AC_MSG_ERROR(["*** GStreamer found, but GStreamer-interfaces not found."])
 	fi
         RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
+	RPM_BUILDREQUIRE_GSTREAMER="BuildRequires: gstreamer-devel >= 0.10"
         # Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
         GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
         GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
         AC_DEFINE([HAVE_GST_0_10], [1], [GStreamer 0.10])
 elif test  $FOUND_GSTREAMER = "1.0" ; then
         RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
+	RPM_BUILDREQUIRE_GSTREAMER="BuildRequires: gstreamer1-devel >= 1.0"
         GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0`
         GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0`
         AC_DEFINE([HAVE_GST_1_0], [1], [GStreamer 1.0])
@@ -155,6 +205,7 @@ fi
 AC_SUBST([GSTREAMER_DASH_LIBS])
 AC_SUBST([GSTREAMER_DASH_CFLAGS])
 AC_SUBST([RPM_REQUIRE_GSTREAMER])
+AC_SUBST([RPM_BUILDREQUIRE_GSTREAMER])
 
 # Checks for libraries.
 PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [FOUND_LIBXML2="yes"], [FOUND_LIBXML2="no"])
@@ -165,29 +216,6 @@ fi
 PKG_CHECK_MODULES([SQLITE3], [sqlite3], [FOUND_SQLITE3="yes"], [FOUND_SQLITE3="no"])
 if test $FOUND_SQLITE3 = "no" ; then
         AC_MSG_ERROR(["*** sqlite3 not found."])
-fi
-
-# Check for packages
-PKG_CHECK_MODULES([GTK], [gtk+-2.0])
-PKG_CHECK_MODULES([GLIB], [glib-2.0])
-PKG_CHECK_MODULES([LIBMATEPANELAPPLET_4], [libmatepanelapplet-4.0], [FOUND_LMPA_4="yes"], [FOUND_LMPA_4="no"])
-PKG_CHECK_MODULES([LIBMATEPANELAPPLET_3], [libmatepanelapplet-3.0], [FOUND_LMPA_3="yes"], [FOUND_LMPA_3="no"])
-PKG_CHECK_MODULES([LIBPANELAPPLET_2], [libpanelapplet-2.0], [FOUND_LPA_2="yes"], [FOUND_LPA_2="no"])
-if test $FOUND_LMPA_4 = "yes" ; then
-	LIBMATEPANELAPPLET="libmatepanelapplet-4.0"
-	HAVE_MATE="1"
-	AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
-elif test $FOUND_LMPA_3 = "yes" ; then
-	LIBMATEPANELAPPLET="libmatepanelapplet-3.0"
-	HAVE_MATE="1"
-	AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
-elif test $FOUND_LPA_2 = "yes" ; then
-	LIBMATEPANELAPPLET="libpanelapplet-2.0"
-	HAVE_GNOME_2="1"
-	AC_DEFINE([HAVE_GNOME_2], [1], [Define if we have GNOME-2 Desktop Environment])
-	AC_DEFINE_UNQUOTED([GNOMELOCALEDIR], ["$LOCALEDIR"], [GNOME-2 specific locale dir variable])
-else
-	AC_MSG_ERROR(["*** libmatepanelapplet not found."])
 fi
 
 APPLET_FLAGS=`$PKG_CONFIG --cflags-only-I glib-2.0 libxml-2.0 $SELECTED_NOTIFY $LIBMATEPANELAPPLET $ADDITIONAL_PACKAGES`
