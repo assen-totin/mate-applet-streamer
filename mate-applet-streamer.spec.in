@@ -11,7 +11,7 @@ License:        GPLv2
 URL:            http://www.zavedil.com/mate-software-updates-applet/
 Source:         http://www.zavedil.com/wp-content/uploads/2013/10/mate-applet-streamer-@PACKAGE_VERSION@.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  mate-panel-devel >= 1.3.0
+#BuildRequires:  mate-panel-devel >= 1.3.0
 BuildRequires:  gettext-devel
 BuildRequires:  automake
 BuildRequires:  autoconf
@@ -19,11 +19,15 @@ BuildRequires:  sqlite-devel
 BuildRequires:	libxml2-devel
 Requires:       sqlite
 Requires:	libxml2
+# Requires: and BuildRequires: for chosen panel
+@RPM_BUILDREQUIRES_PANEL@
+@RPM_REQUIRES_PANEL@
 # Requires: and BuildRequires: for chosen notification library
 @RPM_BUILDREQUIRES_NOTIFY@
 @RPM_REQUIRES_NOTIFY@
 # Requires: for GStreamer
 @RPM_REQUIRE_GSTREAMER@
+@RPM_BUILDREQUIRE_GSTREAMER@
 
 %description
 Software updates notification applet for the MATE desktop environment.
@@ -63,6 +67,7 @@ rm -rf "${RPM_BUILD_ROOT}"
 %{_libexecdir}/streamer_applet
 %{pixmapdir}/applet_streamer_pause.png
 %{pixmapdir}/applet_streamer_play.png
+%{pixmapdir}/applet_streamer.48.png
 %{iconsdir}/hicolor/16x16/apps/applet_streamer.png
 %{iconsdir}/hicolor/22x22/apps/applet_streamer.png
 %{iconsdir}/hicolor/24x24/apps/applet_streamer.png
@@ -70,6 +75,7 @@ rm -rf "${RPM_BUILD_ROOT}"
 %{_datadir}/mate-panel/applets/org.mate.applets.StreamerApplet.mate-panel-applet
 %{_datadir}/dbus-1/services/org.mate.panel.applet.StreamerApplet.service
 %{_datadir}/streamer_applet/streamer.sqlite
+%{_libdir}/bonobo/servers/StreamerAppletFactory.server
 
 %changelog
 * Wed Nov 3 2013 Assen Totin <assen.totin@gmail.com>
