@@ -1,3 +1,10 @@
+Dec 23, 2013 - Version 0.0.5
+============================
+* Fixed a warning regarding missing accelerators in Recent and Favourites
+submenus.
+* Fixed an issue when a new entry in Favourites was not created if the
+Favourites list is empty.
+
 Nov 3, 2013 - Version 0.0.4
 ===========================
 * Backport to GNOME-2 for RHEL6 and derivatives.
@@ -10,10 +17,9 @@ Sep 26, 2013 - Version 0.0.2
 ============================
 * Updated autoconf to accept a non-standard libexec dir
 * More conservative DB writes: write earlier, close earlier
-  to prevent data loss in some cases
+to prevent data loss in some cases
 
 Sep 1, 2013 - Version 0.0.1
 ============================
-
 * Initial release.
 

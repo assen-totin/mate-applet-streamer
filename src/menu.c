@@ -376,10 +376,13 @@ void row_add (GtkWidget *widget, gpointer data){
         	gtk_tree_selection_select_iter(selection, &sibling);
 	}
 
+/*
 	if (iter.stamp)
 	        gtk_list_store_insert_before (applet->tree_store, &iter, &sibling);
 	else
 		gtk_list_store_append (applet->tree_store, &iter);
+*/
+	gtk_list_store_prepend(applet->tree_store, &iter);
 
        	gtk_list_store_set (applet->tree_store, &iter, COL_NAME, _("<enter name>"), COL_URL, _("<enter url>"), -1);
 	gtk_tree_selection_select_iter(selection, &iter);

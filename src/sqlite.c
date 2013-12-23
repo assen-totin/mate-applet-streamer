@@ -108,6 +108,7 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 	if (!match) {
         	action.name = g_checksum_get_string(checksum);
 	        action.label = argv[0];
+		action.accelerator = NULL;
         	action.callback = G_CALLBACK(play_menu_mate);
 
 	        gtk_action_group_add_actions(applet->action_group, &action, 1, applet);
@@ -175,6 +176,7 @@ int cb_sql_fav_10(void *data, int argc, char **argv, char **azColName) {
 	if (!match) {
         	action.name = g_checksum_get_string(checksum);
 	        action.label = argv[0];
+		action.accelerator = NULL;
         	action.callback = G_CALLBACK(play_menu_mate);
 
 	        gtk_action_group_add_actions(applet->action_group, &action, 1, applet);

@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([mate-applet-streamer], [0.0.4], [assen.totin@gmail.com])
+AC_INIT([mate-applet-streamer], [0.0.5], [assen.totin@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([-Wall])
@@ -35,6 +35,7 @@ TOPLEVELDIR=`pwd`
 AC_SUBST([TOPLEVELDIR])
 
 # gettext
+# For F20, change this to 0.18 and add --force to "autopoint" line in autogen.sh
 AM_GNU_GETTEXT_VERSION(0.17)
 AM_GNU_GETTEXT([external])
 if test $USE_NLS != "yes" ; then
