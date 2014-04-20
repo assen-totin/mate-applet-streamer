@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([mate-applet-streamer], [0.0.5], [assen.totin@gmail.com])
+AC_INIT([mate-applet-streamer], [0.1.0], [assen.totin@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([-Wall])

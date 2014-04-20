@@ -99,17 +99,32 @@ static const gchar *ui3 =
 #endif
 
 enum {
-        COL_URL = 0,
-        COL_NAME,
-        NUM_COLS
+	TAB_FAVOURITES = 0,
+	TAB_ICECAST, 
+	TAB_CUSTOM
+};
+
+
+enum {
+	FAVOURITES_COL_URL = 0,
+	FAVOURITES_COL_NAME,
+	FAVOURITES_NUM_COLS
 };
 
 enum {
-        COL_URL2 = 0,
-        COL_NAME2,
-	COL_GENRE2,
-        NUM_COLS2
+	ICECAST_COL_URL = 0,
+	ICECAST_COL_NAME,
+	ICECAST_COL_GENRE,
+	ICECAST_NUM_COLS
 };
+
+enum {
+	CUSTOM_COL_URL = 0,
+	CUSTOM_COL_NAME,
+	CUSTOM_COL_GENRE,
+	CUSTOM_NUM_COLS
+};
+
 
 struct url_hash {
 	char hash[64];
@@ -118,22 +133,25 @@ struct url_hash {
 } url_hash;
 
 #ifdef HAVE_MATE
-        typedef MatePanelApplet MyPanelApplet;
+	typedef MatePanelApplet MyPanelApplet;
 	typedef MatePanelAppletBackgroundType MyPanelAppletBackgroundType;
 #elif HAVE_GNOME_2
-        typedef PanelApplet MyPanelApplet;
+	typedef PanelApplet MyPanelApplet;
 	typedef PanelAppletBackgroundType MyPanelAppletBackgroundType;
 #endif
 
 typedef struct {
-        MyPanelApplet *applet;
+	MyPanelApplet *applet;
 	GMainLoop *loop;
 	GtkActionGroup *action_group;
-        GtkWidget *image;
-        GtkWidget *event_box;
+	GtkWidget *image;
+	GtkWidget *event_box;
 	GtkWidget *quitDialog;
-	GtkWidget *progress;
-	GtkWidget *text;
+	GtkWidget *progress_icecast;
+	GtkWidget *progress_custom;
+	GtkWidget *text_icecast;
+	GtkWidget *text_custom;
+	int db_version;
 	char url[1024];
 	char name[1024];
 	char xmlfile[1024];
@@ -141,10 +159,12 @@ typedef struct {
 	time_t timestamp;
 	sqlite3 *sqlite;
 	GstElement *gstreamer_playbin2;
-	GtkListStore *tree_store;
-	GtkWidget *tree_view;
-        GtkListStore *tree_store2;
-        GtkWidget *tree_view2;
+	GtkListStore *tree_store_favourites;
+	GtkWidget *tree_view_favourites;
+	GtkListStore *tree_store_icecast;
+	GtkWidget *tree_view_icecast;
+	GtkListStore *tree_store_custom;
+	GtkWidget *tree_view_custom;
 	char xml_listen_url[1024];
 	char xml_server_name[1024];
 	char xml_bitrate[1024];
@@ -152,6 +172,7 @@ typedef struct {
 	int xml_total_entries;
 	int xml_curr_entries;
 	int icecast_total_entries;
+	int custom_total_entries;
 	gdouble progress_ratio;
 	char ui_fav[10240];
 	char ui_recent[1024];
@@ -183,25 +204,34 @@ int cb_sql_recent_10(void *, int, char **, char **);
 int cb_sql_fav(void *, int, char **, char **);
 int cb_sql_fav_10(void *, int, char **, char **);
 int cb_sql_icecast(void *, int, char **, char **);
+int cb_sql_custom(void *, int, char **, char **);
+int cb_sql_version(void *, int, char **, char **);
 
 // icecast.c
 gboolean icecast_dnld(streamer_applet *);
 gboolean icecast_xml(streamer_applet *);
-void print_elements(xmlNode *, streamer_applet *);
-int count_elements(xmlNode *, int);
-void save_icecast(streamer_applet *);
-gboolean write_icecast(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+void icecast_print_elements(xmlNode *, streamer_applet *);
+int icecast_count_elements(xmlNode *, int);
+void icecast_save(streamer_applet *);
+gboolean icecast_write(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+
+// custom.c
+gboolean custom_xml(streamer_applet *);
+void custom_print_elements(xmlNode *, streamer_applet *);
+int custom_count_elements(xmlNode *, int);
+void custom_save(streamer_applet *);
+gboolean custom_write(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 
 //menu.c
 void quitDialogClose(GtkWidget *, gpointer);
 void menu_cb_all(GtkAction *, streamer_applet *);
 void menu_cb_about(GtkAction *, streamer_applet *);
-void create_view_and_model (streamer_applet *);
-void create_view_and_model2 (streamer_applet *);
+void create_view_and_model_favourites (streamer_applet *);
+void create_view_and_model_icecast (streamer_applet *);
+void create_view_and_model_custom (streamer_applet *);
 void cell_edit_name(GtkCellRendererText *, gchar *, gchar *, gpointer);
 void cell_edit_url(GtkCellRendererText *, gchar *, gchar *, gpointer);
-void clear_store(streamer_applet *);
-void clear_store2(streamer_applet *);
+void clear_store(streamer_applet *, int);
 void row_down(GtkWidget *, gpointer);
 void row_up(GtkWidget *, gpointer);
 void row_del(GtkWidget *, gpointer);
@@ -211,7 +241,9 @@ void row_copy(GtkWidget *, gpointer);
 void save_favourites(streamer_applet *);
 gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 void icecast_refresh(GtkWidget *, gpointer);
-void icecast_search(GtkWidget *, gpointer);
+void custom_refresh(GtkWidget *, gpointer);
+void custom_warning_import (GtkWidget *widget, gpointer window);
+void search_station(GtkWidget *, gpointer);
 void do_play(streamer_applet *);
 gboolean on_left_click (GtkWidget *, GdkEventButton *, streamer_applet *);
 #ifdef HAVE_MATE
