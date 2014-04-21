@@ -232,7 +232,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// SQL query to fill the Icecast page
 	sqlite_connect(applet);
-	*zErrMsg2 = 0;
+	zErrMsg2 = 0;
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url, genre FROM icecast_stations", cb_sql_icecast, (void*) applet, &zErrMsg2);
 	if (res != SQLITE_OK)
 		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
@@ -250,7 +250,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// SQL query to fill the Custom page
 	sqlite_connect(applet);
-	*zErrMsg3 = 0;
+	zErrMsg3 = 0;
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url, genre FROM custom_stations", cb_sql_custom, (void*) applet, &zErrMsg3);
 	if (res != SQLITE_OK)
 		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);

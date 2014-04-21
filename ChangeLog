@@ -1,3 +1,7 @@
+Apr 21, 2014 - Version 1.0.0
+============================
+* Added theCustom tab to load a station list from a local file.
+
 Dec 23, 2013 - Version 0.0.5
 ============================
 * Fixed a warning regarding missing accelerators in Recent and Favourites

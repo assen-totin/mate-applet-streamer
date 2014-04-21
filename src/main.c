@@ -164,14 +164,14 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 		return FALSE;
 	}
 
-	sqlite3_close(applet->sqlite);
-
 	if (applet->db_version == 1) {
 		// Upgrade DB to version 2
 		sqlite_insert(applet, "CREATE TABLE custom_stations (server_name VARCHAR(255), listen_url VARCHAR(255), bitrate VARCHAR(255), genre VARCHAR(255))");
 		sqlite_insert(applet, "ALTER TABLE stations RENAME TO icecast_stations");
 		sqlite_insert(applet, "UPDATE version SET version=2");
 	}
+
+	sqlite3_close(applet->sqlite);
 
 	// Init GStreamer
 	gstreamer_init(applet);

@@ -15,9 +15,25 @@ On the 'Icecast' tab you can download the full Icecast directory (it will be
 saved after this), search through it, listen to a station or copy one to the
 Favourites list.
 
+On the 'Custom' tab you can load your local list of stations. The file has
+to be XML compatible with the Icecast format:
+
+<directory>
+	<entry>
+		<server_name>Radio 1 (AAC+)</server_name>
+		<listen_url>http://icecast.omroep.nl/radio1-bb-aac</listen_url>
+		<genre>Generic</genre>
+		<bitrate>128</bitrate>
+	</entry>
+	<entry>
+		...
+	</entry>
+	...
+</directory>
+
 When the applet starts, it will also load the top 10 recent stations and the 
 top 10 favourites into two separate sub-menus in the right-click menu. From 
-them you can launch a station too. Due to MATE limitations, these two sub-
+them you can launch a station too. Due to panel limitations, these two sub-
 menus cannot be updated dynamically and will only change on applet start. 
 
 
