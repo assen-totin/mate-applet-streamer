@@ -797,14 +797,14 @@ void custom_refresh (GtkWidget *widget, gpointer data) {
 			sprintf(&line[0], _("Ready"));
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_custom), &line[0]);
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_custom), 0);
-
-			gtk_widget_destroy (fileDialogWidget);
 		}
 		else
 			custom_warning_import(NULL, fileDialogWidget);
 
 		g_free (filename);
 	}
+	
+	gtk_widget_destroy (fileDialogWidget);
 }
 
 
