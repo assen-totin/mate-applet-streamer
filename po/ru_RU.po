@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-01 18:17+0300\n"
+"POT-Creation-Date: 2014-04-21 14:14+0300\n"
 "PO-Revision-Date: 2013-09-01 18:19+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -19,119 +19,140 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/menu.c:389
+#: src/menu.c:504
 msgid "<enter name>"
 msgstr "<введите имя>"
 
-#: src/menu.c:389
+#: src/menu.c:504
 msgid "<enter url>"
 msgstr "<введите адрес (URL)>"
 
-#: src/menu.c:35
+#: src/menu.c:33
 msgid "An applet which lets you listen to online radio streams."
 msgstr "Программа для прослушивания онлайн радио."
 
-#: src/menu.c:35
+#: src/menu.c:33
 msgid "Assen Totin <assen.totin@gmail.com>"
 msgstr "Асен Тотин <assen.totin@gmail.com>"
 
-#: src/main.c:122
+#: src/main.c:117
 msgid "Cannot access configuration directory. Exiting."
 msgstr "Нет доступа к директории конфигурации. Запуск прекращается."
 
-#: src/main.c:148
+#: src/main.c:143
 msgid "Cannot copy database file to configuration directory. Exiting."
-msgstr "Не удалось скопировать базу в конфигурационную директорию. Запуск прекращается."
+msgstr ""
+"Не удалось скопировать базу в конфигурационную директорию. Запуск "
+"прекращается."
 
-#: src/main.c:129
+#: src/main.c:124
 msgid "Cannot create configuration directory. Exiting."
 msgstr "Не удалось создать конфигурационную директорию. Запуск прекращается."
 
-#: src/main.c:134
+#: src/main.c:129
 msgid "Cannot verify configuration directory. Exiting."
 msgstr "Не удалось прочесть конфигурационную директорию. Запуск прекращается."
 
-#: src/main.c:153
+#: src/main.c:148
 msgid "Cannot verify database file. Exiting."
 msgstr "Не удалось прочесть безу данных. Запуск прекращается."
 
-#: src/main.c:143
+#: src/menu.c:199
+msgid "Custom"
+msgstr "Мои"
+
+#: src/main.c:138
 msgid "Database file is not a regular file. Exiting."
 msgstr "База данных не читается. Запуск прекращается."
 
-#: src/menu.c:566
+#: src/menu.c:741
 #, c-format
 msgid "Downloading directory..."
 msgstr "Получение списка..."
 
-#: src/menu.c:142
+#: src/menu.c:817
+msgid "Error"
+msgstr "Ошибка"
+
+#: src/menu.c:191
 msgid "Favourites"
 msgstr "Любимые"
 
-#: src/menu.c:257
+#: src/menu.c:329 src/menu.c:370
 msgid "Genre"
 msgstr "Жанр"
 
-#: src/menu.c:146
+#: src/menu.c:195
 msgid "Icecast"
 msgstr "Icecast"
 
-#: src/menu.c:35 src/menu.c:39 src/menu.c:150
+#: src/menu.c:789
+#, c-format
+msgid "Importing file..."
+msgstr "Идет обработка..."
+
+#: src/menu.c:33 src/menu.c:35 src/menu.c:203
 msgid "MATE Streamer Applet"
 msgstr "Программа для онлайн радио"
 
-#: src/menu.c:210 src/menu.c:243
+#: src/menu.c:282 src/menu.c:315 src/menu.c:356
 msgid "Name"
 msgstr "Имя"
 
-#: src/menu.c:193
+#: src/menu.c:265
+#, fuzzy, c-format
+msgid "No stations found. Press Open button to load from file."
+msgstr "Список пуст. Нажмите Refresh для скачивания списка."
+
+#: src/menu.c:247
 #, c-format
 msgid "No stations found. Press Refresh button to download stations."
 msgstr "Список пуст. Нажмите Refresh для скачивания списка."
 
-#: src/menu.c:629
+#: src/menu.c:880
 msgid "No stream selected."
 msgstr "Не выбрана станция."
 
-#: src/main.c:228
+#: src/main.c:256
 msgid "No stream selected. Right-click to load one."
 msgstr "Не выбрана станция. Нажмите правой кнопкой мыши."
 
-#: src/gstreamer.c:29 src/menu.c:638 src/sqlite.c:78
+#: src/gstreamer.c:29 src/menu.c:889 src/sqlite.c:79
 msgid "PAUSED: "
 msgstr "ПАУЗА: "
 
-#: src/gstreamer.c:41 src/menu.c:650
+#: src/gstreamer.c:41 src/menu.c:901
 msgid "PLAYING: "
 msgstr "ИГРАЕТ: "
 
-#: src/menu.c:573
+#: src/menu.c:748
 #, c-format
 msgid "Processing directory..."
 msgstr "Идет обработка..."
 
-#: src/menu.c:115 src/menu.c:586
+#: src/menu.c:112 src/menu.c:163 src/menu.c:761 src/menu.c:797
 #, c-format
 msgid "Ready"
 msgstr "Готовность"
 
-#: src/menu.c:629
+#: src/menu.c:880
 msgid "Right-click to load one."
 msgstr "Нажмите правой кнопкой мыши."
 
-#: src/menu.c:580
+#: src/menu.c:755
 #, c-format
 msgid "Saving entries..."
 msgstr "Идет запись..."
 
-#: src/icecast.c:35 src/icecast.c:45 src/icecast.c:108 src/main.c:122
-#: src/main.c:129 src/main.c:134 src/main.c:143 src/main.c:148 src/main.c:153
-#: src/main.c:160 src/main.c:190 src/main.c:197 src/main.c:204 src/menu.c:169
-#: src/menu.c:184 src/menu.c:607 src/sqlite.c:33
+#: src/custom.c:35 src/icecast.c:35 src/icecast.c:45 src/icecast.c:108
+#: src/main.c:117 src/main.c:124 src/main.c:129 src/main.c:138 src/main.c:143
+#: src/main.c:148 src/main.c:155 src/main.c:162 src/main.c:205 src/main.c:212
+#: src/main.c:219 src/menu.c:223 src/menu.c:238 src/menu.c:256 src/menu.c:842
+#: src/menu.c:857 src/sqlite.c:33
 msgid "Streamer Applet Error"
 msgstr "Программа онлайн радио"
 
-#: src/menu.c:216 src/menu.c:251
+#: src/menu.c:288 src/menu.c:323 src/menu.c:364
 msgid "URL"
 msgstr "URL"
 
@@ -139,7 +160,7 @@ msgstr "URL"
 msgid "Unable to connect to DB."
 msgstr "Нет связи с базой данных."
 
-#: src/main.c:160
+#: src/main.c:155
 msgid "Unable to connect to DB. Exiting."
 msgstr "Нет связи с базой данных. Запуск прекращается."
 
@@ -147,11 +168,15 @@ msgstr "Нет связи с базой данных. Запуск прекра�
 msgid "Unable to create temporary file."
 msgstr "Не удалось создать временный файл."
 
-#: src/icecast.c:108
+#: src/menu.c:816
+msgid "Unable to import file: check file format"
+msgstr ""
+
+#: src/custom.c:35 src/icecast.c:108
 msgid "Unable to parse XML file."
 msgstr "Не удалось прочесть XML файл."
 
-#: src/menu.c:169 src/menu.c:184 src/menu.c:607
+#: src/menu.c:223 src/menu.c:238 src/menu.c:256 src/menu.c:842 src/menu.c:857
 msgid "Unable to read DB."
 msgstr "Не удалось прочесть базу данных."
 
