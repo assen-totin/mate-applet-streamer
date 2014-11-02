@@ -168,7 +168,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	applet->text_custom = gtk_entry_new();
 	//gtk_entry_set_activates_default(GTK_ENTRY(applet->text_custom), FALSE);
 	GtkWidget *butt_custom_search = gtk_button_new_from_stock(GTK_STOCK_FIND);
-	gtk_widget_set_name(butt_icecast_search, "search_custom");
+	gtk_widget_set_name(butt_custom_search, "search_custom");
 	g_signal_connect (G_OBJECT(butt_custom_search), "clicked", G_CALLBACK (search_station), (gpointer) applet);
 	GtkWidget *custom_hbox_2 = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_hbox_2), applet->text_custom, TRUE, TRUE, 0);
@@ -852,7 +852,7 @@ void search_station(GtkWidget *widget, gpointer data) {
 		strcpy(&query[0], (char *) gtk_entry_get_text(GTK_ENTRY(applet->text_custom)));
 		clear_store(applet, TAB_CUSTOM);
 		sprintf(&sql[0], "SELECT server_name, listen_url, genre FROM custom_stations WHERE server_name LIKE '%%%s%%' OR listen_url LIKE '%%%s%%' OR genre LIKE '%%%s%%'", &query[0], &query[0], &query[0]);
-		res = sqlite3_exec(applet->sqlite, &sql[0], cb_sql_icecast, (void*) applet, &zErrMsg2);
+		res = sqlite3_exec(applet->sqlite, &sql[0], cb_sql_custom, (void*) applet, &zErrMsg2);
 		if (res != SQLITE_OK)
 			push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
 
