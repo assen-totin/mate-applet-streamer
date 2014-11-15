@@ -1,3 +1,7 @@
+Nov 15, 2014 - Version 0.1.2
+============================
+* Fix a random crash when the applet builds the Recent or Favourites menus.
+
 Nov 2, 2014 - Version 0.1.1
 ===========================
 * Fixed a non-working search buton on the Icecaset tab.

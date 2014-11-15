@@ -78,6 +78,9 @@ rm -rf "${RPM_BUILD_ROOT}"
 %{_libdir}/bonobo/servers/StreamerAppletFactory.server
 
 %changelog
+* Sat Nov 14 2014 Assen Totin <assen.totin@gmail.com>
+- Release 0.1.2
+
 * Sun Nov 2 2014 Assen Totin <assen.totin@gmail.com>
 - Release 0.1.1
 

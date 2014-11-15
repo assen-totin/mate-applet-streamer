@@ -109,12 +109,13 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 	if (!match) {
 		action.name = g_checksum_get_string(checksum);
 		action.label = argv[0];
+		action.stock_id = NULL;
 		action.accelerator = NULL;
+		action.tooltip = NULL;
 		action.callback = G_CALLBACK(play_menu_mate);
 
 		gtk_action_group_add_actions(applet->action_group, &action, 1, applet);
 	}
-
 	sprintf(&applet->ui_recent[0], "%s<menuitem action='%s' />", &applet->ui_recent[0], g_checksum_get_string(checksum));
 #elif HAVE_GNOME_2
 	BonoboUIVerb bnb = BONOBO_UI_UNSAFE_VERB_DATA (g_checksum_get_string(checksum), G_CALLBACK (play_menu_gnome), applet);
@@ -178,6 +179,8 @@ int cb_sql_fav_10(void *data, int argc, char **argv, char **azColName) {
 		action.name = g_checksum_get_string(checksum);
 		action.label = argv[0];
 		action.accelerator = NULL;
+                action.stock_id = NULL;
+                action.tooltip = NULL;
 		action.callback = G_CALLBACK(play_menu_mate);
 
 		gtk_action_group_add_actions(applet->action_group, &action, 1, applet);
