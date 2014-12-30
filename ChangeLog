@@ -1,3 +1,9 @@
+Dec 31, 2014 - Version 0.1.3
+============================
+* Fix a crash when Up/Down/Del button is pressed on the Favourites page, but
+nothing is selected.
+* Make the Enter key work in the search fields.
+
 Nov 15, 2014 - Version 0.1.2
 ============================
 * Fix a random crash when the applet builds the Recent or Favourites menus.
