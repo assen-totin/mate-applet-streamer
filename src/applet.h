@@ -151,6 +151,8 @@ typedef struct {
 	GtkWidget *progress_custom;
 	GtkWidget *text_icecast;
 	GtkWidget *text_custom;
+	GtkWidget *butt_search_icecast;
+	GtkWidget *butt_search_custom;
 	int db_version;
 	char url[1024];
 	char name[1024];
@@ -246,11 +248,13 @@ void custom_warning_import (GtkWidget *widget, gpointer window);
 void search_station(GtkWidget *, gpointer);
 void do_play(streamer_applet *);
 gboolean on_left_click (GtkWidget *, GdkEventButton *, streamer_applet *);
+void change_default_widget(GtkNotebook *, GtkWidget *, guint, gpointer);
 #ifdef HAVE_MATE
 void play_menu_mate (GtkAction *, streamer_applet *);
 #elif HAVE_GNOME_2
 void play_menu_gnome (BonoboUIComponent *, gpointer, char *);
 #endif
+
 
 // main.c
 void applet_back_change (MyPanelApplet *, MyPanelAppletBackgroundType, GdkColor *, GdkPixmap *, streamer_applet *);

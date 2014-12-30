@@ -115,13 +115,15 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Search field and button
 	applet->text_icecast = gtk_entry_new();
-	//gtk_entry_set_activates_default(GTK_ENTRY(applet->text), FALSE);
-	GtkWidget *butt_icecast_search = gtk_button_new_from_stock(GTK_STOCK_FIND);
-	gtk_widget_set_name(butt_icecast_search, "search_icecast");
-	g_signal_connect (G_OBJECT(butt_icecast_search), "clicked", G_CALLBACK (search_station), (gpointer) applet);
+	gtk_entry_set_activates_default(GTK_ENTRY(applet->text_icecast), TRUE);
+	applet->butt_search_icecast = gtk_button_new_from_stock(GTK_STOCK_FIND);
+	GTK_WIDGET_SET_FLAGS(applet->butt_search_icecast, GTK_CAN_DEFAULT);
+	gtk_widget_set_name(applet->butt_search_icecast, "search_icecast");
+	g_signal_connect (G_OBJECT(applet->butt_search_icecast), "clicked", G_CALLBACK (search_station), (gpointer) applet);
+	g_signal_connect (G_OBJECT(applet->butt_search_icecast), "activate", G_CALLBACK (search_station), (gpointer) applet);
 	GtkWidget *icecast_hbox_2 = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_hbox_2), applet->text_icecast, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(icecast_hbox_2), butt_icecast_search, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(icecast_hbox_2), applet->butt_search_icecast, FALSE, FALSE, 0);
 
 	GtkWidget *icecast_vbox_2 = gtk_vbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_2), applet->progress_icecast, FALSE, FALSE, 0);
@@ -166,13 +168,15 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Search field and button
 	applet->text_custom = gtk_entry_new();
-	//gtk_entry_set_activates_default(GTK_ENTRY(applet->text_custom), FALSE);
-	GtkWidget *butt_custom_search = gtk_button_new_from_stock(GTK_STOCK_FIND);
-	gtk_widget_set_name(butt_custom_search, "search_custom");
-	g_signal_connect (G_OBJECT(butt_custom_search), "clicked", G_CALLBACK (search_station), (gpointer) applet);
+	gtk_entry_set_activates_default(GTK_ENTRY(applet->text_custom), TRUE);
+	applet->butt_search_custom = gtk_button_new_from_stock(GTK_STOCK_FIND);
+	GTK_WIDGET_SET_FLAGS(applet->butt_search_custom, GTK_CAN_DEFAULT);
+	gtk_widget_set_name(applet->butt_search_custom, "search_custom");
+	g_signal_connect (G_OBJECT(applet->butt_search_custom), "clicked", G_CALLBACK (search_station), (gpointer) applet);
+	g_signal_connect (G_OBJECT(applet->butt_search_custom), "activate", G_CALLBACK (search_station), (gpointer) applet);
 	GtkWidget *custom_hbox_2 = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_hbox_2), applet->text_custom, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(custom_hbox_2), butt_custom_search, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(custom_hbox_2), applet->butt_search_custom, FALSE, FALSE, 0);
 
 	GtkWidget *custom_vbox_2 = gtk_vbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_vbox_2), applet->progress_custom, FALSE, FALSE, 0);
@@ -186,6 +190,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	// Create notebook widget
 	GtkWidget *notebook = gtk_notebook_new();
 	gtk_widget_set_size_request (notebook, 640, 480);
+	g_signal_connect (G_OBJECT(notebook), "switch-page", G_CALLBACK (change_default_widget), (gpointer) applet);
 
 	// First page - Favourites
 	GtkWidget *tab_label_1 = gtk_label_new(_("Favourites"));
@@ -207,7 +212,6 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(applet->quitDialog)->vbox), notebook);
 	g_signal_connect (G_OBJECT(buttonClose), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 
-	//gtk_window_set_default(GTK_WINDOW(applet->quitDialog), butt_search);
 	gtk_widget_show_all(GTK_WIDGET(applet->quitDialog));
 
 	clear_store(applet, TAB_FAVOURITES);
@@ -264,6 +268,19 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	if (applet->custom_total_entries == 0) {
 			sprintf(&line[0], _("No stations found. Press Open button to load from file."));
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_custom), &line[0]);
+	}
+}
+
+
+void change_default_widget(GtkNotebook *notebook, GtkWidget *page, guint page_num, gpointer data) {
+	streamer_applet *applet = data;
+	switch (page_num) {
+		case 1: 
+			gtk_window_set_default(GTK_WINDOW(applet->quitDialog), applet->butt_search_icecast);
+			break;
+		case 2: 
+			gtk_window_set_default(GTK_WINDOW(applet->quitDialog), applet->butt_search_custom);
+			break;
 	}
 }
 
@@ -418,10 +435,13 @@ void row_down(GtkWidget *widget, gpointer data) {
 	GtkTreeIter iter1, iter2;
 	gchar *name1, *name2, *url1, *url2;
 	streamer_applet *applet = data;
+	gboolean have_selection;
 
 	GtkTreeModel *model_favourites = GTK_TREE_MODEL(applet->tree_store_favourites);
 	GtkTreeSelection *selection_favourites = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_favourites));
-	gtk_tree_selection_get_selected(selection_favourites, &model_favourites, &iter1);
+	have_selection = gtk_tree_selection_get_selected(selection_favourites, &model_favourites, &iter1);
+	if (!have_selection)
+		return;
 	iter2 = iter1;
 
 	gtk_tree_model_get(model_favourites, &iter1, FAVOURITES_COL_NAME, &name1, FAVOURITES_COL_URL, &url1, -1);
@@ -442,10 +462,13 @@ void row_up(GtkWidget *widget, gpointer data) {
 	GtkTreeIter iter0, iter1, iter2;
 	gchar *name1, *name2, *url1, *url2;
 	streamer_applet *applet = data;
+	gboolean have_selection;
 
 	GtkTreeModel *model_favourites = GTK_TREE_MODEL(applet->tree_store_favourites);
 	GtkTreeSelection *selection_favourites = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_favourites));
-	gtk_tree_selection_get_selected(selection_favourites, &model_favourites, &iter1);
+	have_selection = gtk_tree_selection_get_selected(selection_favourites, &model_favourites, &iter1);
+	if (!have_selection)
+		return;
 
 	gtk_tree_model_get_iter_first (model_favourites, &iter0);
 	gtk_tree_selection_select_iter(selection_favourites, &iter0);
@@ -471,10 +494,13 @@ void row_up(GtkWidget *widget, gpointer data) {
 void row_del(GtkWidget *widget, gpointer data) {
 	GtkTreeIter iter;
 	streamer_applet *applet = data;
+	gboolean have_selection;
 
 	GtkTreeModel *model_favourites = GTK_TREE_MODEL(applet->tree_store_favourites);
 	GtkTreeSelection *selection_favourites = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_favourites));
-	gtk_tree_selection_get_selected(selection_favourites, &model_favourites, &iter);
+	have_selection = gtk_tree_selection_get_selected(selection_favourites, &model_favourites, &iter);
+	if (!have_selection)
+		return;
 	gtk_list_store_remove (applet->tree_store_favourites, &iter);
 
 	save_favourites(applet);
