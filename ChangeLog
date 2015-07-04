@@ -1,3 +1,7 @@
+Jul 4, 2015 - Version 0.1.4
+============================
+* Fix compiler warnings.
+
 Dec 31, 2014 - Version 0.1.3
 ============================
 * Fix a crash when Up/Down/Del button is pressed on the Favourites page, but

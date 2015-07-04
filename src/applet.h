@@ -200,6 +200,7 @@ void gstreamer_init(streamer_applet *);
 gboolean sqlite_connect(streamer_applet *);
 gboolean sqlite_insert(streamer_applet *, char *);
 gboolean sqlite_select(streamer_applet *, char *);
+gboolean sqlite_delete(streamer_applet *t, char *);
 int cb_sql_true(void *, int, char **, char **);
 int cb_sql_recent(void *, int, char **, char **);
 int cb_sql_recent_10(void *, int, char **, char **);
