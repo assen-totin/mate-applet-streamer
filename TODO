@@ -1,6 +1,6 @@
 PENDING:
 
 1. Replace GtkAction with GAction to eliminate deprecation warnings - when MATE Panel exports a suitable menu creation interface.
-2. Explore if dynamic menus are possible at all with MATE.
+
  
 
