@@ -35,7 +35,11 @@ void menu_cb_about (GtkAction *action, streamer_applet *applet) {
 	applet->quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	gtk_dialog_set_default_response (GTK_DIALOG (applet->quitDialog), GTK_RESPONSE_CANCEL);
+#ifdef HAVE_GTK2
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(applet->quitDialog)->vbox), label);
+#elif HAVE_GTK3
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(applet->quitDialog))), label);
+#endif
 	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 	gtk_widget_show_all (GTK_WIDGET(applet->quitDialog));
 }
@@ -46,15 +50,29 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	char *zErrMsg = 0, *zErrMsg2 = 0, *zErrMsg3 = 0;
 	int res;
 
-	// Prepare Favourites tab 
+	// Prepare Favourites tab
+#ifdef HAVE_GTK2
 	GtkWidget *butt_favourites_add = gtk_button_new_from_stock(GTK_STOCK_ADD);
 	GtkWidget *butt_favourites_del = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
 	GtkWidget *butt_favourites_up = gtk_button_new_from_stock(GTK_STOCK_GO_UP);
 	GtkWidget *butt_favourites_down = gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
 	GtkWidget *butt_favourites_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
+#elif HAVE_GTK3
+	GtkWidget *butt_favourites_add = gtk_button_new_from_icon_name("list-add", 16);
+	GtkWidget *butt_favourites_del = gtk_button_new_from_icon_name("list-remove", 16);
+	GtkWidget *butt_favourites_up = gtk_button_new_from_icon_name("go-previous", 16);
+	GtkWidget *butt_favourites_down = gtk_button_new_from_icon_name("go-next", 16);
+	GtkWidget *butt_favourites_play = gtk_button_new_from_icon_name("media-playback-start", 16);
+#endif
 	gtk_widget_set_name(butt_favourites_play, "play_favourites");
 
-	GtkWidget *favourites_vbox_1 = gtk_vbox_new (FALSE, 0);
+	GtkWidget *favourites_vbox_1;
+#ifdef HAVE_GTK2
+	favourites_vbox_1 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	favourites_vbox_1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(favourites_vbox_1), butt_favourites_add, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(favourites_vbox_1), butt_favourites_del, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(favourites_vbox_1), butt_favourites_up, FALSE, FALSE, 0);
@@ -76,19 +94,36 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(table_favourites), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
 	gtk_container_add (GTK_CONTAINER (table_favourites), applet->tree_view_favourites);
 
-	GtkWidget *favourites_hbox_1 = gtk_hbox_new (FALSE, 0);
+	GtkWidget *favourites_hbox_1;
+#ifdef HAVE_GTK2
+	favourites_hbox_1 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	favourites_hbox_1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
 
 	gtk_box_pack_start(GTK_BOX(favourites_hbox_1), table_favourites, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(favourites_hbox_1), favourites_vbox_1, FALSE, FALSE, 0);
 
 	// Prepare Icecast tab
+#ifdef HAVE_GTK2
 	GtkWidget *butt_icecast_refresh = gtk_button_new_from_stock(GTK_STOCK_REFRESH);
 	GtkWidget *butt_icecast_copy = gtk_button_new_from_stock(GTK_STOCK_COPY);
-	gtk_widget_set_name(butt_icecast_copy, "copy_icecast");
 	GtkWidget *butt_icecast_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
+#elif HAVE_GTK3
+	GtkWidget *butt_icecast_refresh = gtk_button_new_from_icon_name("view-refresh", 16);
+	GtkWidget *butt_icecast_copy = gtk_button_new_from_icon_name("edit-copy", 16);
+	GtkWidget *butt_icecast_play = gtk_button_new_from_icon_name("media-playback-start", 16);
+#endif
+	gtk_widget_set_name(butt_icecast_copy, "copy_icecast");
 	gtk_widget_set_name(butt_icecast_play, "play_icecast");
 
-	GtkWidget *icecast_vbox_1 = gtk_vbox_new (FALSE, 0);
+	GtkWidget *icecast_vbox_1;
+#ifdef HAVE_GTK2
+	icecast_vbox_1 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	icecast_vbox_1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_1), butt_icecast_refresh, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_1), butt_icecast_copy, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_1), butt_icecast_play, FALSE, FALSE, 0);
@@ -108,7 +143,11 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Progress-bar
 	applet->progress_icecast = gtk_progress_bar_new();
+#ifdef HAVE_GTK2
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(applet->progress_icecast), GTK_PROGRESS_LEFT_TO_RIGHT);
+#elif HAVE_GTK3
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(applet->progress_icecast), GTK_ORIENTATION_HORIZONTAL);
+#endif
 	sprintf(&line[0], _("Ready"));
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_icecast), &line[0]);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_icecast), 0);
@@ -116,32 +155,68 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	// Search field and button
 	applet->text_icecast = gtk_entry_new();
 	gtk_entry_set_activates_default(GTK_ENTRY(applet->text_icecast), TRUE);
+#ifdef HAVE_GTK2
 	applet->butt_search_icecast = gtk_button_new_from_stock(GTK_STOCK_FIND);
 	GTK_WIDGET_SET_FLAGS(applet->butt_search_icecast, GTK_CAN_DEFAULT);
+#elif HAVE_GTK3
+	applet->butt_search_icecast = gtk_button_new_from_icon_name("system-search", 16);
+	gtk_widget_set_can_default (applet->butt_search_icecast, TRUE);
+#endif
 	gtk_widget_set_name(applet->butt_search_icecast, "search_icecast");
 	g_signal_connect (G_OBJECT(applet->butt_search_icecast), "clicked", G_CALLBACK (search_station), (gpointer) applet);
 	g_signal_connect (G_OBJECT(applet->butt_search_icecast), "activate", G_CALLBACK (search_station), (gpointer) applet);
-	GtkWidget *icecast_hbox_2 = gtk_hbox_new (FALSE, 0);
+
+	GtkWidget *icecast_hbox_2;
+#ifdef HAVE_GTK2
+	icecast_hbox_2 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	icecast_hbox_2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(icecast_hbox_2), applet->text_icecast, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_hbox_2), applet->butt_search_icecast, FALSE, FALSE, 0);
 
-	GtkWidget *icecast_vbox_2 = gtk_vbox_new (FALSE, 0);
+	GtkWidget *icecast_vbox_2;
+#ifdef HAVE_GTK2
+	icecast_vbox_2 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	icecast_vbox_2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_2), applet->progress_icecast, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_2), icecast_hbox_2, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_vbox_2), table_icecast, TRUE, TRUE, 0);
 
-	GtkWidget *icecast_hbox_1 = gtk_hbox_new (FALSE, 0);
+	GtkWidget *icecast_hbox_1;
+#ifdef HAVE_GTK2
+	icecast_hbox_1 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	icecast_hbox_1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(icecast_hbox_1), icecast_vbox_2, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_hbox_1), icecast_vbox_1, FALSE, FALSE, 0);
 
 	// Prepare Custom tab
+#ifdef HAVE_GTK2
 	GtkWidget *butt_custom_load = gtk_button_new_from_stock(GTK_STOCK_OPEN);
 	GtkWidget *butt_custom_copy = gtk_button_new_from_stock(GTK_STOCK_COPY);
-	gtk_widget_set_name(butt_custom_copy, "copy_custom");
 	GtkWidget *butt_custom_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
+#elif HAVE_GTK3
+	GtkWidget *butt_custom_load = gtk_button_new_from_icon_name("document-open", 16);
+	GtkWidget *butt_custom_copy = gtk_button_new_from_icon_name("edit-copy", 16);
+	GtkWidget *butt_custom_play = gtk_button_new_from_icon_name("media-playback-start", 16);
+#endif
+	gtk_widget_set_name(butt_custom_copy, "copy_custom");
 	gtk_widget_set_name(butt_custom_play, "play_custom");
 
-	GtkWidget *custom_vbox_1 = gtk_vbox_new (FALSE, 0);
+	GtkWidget *custom_vbox_1;
+#ifdef HAVE_GTK2
+	custom_vbox_1 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	custom_vbox_1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(custom_vbox_1), butt_custom_load, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_vbox_1), butt_custom_copy, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_vbox_1), butt_custom_play, FALSE, FALSE, 0);
@@ -161,7 +236,11 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Progress-bar for Custom tab
 	applet->progress_custom = gtk_progress_bar_new();
+#ifdef HAVE_GTK2
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(applet->progress_custom), GTK_PROGRESS_LEFT_TO_RIGHT);
+#elif HAVE_GTK3
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(applet->progress_custom), GTK_ORIENTATION_HORIZONTAL);
+#endif
 	sprintf(&line[0], _("Ready"));
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_custom), &line[0]);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_custom), 0);
@@ -169,21 +248,44 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	// Search field and button
 	applet->text_custom = gtk_entry_new();
 	gtk_entry_set_activates_default(GTK_ENTRY(applet->text_custom), TRUE);
+#ifdef HAVE_GTK2
 	applet->butt_search_custom = gtk_button_new_from_stock(GTK_STOCK_FIND);
 	GTK_WIDGET_SET_FLAGS(applet->butt_search_custom, GTK_CAN_DEFAULT);
+#elif HAVE_GTK3
+	applet->butt_search_custom = gtk_button_new_from_icon_name("system-search", 16);
+	gtk_widget_set_can_default (applet->butt_search_custom, TRUE);
+#endif
 	gtk_widget_set_name(applet->butt_search_custom, "search_custom");
 	g_signal_connect (G_OBJECT(applet->butt_search_custom), "clicked", G_CALLBACK (search_station), (gpointer) applet);
 	g_signal_connect (G_OBJECT(applet->butt_search_custom), "activate", G_CALLBACK (search_station), (gpointer) applet);
-	GtkWidget *custom_hbox_2 = gtk_hbox_new (FALSE, 0);
+
+	GtkWidget *custom_hbox_2;
+#ifdef HAVE_GTK2
+	custom_hbox_2 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	custom_hbox_2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(custom_hbox_2), applet->text_custom, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_hbox_2), applet->butt_search_custom, FALSE, FALSE, 0);
 
-	GtkWidget *custom_vbox_2 = gtk_vbox_new (FALSE, 0);
+	GtkWidget *custom_vbox_2;
+#ifdef HAVE_GTK2
+	custom_vbox_2 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	custom_vbox_2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
 	gtk_box_pack_start(GTK_BOX(custom_vbox_2), applet->progress_custom, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_vbox_2), custom_hbox_2, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_vbox_2), table_custom, TRUE, TRUE, 0);
 
-	GtkWidget *custom_hbox_1 = gtk_hbox_new (FALSE, 0);
+	GtkWidget *custom_hbox_1;
+#ifdef HAVE_GTK2
+	custom_hbox_1 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	custom_hbox_1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
 	gtk_box_pack_start(GTK_BOX(custom_hbox_1), custom_vbox_2, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_hbox_1), custom_vbox_1, FALSE, FALSE, 0);
 
@@ -209,7 +311,12 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkWidget *buttonClose = gtk_dialog_add_button (GTK_DIALOG(applet->quitDialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
 
 	gtk_dialog_set_default_response (GTK_DIALOG (applet->quitDialog), GTK_RESPONSE_CANCEL);
+#ifdef HAVE_GTK2
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(applet->quitDialog)->vbox), notebook);
+#elif HAVE_GTK3
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(applet->quitDialog))), notebook);
+#endif
+
 	g_signal_connect (G_OBJECT(buttonClose), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 
 	gtk_widget_show_all(GTK_WIDGET(applet->quitDialog));

@@ -19,13 +19,16 @@ BuildRequires:  sqlite-devel
 BuildRequires:	libxml2-devel
 Requires:       sqlite
 Requires:	libxml2
+# Requires: and BuildRequires: for GTK
+@RPM_REQUIRE_GTK@
+@RPM_BUILDREQUIRE_GTK@
 # Requires: and BuildRequires: for chosen panel
 @RPM_BUILDREQUIRES_PANEL@
 @RPM_REQUIRES_PANEL@
 # Requires: and BuildRequires: for chosen notification library
 @RPM_BUILDREQUIRES_NOTIFY@
 @RPM_REQUIRES_NOTIFY@
-# Requires: for GStreamer
+# Requires: and BuildRequires: for GStreamer
 @RPM_REQUIRE_GSTREAMER@
 @RPM_BUILDREQUIRE_GSTREAMER@
 
@@ -78,6 +81,9 @@ rm -rf "${RPM_BUILD_ROOT}"
 %{_libdir}/bonobo/servers/StreamerAppletFactory.server
 
 %changelog
+* Sun Jul 26 2015 Assen Totin <assen.totin@gmail.com>
+- Release 0.2.0
+
 * Sat Jul 5 2015 Assen Totin <assen.totin@gmail.com>
 - Release 0.1.4
 

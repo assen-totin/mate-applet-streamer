@@ -133,7 +133,7 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 			break;
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -203,7 +203,6 @@ int cb_sql_fav_10(void *data, int argc, char **argv, char **azColName) {
 			break;
 		}
 	}
-
 	return 0;
 }
 

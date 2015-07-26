@@ -1,3 +1,6 @@
 Should you find any bug, send an email. See AUTHORS for details. 
 
+KNOWN ISSUES:
+- Compilation with GTK3 raises a number of warnings for deperated items. These cannot be removed, because mate-panel still only exports a GtkAction-based menu creation interface. 
+
 

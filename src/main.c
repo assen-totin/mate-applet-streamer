@@ -22,7 +22,9 @@
 #include "applet.h"
 
 
-void applet_back_change (MyPanelApplet *a, MyPanelAppletBackgroundType type, GdkColor *color, GdkPixmap *pixmap, streamer_applet *applet) {
+#ifdef HAVE_GTK2
+void applet_back_change (MyPanelApplet *a, MyPanelAppletBackgroundType type, GdkColor *color, GdkPixmap *pixmap, 
+streamer_applet *applet) {
 	/* taken from the TrashApplet */
 	GtkRcStyle *rc_style;
 	GtkStyle *style;
@@ -55,8 +57,45 @@ void applet_back_change (MyPanelApplet *a, MyPanelAppletBackgroundType type, Gdk
 		default:
 			break;
 	}
-
 }
+
+#elif HAVE_GTK3
+void applet_back_change (MyPanelApplet *a, MyPanelAppletBackgroundType type, GdkRGBA *color, cairo_pattern_t *pattern, streamer_applet *applet) {
+	GtkRcStyle *rc_style;
+	GtkStyle *style;
+
+	gtk_widget_set_style (GTK_WIDGET(applet->applet), NULL);
+	gtk_widget_set_style (GTK_WIDGET(applet->event_box), NULL);
+	rc_style = gtk_rc_style_new ();
+
+	gtk_widget_modify_style (GTK_WIDGET(applet->applet), rc_style);
+	gtk_widget_modify_style (GTK_WIDGET(applet->event_box), rc_style);
+	g_object_unref (rc_style);
+
+	switch (type) {
+		case CAIRO_PATTERN_TYPE_SOLID:
+			gtk_widget_override_background_color (GTK_WIDGET(applet->applet), GTK_STATE_NORMAL, &color);
+			gtk_widget_override_background_color (GTK_WIDGET(applet->event_box), GTK_STATE_NORMAL, &color);
+
+			break;
+
+		case CAIRO_PATTERN_TYPE_RASTER_SOURCE:
+			//FIXME: This needs handling in GTK3, but *pattern we are supplied with is NULL
+			style = gtk_style_copy (gtk_widget_get_style (GTK_WIDGET(applet->applet)));
+			//if (style->bg_pixmap[GTK_STATE_NORMAL])
+			//	g_object_unref (style->bg_pixmap[GTK_STATE_NORMAL]);
+			//style->bg_pixmap[GTK_STATE_NORMAL] = g_object_ref(pixmap);
+
+			gtk_widget_set_style (GTK_WIDGET(applet->applet), style);
+			gtk_widget_set_style (GTK_WIDGET(applet->event_box), style);
+			g_object_unref (style);
+			break;
+
+		default:
+			break;
+	}
+}
+#endif
 
 void applet_destroy(MyPanelApplet *applet_widget, streamer_applet *applet) {
 	sqlite3_close(applet->sqlite);

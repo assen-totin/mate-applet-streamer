@@ -1,3 +1,7 @@
+Jul 26, 2015 - Version 0.2.0
+============================
+* Add GTK3 support
+
 Jul 4, 2015 - Version 0.1.4
 ============================
 * Fix compiler warnings.

@@ -256,9 +256,12 @@ void play_menu_mate (GtkAction *, streamer_applet *);
 void play_menu_gnome (BonoboUIComponent *, gpointer, char *);
 #endif
 
-
 // main.c
+#ifdef HAVE_GTK2
 void applet_back_change (MyPanelApplet *, MyPanelAppletBackgroundType, GdkColor *, GdkPixmap *, streamer_applet *);
+#elif HAVE_GTK3
+void applet_back_change (MyPanelApplet *, MyPanelAppletBackgroundType, GdkRGBA *, cairo_pattern_t *, streamer_applet *);
+#endif
 void applet_destroy(MyPanelApplet *, streamer_applet *);
 
 // Menu skeleton - MATE version
@@ -268,4 +271,5 @@ static const GtkActionEntry applet_menu_actions_mate[] = {
         { "All", GTK_STOCK_EXECUTE, "_All Stations", NULL, NULL, G_CALLBACK (menu_cb_all) },
         { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
 };
+
 

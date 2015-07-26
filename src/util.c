@@ -22,27 +22,27 @@
 #include "applet.h"
 
 void push_notification (gchar *title, gchar *body, gchar *icon) {
-        NotifyNotification* notification;
-        GError* error = NULL;
+	NotifyNotification* notification;
+	GError* error = NULL;
 
-        notify_init(PACKAGE_NAME);
+	notify_init(PACKAGE_NAME);
 
 #ifdef HAVE_MATE
 	#ifdef HAVE_LIBMATENOTIFY
-        notification = notify_notification_new (title, body, icon, NULL);
+	notification = notify_notification_new (title, body, icon, NULL);
 	#elif HAVE_LIBNOTIFY
-        notification = notify_notification_new (title, body, icon);
+	notification = notify_notification_new (title, body, icon);
 	#endif
 #elif HAVE_GNOME_2
 	notification = notify_notification_new (title, body, icon, NULL);
 #endif
 
-        notify_notification_set_timeout (notification, 5000);
+	notify_notification_set_timeout (notification, 5000);
 
-        notify_notification_show (notification, &error);
+	notify_notification_show (notification, &error);
 
-        g_object_unref (G_OBJECT (notification));
-        notify_uninit ();
+	g_object_unref (G_OBJECT (notification));
+	notify_uninit ();
 }
 
 
@@ -88,18 +88,20 @@ gboolean cp(const char *to, const char *from) {
 	}
 
 	out_error:
-		saved_errno = errno;
+	saved_errno = errno;
 
-		close(fd_from);
-		if (fd_to >= 0)
-		close(fd_to);
+	close(fd_from);
+	if (fd_to >= 0)
+	close(fd_to);
 
-		errno = saved_errno;
-		return FALSE;
+	errno = saved_errno;
+	return FALSE;
 }
 
 void debug(char *s) {
 	FILE *fp = fopen("/tmp/streamer_applet", "a");
 	fprintf(fp, "%s\n", s);
 	fclose(fp);
+	printf("%s\n", s);
 }
+

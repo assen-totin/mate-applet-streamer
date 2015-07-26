@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([mate-applet-streamer], [0.1.4], [assen.totin@gmail.com])
+AC_INIT([mate-applet-streamer], [0.2.0], [assen.totin@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([-Wall])
@@ -41,7 +41,6 @@ AM_GNU_GETTEXT([external])
 if test $USE_NLS != "yes" ; then
         echo "*** gettext not found. You're losing internationalization."
 fi
-AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
 AC_DEFINE_UNQUOTED([MATELOCALEDIR], ["$LOCALEDIR"], ["Locale Dir MATE"])
 
 # Checks for programs
@@ -49,8 +48,53 @@ AC_PROG_CC
 MAKEFILE_CC=`which gcc`
 AC_SUBST([MAKEFILE_CC])
 
-# Check for packages
-PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+# Check for GTK and determine version
+FORCE_GTK="no"
+RPM_REQUIRE_GTK=" "
+USE_GTK="0"
+AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
+
+PKG_CHECK_MODULES([PKG_GTK2], [gtk+-2.0], [FOUND_GTK2="1"], [FOUND_GTK2="0"])
+PKG_CHECK_MODULES([PKG_GTK3], [gtk+-3.0], [FOUND_GTK3="1"], [FOUND_GTK3="0"])
+
+if test $FORCE_GTK = "3" ; then
+	if test $FOUND_GTK3 = "1" ; then
+		AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [AC_MSG_ERROR(["*** GTK3 forced, but not found."])])
+	else
+		AC_MSG_ERROR(["*** GTK3 forced, but not found."])
+	fi
+elif test $FORCE_GTK = "2" ; then
+	if test $FOUND_GTK2 = "1" ; then
+		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [AC_MSG_ERROR(["*** GTK2 forced, but not found."])])
+	else
+		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
+	fi
+else
+	if test $FOUND_GTK3 = "1" ; then
+		AM_PATH_GTK_3_0([3.14.0], [USE_GTK="3"], [USE_GTK="0"])
+	elif test $FOUND_GTK2 = "1" ; then
+		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [USE_GTK="0"])
+	fi
+fi
+
+if test $USE_GTK = "3" ; then
+	AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
+	AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
+	RPM_REQUIRE_GTK="Requires: gtk3 >= 3.14.0"
+	RPM_BUILDREQUIRE_GTK="Requires: gtk3 >= 3.14.0"
+	SELECTED_GTK="GTK-3"
+elif test $USE_GTK = "2" ; then
+	AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
+	AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
+	RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
+	RPM_BUILDREQUIRE_GTK="Requires: gtk2-devel >= 2.24.0"
+	SELECTED_GTK="GTK-2"
+else
+	AC_MSG_ERROR(["*** GTK not found."])
+fi
+
+AC_SUBST([RPM_REQUIRE_GTK])
+AC_SUBST([RPM_BUILDREQUIRE_GTK])
 
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 
@@ -190,18 +234,18 @@ if test $FOUND_GSTREAMER = "0.10" ; then
 	if test $FOUND_GSTREAMER_INTERFACES = "no" ; then
         	AC_MSG_ERROR(["*** GStreamer found, but GStreamer-interfaces not found."])
 	fi
-        RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
+	RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
 	RPM_BUILDREQUIRE_GSTREAMER="BuildRequires: gstreamer-devel >= 0.10"
-        # Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
-        GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
-        GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
-        AC_DEFINE([HAVE_GST_0_10], [1], [GStreamer 0.10])
-elif test  $FOUND_GSTREAMER = "1.0" ; then
-        RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
+	# Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
+	GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
+	GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
+	AC_DEFINE([HAVE_GST_0_10], [1], [GStreamer 0.10])
+elif test $FOUND_GSTREAMER = "1.0" ; then
+	RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
 	RPM_BUILDREQUIRE_GSTREAMER="BuildRequires: gstreamer1-devel >= 1.0"
-        GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0`
-        GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0`
-        AC_DEFINE([HAVE_GST_1_0], [1], [GStreamer 1.0])
+	GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0`
+	GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0`
+	AC_DEFINE([HAVE_GST_1_0], [1], [GStreamer 1.0])
 fi
 AC_SUBST([GSTREAMER_DASH_LIBS])
 AC_SUBST([GSTREAMER_DASH_CFLAGS])
@@ -219,8 +263,8 @@ if test $FOUND_SQLITE3 = "no" ; then
         AC_MSG_ERROR(["*** sqlite3 not found."])
 fi
 
-APPLET_FLAGS=`$PKG_CONFIG --cflags-only-I glib-2.0 libxml-2.0 $SELECTED_NOTIFY $LIBMATEPANELAPPLET $ADDITIONAL_PACKAGES`
-APPLET_LIBS=`$PKG_CONFIG --libs glib-2.0 libxml-2.0 $SELECTED_NOTIFY $LIBMATEPANELAPPLET $ADDITIONAL_PACKAGES`
+APPLET_FLAGS=`$PKG_CONFIG --cflags-only-I glib-2.0 libxml-2.0 $SELECTED_NOTIFY $LIBMATEPANELAPPLET`
+APPLET_LIBS=`$PKG_CONFIG --libs glib-2.0 libxml-2.0 $SELECTED_NOTIFY $LIBMATEPANELAPPLET`
 AC_SUBST([APPLET_FLAGS])
 AC_SUBST([APPLET_LIBS])
 
@@ -243,6 +287,8 @@ AC_OUTPUT
 
 echo
 echo "Configuration complete:"
+echo " * Selected GTK version: $SELECTED_GTK"
+echo " * Selected GStgreamer version: $FOUND_GSTREAMER"
 echo " * Selected notification library: $SELECTED_NOTIFY"
 echo
 echo "Now, run make."
