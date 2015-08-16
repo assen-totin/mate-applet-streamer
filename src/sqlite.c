@@ -94,7 +94,7 @@ int cb_sql_recent_10(void *data, int argc, char **argv, char **azColName) {
 	int i;
 
 	GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
-	g_checksum_update(checksum, argv[1], -1);
+	g_checksum_update(checksum, (guchar *) argv[1], -1);
 
 #ifdef HAVE_MATE
 	GList *list = gtk_action_group_list_actions(applet->action_group);
@@ -163,7 +163,7 @@ int cb_sql_fav_10(void *data, int argc, char **argv, char **azColName) {
 	GList *element;
 
 	GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
-	g_checksum_update(checksum, argv[1], -1);
+	g_checksum_update(checksum, (guchar *) argv[1], -1);
 
 #ifdef HAVE_MATE
 	GList *list = gtk_action_group_list_actions(applet->action_group);
