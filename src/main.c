@@ -212,6 +212,7 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 		return FALSE;
 
 	zErrMsg = 0;
+	memset(&applet->ui_recent[0], '\0', 1);
 
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url FROM recent GROUP BY listen_url ORDER BY unix_timestamp DESC LIMIT 10", cb_sql_recent_10, (void*) applet, &zErrMsg);
 	if (res != SQLITE_OK) {
@@ -220,6 +221,7 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 		return FALSE;
 	}
 
+	memset(&applet->ui_fav[0], '\0', 1);
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url FROM favourites LIMIT 10", cb_sql_fav_10, (void*) applet, &zErrMsg);
 	if (res != SQLITE_OK) {
 		push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
