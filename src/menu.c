@@ -396,7 +396,6 @@ void create_view_and_model_favourites (streamer_applet *applet){
 	GtkCellRenderer *renderer1, *renderer2;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	GtkTreeViewColumn *column;
 
 	applet->tree_view_favourites = gtk_tree_view_new();
 	applet->tree_store_favourites = gtk_list_store_new(FAVOURITES_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
@@ -429,7 +428,6 @@ void create_view_and_model_icecast (streamer_applet *applet){
 	GtkCellRenderer *renderer1, *renderer2, *renderer3;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	GtkTreeViewColumn *column;
 
 	applet->tree_view_icecast = gtk_tree_view_new();
 	applet->tree_store_icecast = gtk_list_store_new(ICECAST_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
@@ -470,7 +468,6 @@ void create_view_and_model_custom (streamer_applet *applet){
 	GtkCellRenderer *renderer1, *renderer2, *renderer3;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	GtkTreeViewColumn *column;
 
 	applet->tree_view_custom = gtk_tree_view_new();
 	applet->tree_store_custom = gtk_list_store_new(CUSTOM_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
@@ -782,7 +779,7 @@ void play_menu_gnome (BonoboUIComponent *ui_container, gpointer data, char *cnam
 
 
 void do_play(streamer_applet *applet) {
-	char msg[1024], sql[1024], image_file[1024];
+	char sql[1024], image_file[1024];
 
 	if (applet->status == 1)
 		gstreamer_pause(applet);
@@ -795,7 +792,7 @@ void do_play(streamer_applet *applet) {
 
 	time_t now = time(NULL);
 	sqlite_connect(applet);
-	sprintf(&sql[0], "INSERT INTO recent (server_name, listen_url, unix_timestamp) VALUES ('%s','%s','%u') ", &applet->name[0], &applet->url[0], now);
+	sprintf(&sql[0], "INSERT INTO recent (server_name, listen_url, unix_timestamp) VALUES ('%s','%s','%li') ", &applet->name[0], &applet->url[0], now);
 	sqlite_insert(applet, &sql[0]);
 	sqlite3_close(applet->sqlite);
 
@@ -807,9 +804,6 @@ void do_play(streamer_applet *applet) {
 
 
 void save_favourites(streamer_applet *applet) {
-	char sql[2048];
-	GtkTreeIter iter;
-
 	// Truncate table in SQL, open transaction
 	sqlite_delete(applet, "DELETE FROM favourites");
 	sqlite_connect(applet);
@@ -902,7 +896,6 @@ void custom_refresh (GtkWidget *widget, gpointer data) {
 	char line[1024];
 
 	GtkWidget *fileDialogWidget;
-	char fileDialogTitle[256];
 	char fileDialogFile[1024];
 
 	fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(applet),
@@ -1001,7 +994,6 @@ void search_station(GtkWidget *widget, gpointer data) {
 
 
 gboolean on_left_click (GtkWidget *event_box, GdkEventButton *event, streamer_applet *applet) {
-	static GtkWidget *label;
 	char msg[1024], image_file[1024];
 
 	// We only process left clicks here

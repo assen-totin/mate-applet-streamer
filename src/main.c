@@ -21,6 +21,36 @@
 #include "../config.h"
 #include "applet.h"
 
+// Menu strings
+#ifdef HAVE_MATE
+static const gchar *ui1 = 
+"<menu name='SubMenu1' action='Recent'>"
+;
+static const gchar *ui2 = 
+"</menu>"
+"<menu name='SubMenu2' action='Favourites'>"
+;
+static const gchar *ui3 =
+"</menu>"
+"<menuitem name='MenuItem1' action='All' />"
+"<menuitem name='MenuItem2' action='About' />"
+;
+#elif HAVE_GNOME_2
+static const gchar *ui1 =
+"<popup name='button3'>"
+"<submenu name='SubMenu1' label='Recent'>"
+;
+static const gchar *ui2 =
+"</submenu>"
+"<submenu name='SubMenu2' label='Favourites'>"
+;
+static const gchar *ui3 =
+"</submenu>"
+"<menuitem name='MenuItem1' verb='All' label='All'/>"
+"<menuitem name='MenuItem2' verb='About' label='About' pixtype='stock' pixname='gnome-stock-about'/>"
+"</popup>"
+;
+#endif
 
 #ifdef HAVE_GNOME_2
 void applet_back_change (MyPanelApplet *a, MyPanelAppletBackgroundType type, GdkColor *color, GdkPixmap *pixmap, streamer_applet *applet) {

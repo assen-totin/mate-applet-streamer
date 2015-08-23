@@ -48,16 +48,10 @@ void gstreamer_play(streamer_applet *applet) {
 void gstreamer_init(streamer_applet *applet) {
 	gst_init(0, NULL);
 
-	GstElement *pipeline = gst_pipeline_new ("my-pipeline");
-
 #ifdef HAVE_GST_0_10
 	applet->gstreamer_playbin2 = gst_element_factory_make ("playbin2", NULL);
 #elif HAVE_GST_1_0
 	applet->gstreamer_playbin2 = gst_element_factory_make ("playbin", NULL);
 #endif
-
-	//g_object_set (G_OBJECT (applet->gstreamer_playbin2), "uri", &applet->url[0], NULL);
-
-	//sleep(1);
 }
 

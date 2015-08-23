@@ -237,7 +237,6 @@ int cb_sql_custom(void *data, int argc, char **argv, char **azColName) {
 
 int cb_sql_version(void *data, int argc, char **argv, char **azColName) {
 	streamer_applet *applet = data;
-	GtkTreeIter iter;
 
 	applet->db_version = atoi(argv[0]);
 

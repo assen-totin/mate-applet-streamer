@@ -65,7 +65,6 @@ gboolean custom_xml (streamer_applet *applet) {
 void custom_print_elements(xmlNode * a_node, streamer_applet *applet) {
 	xmlNode *cur_node = NULL;
 	GtkTreeIter iter;
-	char sql[1024];
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next) {
 		if ((cur_node->type == XML_ELEMENT_NODE) && (!xmlStrcmp(cur_node->name, (const xmlChar *)"entry")) && (strlen(&applet->xml_listen_url[0]) > 2)) {
@@ -108,9 +107,6 @@ int custom_count_elements(xmlNode * a_node, int counter) {
 
 
 void custom_save(streamer_applet *applet) {
-	char sql[2048];
-	GtkTreeIter iter;
-
 	// Clear DB - implies connect/disconnect
 	sqlite_delete(applet, "DELETE FROM custom_stations");
 	
