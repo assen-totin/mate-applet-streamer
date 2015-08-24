@@ -1,3 +1,8 @@
+
+Aug 24, 2015 - Version 0.2.3
+============================
+* Add labels to GTK 3 buttons.
+
 Aug 16, 2015 - Version 0.2.2
 ============================
 * Fix checksum calculation for menu items.
