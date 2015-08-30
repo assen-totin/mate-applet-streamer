@@ -168,7 +168,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GTK_WIDGET_SET_FLAGS(applet->butt_search_icecast, GTK_CAN_DEFAULT);
 #elif HAVE_GTK3
 	applet->butt_search_icecast = gtk_button_new_from_icon_name("system-search", 16);
-	gtk_button_set_label (butt_search_icecast, _("Search"));
+	gtk_button_set_label (applet->butt_search_icecast, _("Search"));
 	gtk_widget_set_can_default (applet->butt_search_icecast, TRUE);
 #endif
 	gtk_widget_set_name(applet->butt_search_icecast, "search_icecast");
@@ -265,7 +265,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GTK_WIDGET_SET_FLAGS(applet->butt_search_custom, GTK_CAN_DEFAULT);
 #elif HAVE_GTK3
 	applet->butt_search_custom = gtk_button_new_from_icon_name("system-search", 16);
-	gtk_button_set_label (butt_search_custom, _("Search"));
+	gtk_button_set_label (applet->butt_search_custom, _("Search"));
 	gtk_widget_set_can_default (applet->butt_search_custom, TRUE);
 #endif
 	gtk_widget_set_name(applet->butt_search_custom, "search_custom");
