@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 21:57+0300\n"
+"POT-Creation-Date: 2015-12-13 23:42+0200\n"
 "PO-Revision-Date: 2013-09-01 18:19+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Bulgarian\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/menu.c:647
+#: src/menu.c:665
 msgid "<enter name>"
 msgstr "<въведете име>"
 
-#: src/menu.c:647
+#: src/menu.c:665
 msgid "<enter url>"
 msgstr "<въведете URL>"
 
@@ -38,23 +38,30 @@ msgstr "Аплет за слушане на онлайн радио."
 msgid "Assen Totin <assen.totin@gmail.com>"
 msgstr "Асен Тотин <assen.totin@gmail.com>"
 
-#: src/main.c:160
+#: src/main.c:162
 msgid "Cannot access configuration directory. Exiting."
-msgstr "Конфигурационната директория е недостъпна. Аплетът не може да стартира."
+msgstr ""
+"Конфигурационната директория е недостъпна. Аплетът не може да стартира."
 
-#: src/main.c:186
+#: src/main.c:188
 msgid "Cannot copy database file to configuration directory. Exiting."
-msgstr "Базата не може да бъде копирана в конфигурационната директория. Аплетът не може да стартира."
+msgstr ""
+"Базата не може да бъде копирана в конфигурационната директория. Аплетът не "
+"може да стартира."
 
-#: src/main.c:167
+#: src/main.c:169
 msgid "Cannot create configuration directory. Exiting."
-msgstr "Конфигурационната директория не може да бъде създадена. Аплетът не може да стартира."
+msgstr ""
+"Конфигурационната директория не може да бъде създадена. Аплетът не може да "
+"стартира."
 
-#: src/main.c:172
+#: src/main.c:174
 msgid "Cannot verify configuration directory. Exiting."
-msgstr "Конфигурационната директория не може да бъде прочетена. Аплетът не може да стартира."
+msgstr ""
+"Конфигурационната директория не може да бъде прочетена. Аплетът не може да "
+"стартира."
 
-#: src/main.c:191
+#: src/main.c:193
 msgid "Cannot verify database file. Exiting."
 msgstr "Базата данни не може да бъде прочетена. Аплетът не може да стартира."
 
@@ -62,36 +69,36 @@ msgstr "Базата данни не може да бъде прочетена. 
 msgid "Copy"
 msgstr "Копиране"
 
-#: src/menu.c:319
+#: src/menu.c:333
 msgid "Custom"
 msgstr "Моите"
 
-#: src/main.c:181
+#: src/main.c:183
 msgid "Database file is not a regular file. Exiting."
 msgstr "Базата данни е повредена. Аплетът не може да стартира."
 
-#: src/menu.c:881
+#: src/menu.c:899
 #, c-format
 msgid "Downloading directory..."
 msgstr "Получаване на списъка..."
 
-#: src/menu.c:956
+#: src/menu.c:974
 msgid "Error"
 msgstr "Грешка"
 
-#: src/menu.c:311
+#: src/menu.c:325
 msgid "Favourites"
 msgstr "Любими"
 
-#: src/menu.c:464 src/menu.c:504
+#: src/menu.c:482 src/menu.c:522
 msgid "Genre"
 msgstr "Жанр"
 
-#: src/menu.c:315
+#: src/menu.c:329
 msgid "Icecast"
 msgstr "Icecast"
 
-#: src/menu.c:928
+#: src/menu.c:946
 #, c-format
 msgid "Importing file..."
 msgstr "Обработка..."
@@ -100,11 +107,11 @@ msgstr "Обработка..."
 msgid "Load"
 msgstr "Отваряне"
 
-#: src/menu.c:33 src/menu.c:35 src/menu.c:323
+#: src/menu.c:33 src/menu.c:35 src/menu.c:341
 msgid "MATE Streamer Applet"
 msgstr "MATE радио аплет"
 
-#: src/menu.c:418 src/menu.c:450 src/menu.c:490
+#: src/menu.c:436 src/menu.c:468 src/menu.c:508
 msgid "Name"
 msgstr "Име"
 
@@ -112,29 +119,37 @@ msgstr "Име"
 msgid "Next"
 msgstr "Следващ"
 
-#: src/menu.c:389
+#: src/menu.c:407
 #, fuzzy, c-format
 msgid "No stations found. Press Open button to load from file."
 msgstr "Списъкът е празен. Натиснете Refresh за обновяване."
 
-#: src/menu.c:371
+#: src/menu.c:389
 #, c-format
 msgid "No stations found. Press Refresh button to download stations."
 msgstr "Списъкът е празен. Натиснете Refresh за обновяване."
 
-#: src/menu.c:1018
+#: src/menu.c:1036
 msgid "No stream selected."
 msgstr "Не е избрано радио."
 
-#: src/main.c:301
+#: src/main.c:319
 msgid "No stream selected. Right-click to load one."
 msgstr "Не е избрано радио. Щракнете с десен бутон на мишката."
 
-#: src/gstreamer.c:29 src/menu.c:1027 src/sqlite.c:79
+#: src/gstreamer.c:64
+msgid "Now Playing"
+msgstr "Слушате"
+
+#: src/menu.c:337
+msgid "Options"
+msgstr "Настройки"
+
+#: src/gstreamer.c:29 src/menu.c:1045 src/sqlite.c:79
 msgid "PAUSED: "
 msgstr "ПАУЗА: "
 
-#: src/gstreamer.c:41 src/menu.c:1039
+#: src/gstreamer.c:41 src/gstreamer.c:67 src/menu.c:1057
 msgid "PLAYING: "
 msgstr "СЛУШАТЕ: "
 
@@ -146,12 +161,12 @@ msgstr "Слушай"
 msgid "Previous"
 msgstr "Предишен"
 
-#: src/menu.c:888
+#: src/menu.c:906
 #, c-format
 msgid "Processing directory..."
 msgstr "Обработване на списъка..."
 
-#: src/menu.c:159 src/menu.c:256 src/menu.c:901 src/menu.c:936
+#: src/menu.c:159 src/menu.c:256 src/menu.c:919 src/menu.c:954
 #, c-format
 msgid "Ready"
 msgstr "Готово"
@@ -164,11 +179,11 @@ msgstr "Сваляне"
 msgid "Remove"
 msgstr "Премахване"
 
-#: src/menu.c:1018
+#: src/menu.c:1036
 msgid "Right-click to load one."
 msgstr "Щракнете с десен бутон на мишката."
 
-#: src/menu.c:895
+#: src/menu.c:913
 #, c-format
 msgid "Saving entries..."
 msgstr "Записване..."
@@ -177,15 +192,19 @@ msgstr "Записване..."
 msgid "Search"
 msgstr "Търсене"
 
+#: src/menu.c:306
+msgid "Show notifications with song titles"
+msgstr ""
+
 #: src/custom.c:35 src/icecast.c:33 src/icecast.c:43 src/icecast.c:106
-#: src/main.c:160 src/main.c:167 src/main.c:172 src/main.c:181 src/main.c:186
-#: src/main.c:191 src/main.c:198 src/main.c:205 src/main.c:249 src/main.c:257
-#: src/main.c:264 src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981
-#: src/menu.c:996 src/sqlite.c:33
+#: src/main.c:162 src/main.c:169 src/main.c:174 src/main.c:183 src/main.c:188
+#: src/main.c:193 src/main.c:200 src/main.c:207 src/main.c:251 src/main.c:259
+#: src/main.c:266 src/menu.c:365 src/menu.c:380 src/menu.c:398 src/menu.c:999
+#: src/menu.c:1014 src/sqlite.c:33
 msgid "Streamer Applet Error"
 msgstr "Грешка на радио аплета"
 
-#: src/menu.c:424 src/menu.c:458 src/menu.c:498
+#: src/menu.c:442 src/menu.c:476 src/menu.c:516
 msgid "URL"
 msgstr "URL"
 
@@ -193,7 +212,7 @@ msgstr "URL"
 msgid "Unable to connect to DB."
 msgstr "Няма връзка с базата данни."
 
-#: src/main.c:198
+#: src/main.c:200
 msgid "Unable to connect to DB. Exiting."
 msgstr "Unable to connect to DB. Аплетът не може да стартира."
 
@@ -201,7 +220,7 @@ msgstr "Unable to connect to DB. Аплетът не може да старти�
 msgid "Unable to create temporary file."
 msgstr "Не може да се създаде временен файл."
 
-#: src/menu.c:955
+#: src/menu.c:973
 msgid "Unable to import file: check file format"
 msgstr "Файлът не може да бъде прочетен; провевете формата му"
 
@@ -209,7 +228,7 @@ msgstr "Файлът не може да бъде прочетен; провев�
 msgid "Unable to parse XML file."
 msgstr "XML файлът не се чете."
 
-#: src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981 src/menu.c:996
+#: src/menu.c:365 src/menu.c:380 src/menu.c:398 src/menu.c:999 src/menu.c:1014
 msgid "Unable to read DB."
 msgstr "Базата данни е недостъпна."
 

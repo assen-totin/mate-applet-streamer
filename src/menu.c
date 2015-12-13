@@ -302,6 +302,20 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_box_pack_start(GTK_BOX(custom_hbox_1), custom_vbox_2, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_hbox_1), custom_vbox_1, FALSE, FALSE, 0);
 
+	// Prepare Options tab
+	GtkWidget *check_option_1 = gtk_check_button_new_with_label (_("Show notifications with song titles"));
+	gtk_widget_set_name(check_option_1, "option_1");
+	g_signal_connect (G_OBJECT(check_option_1), "clicked", G_CALLBACK (option_set), (gpointer) applet);
+
+	GtkWidget *options_hbox_1;
+#ifdef HAVE_GTK2
+	options_hbox_1 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	options_hbox_1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
+
+	gtk_box_pack_start(GTK_BOX(options_hbox_1), check_option_1, TRUE, TRUE, 0);
+
 	// Create notebook widget
 	GtkWidget *notebook = gtk_notebook_new();
 	gtk_widget_set_size_request (notebook, 640, 480);
@@ -318,6 +332,10 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	// Third page - Custom
 	GtkWidget *tab_label_3 = gtk_label_new(_("Custom"));
 	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), custom_hbox_1, tab_label_3);
+
+	// Forth page - Options
+	GtkWidget *tab_label_4 = gtk_label_new(_("Options"));
+	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), options_hbox_1, tab_label_4);
 
 	// Assemble window
 	applet->quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);

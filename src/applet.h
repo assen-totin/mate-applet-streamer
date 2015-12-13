@@ -66,6 +66,10 @@
 #define APPLET_SQLITE_DB_VERSION "1"
 #define ICECAST_URL_XML "http://dir.xiph.org/yp.xml"
 #define ICECAST_TMP_FILE "icecast_dnld"
+// GSettings
+#define APPLET_GSETTINGS_SCHEMA "org.mate.panel.applet.StreamerApplet"
+#define APPLET_GSETTINGS_PATH "/org/mate/panel/objects/streamer/"
+#define APPLET_KEY_OPTION_1 "show-notifications"
 
 enum {
 	TAB_FAVOURITES = 0,
@@ -94,12 +98,15 @@ enum {
 	CUSTOM_NUM_COLS
 };
 
-
 struct url_hash {
 	char hash[64];
 	char url[1024];
 	char name[1024];
 } url_hash;
+
+typedef struct {
+	int show_notifications;
+} streamer_options;
 
 #ifdef HAVE_MATE
 	typedef MatePanelApplet MyPanelApplet;
@@ -122,6 +129,7 @@ typedef struct {
 	GtkWidget *text_custom;
 	GtkWidget *butt_search_icecast;
 	GtkWidget *butt_search_custom;
+	streamer_options options;
 	int db_version;
 	char url[1024];
 	char name[1024];
@@ -136,6 +144,9 @@ typedef struct {
 	GtkWidget *tree_view_icecast;
 	GtkListStore *tree_store_custom;
 	GtkWidget *tree_view_custom;
+#ifdef HAVE_MATE
+	GSettings *gsettings;
+#endif
 	char xml_listen_url[1024];
 	char xml_server_name[1024];
 	char xml_bitrate[1024];
@@ -224,6 +235,9 @@ void play_menu_mate (GtkAction *, streamer_applet *);
 #elif HAVE_GNOME_2
 void play_menu_gnome (BonoboUIComponent *, gpointer, char *);
 #endif
+
+// options.c
+void option_set (GtkWidget *, gpointer);
 
 // main.c
 #ifdef HAVE_GTK2

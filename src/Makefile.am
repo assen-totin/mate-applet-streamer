@@ -17,6 +17,8 @@
 #  MATE Streamer applet written by Assen Totin <assen.totin@gmail.com>
 #
 
+HAVE_MATE=@HAVE_MATE@
+
 APPLET_FLAGS=@APPLET_FLAGS@
 APPLET_LIBS=@APPLET_LIBS@
 
@@ -25,7 +27,7 @@ LDADD = @GTK_LIBS@ @APPLET_LIBS@ @GSTREAMER_DASH_LIBS@ -lsqlite3
 
 libexec_PROGRAMS = streamer_applet
 
-streamer_applet_SOURCES = applet.h util.c icecast.c custom.c gstreamer.c sqlite.c menu.c main.c
+streamer_applet_SOURCES = applet.h util.c icecast.c custom.c gstreamer.c sqlite.c menu.c options.c main.c
 
 appletdir = $(datadir)/mate-panel/applets
 applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet
@@ -39,4 +41,11 @@ server_DATA = StreamerAppletFactory.server
 sqlitedir = @SQLITE_SKEL_DIR@
 sqlite_DATA = streamer.sqlite
 
+gsettingsdir = $(datadir)/glib-2.0/schemas
+gsettings_DATA = org.mate.panel.applet.StreamerApplet.gschema.xml
+
 EXTRA_DIST = streamer.sqlite
+
+install-data-hook:
+	if test $(HAVE_MATE) = "1" ; then glib-compile-schemas $(DESTDIR)$(datadir)/glib-2.0/schemas 2>/dev/null; fi
+

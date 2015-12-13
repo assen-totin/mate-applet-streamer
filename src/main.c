@@ -145,6 +145,8 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 		memset(&applet->hash_recent[i].hash[0], '\0', 64);
 	}
 
+	applet->options.show_notifications = 0;
+
 #ifdef HAVE_GNOME_2
 	applet->bonobo_counter = 0;
 #endif
@@ -291,6 +293,22 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 	//char ui[10240];
 	//sprintf(&ui[0], "<menu action='SubMenu1'>\n<menuitem action='All'/>\n<menuitem action='All'/></menu>");
 	//guint merge_id = gtk_ui_manager_add_ui_from_string (applet->applet->priv->ui_manager, &ui[0], -1, error);
+
+	// Options: Prepare DConf - GNOME2 only
+#ifdef HAVE_GNOME_2
+	if (!panel_applet_gconf_get_bool(PANEL_APPLET(applet->applet), "have_settings", NULL)) {
+		panel_applet_gconf_set_bool(PANEL_APPLET(applet->applet), "have_settings", TRUE, NULL);
+                panel_applet_gconf_set_int(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_1, 0, NULL);
+	}
+#endif
+
+	// Load options
+#ifdef HAVE_MATE
+	applet->gsettings = g_settings_new_with_path(APPLET_GSETTINGS_SCHEMA, APPLET_GSETTINGS_PATH);
+	applet->options.show_notifications = g_settings_get_int(applet->gsettings, APPLET_KEY_OPTION_1);
+#elif HAVE_GNOME_2
+	applet->options.show_notifications = panel_applet_gconf_get_string(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_1, NULL);
+#endif
 
 	// Signals
 	g_signal_connect(G_OBJECT(applet->event_box), "button_press_event", G_CALLBACK (on_left_click), (gpointer)applet);

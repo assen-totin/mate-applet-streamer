@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([mate-applet-streamer], [0.2.3], [assen.totin@gmail.com])
+AC_INIT([mate-applet-streamer], [0.3.0], [assen.totin@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([-Wall])
@@ -80,12 +80,14 @@ fi
 if test $USE_GTK = "3" ; then
 	AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
 	AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
+	AC_SUBST([GETTEXT_PACKAGE])
 	RPM_REQUIRE_GTK="Requires: gtk3 >= 3.14.0"
 	RPM_BUILDREQUIRE_GTK="Requires: gtk3 >= 3.14.0"
 	SELECTED_GTK="GTK-3"
 elif test $USE_GTK = "2" ; then
 	AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
 	AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
+	AC_SUBST([GETTEXT_PACKAGE])
 	RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
 	RPM_BUILDREQUIRE_GTK="Requires: gtk2-devel >= 2.24.0"
 	SELECTED_GTK="GTK-2"
@@ -109,12 +111,14 @@ if test $FOUND_LMPA_4 = "yes" ; then
         LIBMATEPANELAPPLET="libmatepanelapplet-4.0"
         HAVE_MATE="1"
         AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
+		AC_SUBST([HAVE_MATE])
         RPM_BUILDREQUIRES_PANEL="BuildRequires: mate-panel-devel >= 1.3.0"
         RPM_REQUIRES_PANEL="Requires: mate-panel >= 1.3.0"
 elif test $FOUND_LMPA_3 = "yes" ; then
         LIBMATEPANELAPPLET="libmatepanelapplet-3.0"
         HAVE_MATE="1"
         AC_DEFINE([HAVE_MATE], [1], [Define if we have MATE Desktop Environment])
+		AC_SUBST([HAVE_MATE])
         RPM_BUILDREQUIRES_PANEL="BuildRequires: mate-panel-devel >= 1.3.0"
         RPM_REQUIRES_PANEL="Requires: mate-panel >= 1.3.0"
 elif test $FOUND_LPA_2 = "yes" ; then
@@ -272,7 +276,7 @@ AC_SUBST([APPLET_LIBS])
 AC_CONFIG_FILES([Makefile src/Makefile po/Makefile.in po/Makefile images/Makefile])
 
 # Service files
-AC_CONFIG_FILES([src/org.mate.applets.StreamerApplet.mate-panel-applet src/org.mate.panel.applet.StreamerApplet.service src/StreamerAppletFactory.server mate-applet-streamer.spec])
+AC_CONFIG_FILES([src/org.mate.applets.StreamerApplet.mate-panel-applet src/org.mate.panel.applet.StreamerApplet.service src/StreamerAppletFactory.server mate-applet-streamer.spec src/org.mate.panel.applet.StreamerApplet.gschema.xml])
 
 # Icons
 AC_DEFINE_UNQUOTED([APPLET_ICON_PATH], ["$PIXMAPDIR"], [Define icons location])
