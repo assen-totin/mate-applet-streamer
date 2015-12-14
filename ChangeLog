@@ -1,3 +1,7 @@
+Dec 14, 2015 - Version 0.3.1
+============================
+* Fix chechbox for notifications to reflect option value on load.
+
 Dec 13, 2015 - Version 0.3.0
 ============================
 * Adding notifications with song titles.

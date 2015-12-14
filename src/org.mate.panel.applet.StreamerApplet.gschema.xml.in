@@ -1,0 +1,9 @@
+<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+  <schema id="org.mate.panel.applet.StreamerApplet">
+    <key name="show-notifications" type="i">
+      <default>1</default>
+      <summary>Show song titles as notification</summary>
+      <description>Show a new notification with the song title for each new song</description>
+    </key>
+  </schema>
+</schemalist>

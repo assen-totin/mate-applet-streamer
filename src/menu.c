@@ -307,6 +307,9 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_widget_set_name(check_option_1, "option_1");
 	g_signal_connect (G_OBJECT(check_option_1), "clicked", G_CALLBACK (option_set), (gpointer) applet);
 
+	if (applet->options.show_notifications)
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(check_option_1), TRUE);
+
 	GtkWidget *options_hbox_1;
 #ifdef HAVE_GTK2
 	options_hbox_1 = gtk_vbox_new (FALSE, 0);
