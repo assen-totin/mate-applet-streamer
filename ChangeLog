@@ -1,6 +1,10 @@
+Dec 16, 2015 - Version 0.3.2
+============================
+* Add Turkish translation (by tarakbumba).
+
 Dec 14, 2015 - Version 0.3.1
 ============================
-* Fix chechbox for notifications to reflect option value on load.
+* Fix checkbox for notifications to reflect option value on load.
 
 Dec 13, 2015 - Version 0.3.0
 ============================
