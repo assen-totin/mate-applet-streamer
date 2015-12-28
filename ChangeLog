@@ -1,3 +1,8 @@
+Dec 31, 2015 - Version 0.3.3
+============================
+* Skip duplicate song title frames in media stream to avoid duplicate
+notifications.
+
 Dec 16, 2015 - Version 0.3.2
 ============================
 * Add Turkish translation (by tarakbumba).

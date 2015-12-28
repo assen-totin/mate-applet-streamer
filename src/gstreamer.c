@@ -59,13 +59,23 @@ gboolean gstreamer_tag(GstBus *bus, GstMessage *message, gpointer data) {
 		// Extract title
 		gboolean has_title = gst_tag_list_get_string (tags, GST_TAG_TITLE, &title);
 		if (has_title) {
-			// Push notification here
-			if (applet->options.show_notifications)
-				push_notification (_("Now Playing"), title, NULL);
+			// See if the new title is different from current one
+			GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
+			g_checksum_update(checksum, (guchar *) title, -1);
 
-			// Set as tooltip
-			snprintf(&msg[0], 1023, "%s%s (%s)", _("PLAYING: "), &applet->name[0], title);
-			gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
+			// Proceed only on change
+			if (strcmp(g_checksum_get_string(checksum), &applet->title_checksum[0])) {
+				// Save title checksum
+				snprintf(&applet->title_checksum[0], 1023, "%s", g_checksum_get_string(checksum));
+
+				// Set as tooltip
+				snprintf(&msg[0], 1023, "%s%s (%s)", _("PLAYING: "), &applet->name[0], title);
+				gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
+
+				// Push notification
+				if (applet->options.show_notifications)
+					push_notification (_("Now Playing"), title, NULL);
+			}
 
 			g_free (title);
 		}

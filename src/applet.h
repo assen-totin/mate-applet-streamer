@@ -133,6 +133,7 @@ typedef struct {
 	int db_version;
 	char url[1024];
 	char name[1024];
+	char title_checksum[1024];
 	char xmlfile[1024];
 	int status;
 	time_t timestamp;
