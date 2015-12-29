@@ -24,6 +24,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <wait.h>
 #include <gst/gst.h>
@@ -249,11 +250,12 @@ void applet_back_change (MyPanelApplet *, MyPanelAppletBackgroundType, GdkRGBA *
 void applet_destroy(MyPanelApplet *, streamer_applet *);
 
 // Menu skeleton - MATE version
+#ifdef HAVE_MATE
 static const GtkActionEntry applet_menu_actions_mate[] = {
-        { "Favourites", GTK_STOCK_GO_FORWARD, "_Favourites", NULL, NULL, NULL },
-        { "Recent", GTK_STOCK_GO_FORWARD, "_Recent", NULL, NULL, NULL },
-        { "All", GTK_STOCK_EXECUTE, "_All Stations", NULL, NULL, G_CALLBACK (menu_cb_all) },
-        { "About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (menu_cb_about) }
+        { "Favourites", GTK_STOCK_GO_FORWARD, N_("Favourites"), NULL, NULL, NULL },
+        { "Recent", GTK_STOCK_GO_FORWARD, N_("Recent"), NULL, NULL, NULL },
+        { "All", GTK_STOCK_EXECUTE, N_("All Stations"), NULL, NULL, G_CALLBACK (menu_cb_all) },
+        { "About", GTK_STOCK_ABOUT, N_("About"), NULL, NULL, G_CALLBACK (menu_cb_about) }
 };
-
+#endif
 

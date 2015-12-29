@@ -236,6 +236,7 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 	// Define menu action group
 #ifdef HAVE_MATE
 	applet->action_group = gtk_action_group_new ("Streamer_Applet_Actions");
+	gtk_action_group_set_translation_domain(applet->action_group, PACKAGE_NAME);
 	gtk_action_group_add_actions (applet->action_group, applet_menu_actions_mate, G_N_ELEMENTS (applet_menu_actions_mate), applet);
 #endif
 

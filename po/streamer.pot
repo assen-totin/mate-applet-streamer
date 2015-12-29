@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 23:42+0200\n"
+"POT-Creation-Date: 2015-12-30 00:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/menu.c:665
+#: src/menu.c:668
 msgid "<enter name>"
 msgstr ""
 
-#: src/menu.c:665
+#: src/menu.c:668
 msgid "<enter url>"
+msgstr ""
+
+#: src/applet.h:258
+msgid "About"
 msgstr ""
 
 #: src/menu.c:62
 msgid "Add"
+msgstr ""
+
+#: src/applet.h:257
+msgid "All Stations"
 msgstr ""
 
 #: src/menu.c:33
@@ -61,7 +69,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: src/menu.c:333
+#: src/menu.c:336
 msgid "Custom"
 msgstr ""
 
@@ -69,28 +77,28 @@ msgstr ""
 msgid "Database file is not a regular file. Exiting."
 msgstr ""
 
-#: src/menu.c:899
+#: src/menu.c:902
 #, c-format
 msgid "Downloading directory..."
 msgstr ""
 
-#: src/menu.c:974
+#: src/menu.c:977
 msgid "Error"
 msgstr ""
 
-#: src/menu.c:325
+#: src/menu.c:328 src/applet.h:255
 msgid "Favourites"
 msgstr ""
 
-#: src/menu.c:482 src/menu.c:522
+#: src/menu.c:485 src/menu.c:525
 msgid "Genre"
 msgstr ""
 
-#: src/menu.c:329
+#: src/menu.c:332
 msgid "Icecast"
 msgstr ""
 
-#: src/menu.c:946
+#: src/menu.c:949
 #, c-format
 msgid "Importing file..."
 msgstr ""
@@ -99,11 +107,11 @@ msgstr ""
 msgid "Load"
 msgstr ""
 
-#: src/menu.c:33 src/menu.c:35 src/menu.c:341
+#: src/menu.c:33 src/menu.c:35 src/menu.c:344
 msgid "MATE Streamer Applet"
 msgstr ""
 
-#: src/menu.c:436 src/menu.c:468 src/menu.c:508
+#: src/menu.c:439 src/menu.c:471 src/menu.c:511
 msgid "Name"
 msgstr ""
 
@@ -111,37 +119,37 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: src/menu.c:407
+#: src/menu.c:410
 #, c-format
 msgid "No stations found. Press Open button to load from file."
 msgstr ""
 
-#: src/menu.c:389
+#: src/menu.c:392
 #, c-format
 msgid "No stations found. Press Refresh button to download stations."
 msgstr ""
 
-#: src/menu.c:1036
+#: src/menu.c:1039
 msgid "No stream selected."
 msgstr ""
 
-#: src/main.c:319
+#: src/main.c:320
 msgid "No stream selected. Right-click to load one."
 msgstr ""
 
-#: src/gstreamer.c:64
+#: src/gstreamer.c:77
 msgid "Now Playing"
 msgstr ""
 
-#: src/menu.c:337
+#: src/menu.c:340
 msgid "Options"
 msgstr ""
 
-#: src/gstreamer.c:29 src/menu.c:1045 src/sqlite.c:79
+#: src/gstreamer.c:29 src/menu.c:1048 src/sqlite.c:79
 msgid "PAUSED: "
 msgstr ""
 
-#: src/gstreamer.c:41 src/gstreamer.c:67 src/menu.c:1057
+#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1060
 msgid "PLAYING: "
 msgstr ""
 
@@ -153,14 +161,18 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: src/menu.c:906
+#: src/menu.c:909
 #, c-format
 msgid "Processing directory..."
 msgstr ""
 
-#: src/menu.c:159 src/menu.c:256 src/menu.c:919 src/menu.c:954
+#: src/menu.c:159 src/menu.c:256 src/menu.c:922 src/menu.c:957
 #, c-format
 msgid "Ready"
+msgstr ""
+
+#: src/applet.h:256
+msgid "Recent"
 msgstr ""
 
 #: src/menu.c:119
@@ -171,11 +183,11 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/menu.c:1036
+#: src/menu.c:1039
 msgid "Right-click to load one."
 msgstr ""
 
-#: src/menu.c:913
+#: src/menu.c:916
 #, c-format
 msgid "Saving entries..."
 msgstr ""
@@ -190,13 +202,13 @@ msgstr ""
 
 #: src/custom.c:35 src/icecast.c:33 src/icecast.c:43 src/icecast.c:106
 #: src/main.c:162 src/main.c:169 src/main.c:174 src/main.c:183 src/main.c:188
-#: src/main.c:193 src/main.c:200 src/main.c:207 src/main.c:251 src/main.c:259
-#: src/main.c:266 src/menu.c:365 src/menu.c:380 src/menu.c:398 src/menu.c:999
-#: src/menu.c:1014 src/sqlite.c:33
+#: src/main.c:193 src/main.c:200 src/main.c:207 src/main.c:252 src/main.c:260
+#: src/main.c:267 src/menu.c:368 src/menu.c:383 src/menu.c:401 src/menu.c:1002
+#: src/menu.c:1017 src/sqlite.c:33
 msgid "Streamer Applet Error"
 msgstr ""
 
-#: src/menu.c:442 src/menu.c:476 src/menu.c:516
+#: src/menu.c:445 src/menu.c:479 src/menu.c:519
 msgid "URL"
 msgstr ""
 
@@ -212,7 +224,7 @@ msgstr ""
 msgid "Unable to create temporary file."
 msgstr ""
 
-#: src/menu.c:973
+#: src/menu.c:976
 msgid "Unable to import file: check file format"
 msgstr ""
 
@@ -220,7 +232,7 @@ msgstr ""
 msgid "Unable to parse XML file."
 msgstr ""
 
-#: src/menu.c:365 src/menu.c:380 src/menu.c:398 src/menu.c:999 src/menu.c:1014
+#: src/menu.c:368 src/menu.c:383 src/menu.c:401 src/menu.c:1002 src/menu.c:1017
 msgid "Unable to read DB."
 msgstr ""
 

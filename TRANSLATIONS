@@ -1,16 +1,23 @@
 1. To create templates for translation: 
 
-# Get all strings from C files
-xgettext -d streamer -s -k_ -o po/streamer.pot src/*.c
+# Get all strings from C files and header files
+xgettext -d streamer -s -k_ -kN_ -o po/streamer.pot src/*.c src/*.h
 
-2. To add your translation
+
+2. To merge changes from POT to PO file for xx_XX locale:
+
+msgmerge -U po/xx_XX.po po/streamer.pot
+
+
+3. To add your translation
 
 # Init your translation from template
 msginit -l xx_XX.UTF-8 -o po/xx_XX.po -i po/streamer.pot
 
 # Edit the new .po file and set the desired strings.
 
-3. To compile and install (will be automatically done by the Makefile):
+
+4. To compile and install (will be automatically done by the Makefile):
 
 msgfmt -c -v -o po/xx_XX.mo po/xx_XX.po
 
