@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-30 00:41+0200\n"
+"POT-Creation-Date: 2016-01-02 20:16+0200\n"
 "PO-Revision-Date: 2015-12-15 12:55+0300\n"
 "Last-Translator: Atilla ÖNTAŞ <tarakbumba@gmail.com>\n"
 "Language-Team: Turkish <i18n-tr@ml.mageia.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Virtaal 0.7.1\n"
 
-#: src/menu.c:668
+#: src/menu.c:647
 msgid "<enter name>"
 msgstr "<isim girin>"
 
-#: src/menu.c:668
+#: src/menu.c:647
 msgid "<enter url>"
 msgstr "<bağlantı girin>"
 
-#: src/applet.h:258
+#: src/applet.h:263
 msgid "About"
 msgstr "Hakkında"
 
@@ -33,7 +33,7 @@ msgstr "Hakkında"
 msgid "Add"
 msgstr "Ekle"
 
-#: src/applet.h:257
+#: src/applet.h:261
 msgid "All Stations"
 msgstr "Tüm yayın istasyonları"
 
@@ -45,23 +45,23 @@ msgstr "Çevrimiçi radyo yayın akışlarını dinlemenizi sağlayan bir progra
 msgid "Assen Totin <assen.totin@gmail.com>"
 msgstr "Assen Totin <assen.totin@gmail.com>"
 
-#: src/main.c:162
+#: src/main.c:164
 msgid "Cannot access configuration directory. Exiting."
 msgstr "Yapılandırma dizinine erişilemiyor. Çıkılıyor."
 
-#: src/main.c:188
+#: src/main.c:190
 msgid "Cannot copy database file to configuration directory. Exiting."
 msgstr "Veritabanı dosyası yapılandırma dizinine kopyalanamıyor. Çıkılıyor."
 
-#: src/main.c:169
+#: src/main.c:171
 msgid "Cannot create configuration directory. Exiting."
 msgstr "Yapılandırma dizini oluşturulamıyor. Çıkılıyor."
 
-#: src/main.c:174
+#: src/main.c:176
 msgid "Cannot verify configuration directory. Exiting."
 msgstr "Yapılandırma dizini doğrulanamıyor. Çıkılıyor."
 
-#: src/main.c:193
+#: src/main.c:195
 msgid "Cannot verify database file. Exiting."
 msgstr "Veritabanı dosyası doğrulanamıyor. Çıkılıyor."
 
@@ -69,36 +69,36 @@ msgstr "Veritabanı dosyası doğrulanamıyor. Çıkılıyor."
 msgid "Copy"
 msgstr "Kopyala"
 
-#: src/menu.c:336
+#: src/menu.c:319
 msgid "Custom"
 msgstr "Kişisel"
 
-#: src/main.c:183
+#: src/main.c:185
 msgid "Database file is not a regular file. Exiting."
 msgstr "Veritabanı düzenli bir dosya değil. Çıkılıyor."
 
-#: src/menu.c:902
+#: src/menu.c:881
 #, c-format
 msgid "Downloading directory..."
 msgstr "Dizin indiriliyor..."
 
-#: src/menu.c:977
+#: src/menu.c:956
 msgid "Error"
 msgstr "Hata"
 
-#: src/menu.c:328 src/applet.h:255
+#: src/menu.c:311 src/applet.h:259
 msgid "Favourites"
 msgstr "Sık Kullanılanlar"
 
-#: src/menu.c:485 src/menu.c:525
+#: src/menu.c:464 src/menu.c:504
 msgid "Genre"
 msgstr "Tür"
 
-#: src/menu.c:332
+#: src/menu.c:315
 msgid "Icecast"
 msgstr "Icecast"
 
-#: src/menu.c:949
+#: src/menu.c:928
 #, c-format
 msgid "Importing file..."
 msgstr "Dosya içe aktarılıyor..."
@@ -107,11 +107,11 @@ msgstr "Dosya içe aktarılıyor..."
 msgid "Load"
 msgstr "Yükle"
 
-#: src/menu.c:33 src/menu.c:35 src/menu.c:344
+#: src/menu.c:33 src/menu.c:35 src/menu.c:323
 msgid "MATE Streamer Applet"
 msgstr "MATE Yayın Akışı Programcığı"
 
-#: src/menu.c:439 src/menu.c:471 src/menu.c:511
+#: src/menu.c:418 src/menu.c:450 src/menu.c:490
 msgid "Name"
 msgstr "İsim"
 
@@ -119,25 +119,25 @@ msgstr "İsim"
 msgid "Next"
 msgstr "Sonraki"
 
-#: src/menu.c:410
+#: src/menu.c:389
 #, c-format
 msgid "No stations found. Press Open button to load from file."
 msgstr ""
 "Hiçbir radyo istasyonu bulunamadı. Lütfen Aç düğmesine tıklayarak dosyadan "
 "yükleyin."
 
-#: src/menu.c:392
+#: src/menu.c:371
 #, c-format
 msgid "No stations found. Press Refresh button to download stations."
 msgstr ""
 "Hiçbir radyo istasyonu bulunamadı. Radyo istasyonlarını indirmek için Yenile "
 "düğmesine tıklayın."
 
-#: src/menu.c:1039
+#: src/menu.c:1018
 msgid "No stream selected."
 msgstr "Hiçbir yayın akışı seçilmedi."
 
-#: src/main.c:320
+#: src/main.c:325
 msgid "No stream selected. Right-click to load one."
 msgstr "Hiçbir yayın akışı seçilmedi. Bir tane yüklemek için sağ tıklayın."
 
@@ -145,15 +145,11 @@ msgstr "Hiçbir yayın akışı seçilmedi. Bir tane yüklemek için sağ tıkla
 msgid "Now Playing"
 msgstr "Şu Anda Çalınıyor"
 
-#: src/menu.c:340
-msgid "Options"
-msgstr "Seçenekler"
-
-#: src/gstreamer.c:29 src/menu.c:1048 src/sqlite.c:79
+#: src/gstreamer.c:29 src/menu.c:1027 src/sqlite.c:79
 msgid "PAUSED: "
 msgstr "DURDURULDU: "
 
-#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1060
+#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1039
 msgid "PLAYING: "
 msgstr "ÇALIYOR: "
 
@@ -165,17 +161,17 @@ msgstr "Çal"
 msgid "Previous"
 msgstr "Önceki"
 
-#: src/menu.c:909
+#: src/menu.c:888
 #, c-format
 msgid "Processing directory..."
 msgstr "Dizin işleniyor..."
 
-#: src/menu.c:159 src/menu.c:256 src/menu.c:922 src/menu.c:957
+#: src/menu.c:159 src/menu.c:256 src/menu.c:901 src/menu.c:936
 #, c-format
 msgid "Ready"
 msgstr "Hazır"
 
-#: src/applet.h:256
+#: src/applet.h:260
 msgid "Recent"
 msgstr "Son"
 
@@ -187,11 +183,11 @@ msgstr "Yenile"
 msgid "Remove"
 msgstr "Kaldır"
 
-#: src/menu.c:1039
+#: src/menu.c:1018
 msgid "Right-click to load one."
 msgstr "Bir tane yüklemek için sağ tıklayın."
 
-#: src/menu.c:916
+#: src/menu.c:895
 #, c-format
 msgid "Saving entries..."
 msgstr "Girdiler kaydediliyor..."
@@ -200,19 +196,23 @@ msgstr "Girdiler kaydediliyor..."
 msgid "Search"
 msgstr "Ara"
 
-#: src/menu.c:306
+#: src/settings.c:95 src/applet.h:262
+msgid "Settings"
+msgstr "Seçenekler"
+
+#: src/settings.c:64
 msgid "Show notifications with song titles"
 msgstr "Bilgi kutucuklarını şarkı isimleriyle görüntüle"
 
 #: src/custom.c:35 src/icecast.c:33 src/icecast.c:43 src/icecast.c:106
-#: src/main.c:162 src/main.c:169 src/main.c:174 src/main.c:183 src/main.c:188
-#: src/main.c:193 src/main.c:200 src/main.c:207 src/main.c:252 src/main.c:260
-#: src/main.c:267 src/menu.c:368 src/menu.c:383 src/menu.c:401 src/menu.c:1002
-#: src/menu.c:1017 src/sqlite.c:33
+#: src/main.c:164 src/main.c:171 src/main.c:176 src/main.c:185 src/main.c:190
+#: src/main.c:195 src/main.c:202 src/main.c:209 src/main.c:254 src/main.c:262
+#: src/main.c:269 src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981
+#: src/menu.c:996 src/sqlite.c:33
 msgid "Streamer Applet Error"
 msgstr "Yayın Akışı Programcığı Hatası"
 
-#: src/menu.c:445 src/menu.c:479 src/menu.c:519
+#: src/menu.c:424 src/menu.c:458 src/menu.c:498
 msgid "URL"
 msgstr "Bağlantı"
 
@@ -220,7 +220,7 @@ msgstr "Bağlantı"
 msgid "Unable to connect to DB."
 msgstr "Veritabanına bağlanılamıyor."
 
-#: src/main.c:200
+#: src/main.c:202
 msgid "Unable to connect to DB. Exiting."
 msgstr "Veritabanına bağlanılamıyor. Çıkılıyor."
 
@@ -228,7 +228,7 @@ msgstr "Veritabanına bağlanılamıyor. Çıkılıyor."
 msgid "Unable to create temporary file."
 msgstr "Geçici dosya oluşturulamıyor."
 
-#: src/menu.c:976
+#: src/menu.c:955
 msgid "Unable to import file: check file format"
 msgstr "Dosya içe aktarılamıyor: dosya biçimini denetleyin"
 
@@ -236,10 +236,13 @@ msgstr "Dosya içe aktarılamıyor: dosya biçimini denetleyin"
 msgid "Unable to parse XML file."
 msgstr "XML dosyası ayrıştırılamıyor."
 
-#: src/menu.c:368 src/menu.c:383 src/menu.c:401 src/menu.c:1002 src/menu.c:1017
+#: src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981 src/menu.c:996
 msgid "Unable to read DB."
 msgstr "Veritabanı okunamıyor."
 
 #: src/icecast.c:33
 msgid "Unable to read remote XML file."
 msgstr "Uzak XML dosyası okunamıyor."
+
+#~ msgid "Options"
+#~ msgstr "Seçenekler"

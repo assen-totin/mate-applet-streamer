@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-30 00:41+0200\n"
+"POT-Creation-Date: 2016-01-02 20:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/menu.c:668
+#: src/menu.c:647
 msgid "<enter name>"
 msgstr ""
 
-#: src/menu.c:668
+#: src/menu.c:647
 msgid "<enter url>"
 msgstr ""
 
-#: src/applet.h:258
+#: src/applet.h:263
 msgid "About"
 msgstr ""
 
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: src/applet.h:257
+#: src/applet.h:261
 msgid "All Stations"
 msgstr ""
 
@@ -45,23 +45,23 @@ msgstr ""
 msgid "Assen Totin <assen.totin@gmail.com>"
 msgstr ""
 
-#: src/main.c:162
+#: src/main.c:164
 msgid "Cannot access configuration directory. Exiting."
 msgstr ""
 
-#: src/main.c:188
+#: src/main.c:190
 msgid "Cannot copy database file to configuration directory. Exiting."
 msgstr ""
 
-#: src/main.c:169
+#: src/main.c:171
 msgid "Cannot create configuration directory. Exiting."
 msgstr ""
 
-#: src/main.c:174
+#: src/main.c:176
 msgid "Cannot verify configuration directory. Exiting."
 msgstr ""
 
-#: src/main.c:193
+#: src/main.c:195
 msgid "Cannot verify database file. Exiting."
 msgstr ""
 
@@ -69,36 +69,36 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: src/menu.c:336
+#: src/menu.c:319
 msgid "Custom"
 msgstr ""
 
-#: src/main.c:183
+#: src/main.c:185
 msgid "Database file is not a regular file. Exiting."
 msgstr ""
 
-#: src/menu.c:902
+#: src/menu.c:881
 #, c-format
 msgid "Downloading directory..."
 msgstr ""
 
-#: src/menu.c:977
+#: src/menu.c:956
 msgid "Error"
 msgstr ""
 
-#: src/menu.c:328 src/applet.h:255
+#: src/menu.c:311 src/applet.h:259
 msgid "Favourites"
 msgstr ""
 
-#: src/menu.c:485 src/menu.c:525
+#: src/menu.c:464 src/menu.c:504
 msgid "Genre"
 msgstr ""
 
-#: src/menu.c:332
+#: src/menu.c:315
 msgid "Icecast"
 msgstr ""
 
-#: src/menu.c:949
+#: src/menu.c:928
 #, c-format
 msgid "Importing file..."
 msgstr ""
@@ -107,11 +107,11 @@ msgstr ""
 msgid "Load"
 msgstr ""
 
-#: src/menu.c:33 src/menu.c:35 src/menu.c:344
+#: src/menu.c:33 src/menu.c:35 src/menu.c:323
 msgid "MATE Streamer Applet"
 msgstr ""
 
-#: src/menu.c:439 src/menu.c:471 src/menu.c:511
+#: src/menu.c:418 src/menu.c:450 src/menu.c:490
 msgid "Name"
 msgstr ""
 
@@ -119,21 +119,21 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: src/menu.c:410
+#: src/menu.c:389
 #, c-format
 msgid "No stations found. Press Open button to load from file."
 msgstr ""
 
-#: src/menu.c:392
+#: src/menu.c:371
 #, c-format
 msgid "No stations found. Press Refresh button to download stations."
 msgstr ""
 
-#: src/menu.c:1039
+#: src/menu.c:1018
 msgid "No stream selected."
 msgstr ""
 
-#: src/main.c:320
+#: src/main.c:325
 msgid "No stream selected. Right-click to load one."
 msgstr ""
 
@@ -141,15 +141,11 @@ msgstr ""
 msgid "Now Playing"
 msgstr ""
 
-#: src/menu.c:340
-msgid "Options"
-msgstr ""
-
-#: src/gstreamer.c:29 src/menu.c:1048 src/sqlite.c:79
+#: src/gstreamer.c:29 src/menu.c:1027 src/sqlite.c:79
 msgid "PAUSED: "
 msgstr ""
 
-#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1060
+#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1039
 msgid "PLAYING: "
 msgstr ""
 
@@ -161,17 +157,17 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: src/menu.c:909
+#: src/menu.c:888
 #, c-format
 msgid "Processing directory..."
 msgstr ""
 
-#: src/menu.c:159 src/menu.c:256 src/menu.c:922 src/menu.c:957
+#: src/menu.c:159 src/menu.c:256 src/menu.c:901 src/menu.c:936
 #, c-format
 msgid "Ready"
 msgstr ""
 
-#: src/applet.h:256
+#: src/applet.h:260
 msgid "Recent"
 msgstr ""
 
@@ -183,11 +179,11 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/menu.c:1039
+#: src/menu.c:1018
 msgid "Right-click to load one."
 msgstr ""
 
-#: src/menu.c:916
+#: src/menu.c:895
 #, c-format
 msgid "Saving entries..."
 msgstr ""
@@ -196,19 +192,23 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: src/menu.c:306
+#: src/settings.c:95 src/applet.h:262
+msgid "Settings"
+msgstr ""
+
+#: src/settings.c:64
 msgid "Show notifications with song titles"
 msgstr ""
 
 #: src/custom.c:35 src/icecast.c:33 src/icecast.c:43 src/icecast.c:106
-#: src/main.c:162 src/main.c:169 src/main.c:174 src/main.c:183 src/main.c:188
-#: src/main.c:193 src/main.c:200 src/main.c:207 src/main.c:252 src/main.c:260
-#: src/main.c:267 src/menu.c:368 src/menu.c:383 src/menu.c:401 src/menu.c:1002
-#: src/menu.c:1017 src/sqlite.c:33
+#: src/main.c:164 src/main.c:171 src/main.c:176 src/main.c:185 src/main.c:190
+#: src/main.c:195 src/main.c:202 src/main.c:209 src/main.c:254 src/main.c:262
+#: src/main.c:269 src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981
+#: src/menu.c:996 src/sqlite.c:33
 msgid "Streamer Applet Error"
 msgstr ""
 
-#: src/menu.c:445 src/menu.c:479 src/menu.c:519
+#: src/menu.c:424 src/menu.c:458 src/menu.c:498
 msgid "URL"
 msgstr ""
 
@@ -216,7 +216,7 @@ msgstr ""
 msgid "Unable to connect to DB."
 msgstr ""
 
-#: src/main.c:200
+#: src/main.c:202
 msgid "Unable to connect to DB. Exiting."
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 msgid "Unable to create temporary file."
 msgstr ""
 
-#: src/menu.c:976
+#: src/menu.c:955
 msgid "Unable to import file: check file format"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgstr ""
 msgid "Unable to parse XML file."
 msgstr ""
 
-#: src/menu.c:368 src/menu.c:383 src/menu.c:401 src/menu.c:1002 src/menu.c:1017
+#: src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981 src/menu.c:996
 msgid "Unable to read DB."
 msgstr ""
 
