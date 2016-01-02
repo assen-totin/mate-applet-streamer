@@ -82,6 +82,9 @@ rm -rf "${RPM_BUILD_ROOT}"
 
 %changelog
 * Sat Jan 2 2016 Assen Totin <assen.totin@gmail.com>
+- Release 0.3.9
+
+* Sat Jan 2 2016 Assen Totin <assen.totin@gmail.com>
 - Release 0.3.8
 
 * Sat Jan 2 2016 Assen Totin <assen.totin@gmail.com>

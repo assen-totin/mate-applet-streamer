@@ -1,0 +1,250 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-02 20:16+0200\n"
+"PO-Revision-Date: 2016-01-02 22:00+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/menu.c:647
+msgid "<enter name>"
+msgstr "<entrez un nom>"
+
+#: src/menu.c:647
+msgid "<enter url>"
+msgstr "<entrez un url>"
+
+#: src/applet.h:263
+msgid "About"
+msgstr "À propos"
+
+#: src/menu.c:62
+msgid "Add"
+msgstr "Ajouter"
+
+#: src/applet.h:261
+msgid "All Stations"
+msgstr "Toutes les stations"
+
+#: src/menu.c:33
+msgid "An applet which lets you listen to online radio streams."
+msgstr "Un applet qui vous permet d'écouter des flux radio en ligne."
+
+#: src/menu.c:33
+msgid "Assen Totin <assen.totin@gmail.com>"
+msgstr "Assen Totin <assen.totin@gmail.com>"
+
+#: src/main.c:164
+msgid "Cannot access configuration directory. Exiting."
+msgstr "Impossible d'accèder au répertoire de configuration. Fermeture."
+
+#: src/main.c:190
+msgid "Cannot copy database file to configuration directory. Exiting."
+msgstr ""
+"Impossible de copier le fichier de base de données dans le répertoire de "
+"configuration. Fermeture."
+
+#: src/main.c:171
+msgid "Cannot create configuration directory. Exiting."
+msgstr "Impossible de créer le répertoire de configuration. Fermeture."
+
+#: src/main.c:176
+msgid "Cannot verify configuration directory. Exiting."
+msgstr "Impossible de vérifier le répertoire de configuration. Fermeture."
+
+#: src/main.c:195
+msgid "Cannot verify database file. Exiting."
+msgstr "Impossible de vérifier le fichier de base de données. Fermeture."
+
+#: src/menu.c:121 src/menu.c:218
+msgid "Copy"
+msgstr "Copier"
+
+#: src/menu.c:319
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: src/main.c:185
+msgid "Database file is not a regular file. Exiting."
+msgstr ""
+"Le fichier de base de données n'est pas un fichier régulier. Fermeture."
+
+#: src/menu.c:881
+#, c-format
+msgid "Downloading directory..."
+msgstr "Téléchargement du répertoire en cours..."
+
+#: src/menu.c:956
+msgid "Error"
+msgstr "Erreur"
+
+#: src/menu.c:311 src/applet.h:259
+msgid "Favourites"
+msgstr "Favoris"
+
+#: src/menu.c:464 src/menu.c:504
+msgid "Genre"
+msgstr "Genre"
+
+#: src/menu.c:315
+msgid "Icecast"
+msgstr "Icecast"
+
+#: src/menu.c:928
+#, c-format
+msgid "Importing file..."
+msgstr "Importation du fichier en cours..."
+
+#: src/menu.c:216
+msgid "Load"
+msgstr "Charger"
+
+#: src/menu.c:33 src/menu.c:35 src/menu.c:323
+msgid "MATE Streamer Applet"
+msgstr "MATE Streamer Applet"
+
+#: src/menu.c:418 src/menu.c:450 src/menu.c:490
+msgid "Name"
+msgstr "Nom"
+
+#: src/menu.c:68
+msgid "Next"
+msgstr "Prochain"
+
+#: src/menu.c:389
+#, c-format
+msgid "No stations found. Press Open button to load from file."
+msgstr ""
+"Aucune station trouvée. Cliquer sur le bouton Ouvrir pour charger depuis un "
+"fichier."
+
+#: src/menu.c:371
+#, c-format
+msgid "No stations found. Press Refresh button to download stations."
+msgstr ""
+"Aucune station trouvée. Cliquez sur le bouton Rafraîchir pour télécharger "
+"des stations."
+
+#: src/menu.c:1018
+msgid "No stream selected."
+msgstr "Aucun flux sélectionné."
+
+#: src/main.c:325
+msgid "No stream selected. Right-click to load one."
+msgstr ""
+"Aucun flux sélectionné. Cliquez avec le bouton droit pour en charger un."
+
+#: src/gstreamer.c:77
+msgid "Now Playing"
+msgstr "Lit actuellement"
+
+#: src/gstreamer.c:29 src/menu.c:1027 src/sqlite.c:79
+msgid "PAUSED: "
+msgstr "EN PAUSE :"
+
+#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1039
+msgid "PLAYING: "
+msgstr "LIT ACTUELLEMENT :"
+
+#: src/menu.c:70 src/menu.c:123 src/menu.c:220
+msgid "Play"
+msgstr "Lire"
+
+#: src/menu.c:66
+msgid "Previous"
+msgstr "Précedent"
+
+#: src/menu.c:888
+#, c-format
+msgid "Processing directory..."
+msgstr "Répertoire en cours de traitement..."
+
+#: src/menu.c:159 src/menu.c:256 src/menu.c:901 src/menu.c:936
+#, c-format
+msgid "Ready"
+msgstr "Prêt"
+
+#: src/applet.h:260
+msgid "Recent"
+msgstr "Récent"
+
+#: src/menu.c:119
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+#: src/menu.c:64
+msgid "Remove"
+msgstr "Enlever"
+
+#: src/menu.c:1018
+msgid "Right-click to load one."
+msgstr "Cliquez avec le bouton droit pour en charger un."
+
+#: src/menu.c:895
+#, c-format
+msgid "Saving entries..."
+msgstr "Enregistrement des éléments..."
+
+#: src/menu.c:171 src/menu.c:268
+msgid "Search"
+msgstr "Chercher"
+
+#: src/settings.c:95 src/applet.h:262
+msgid "Settings"
+msgstr "Réglages"
+
+#: src/settings.c:64
+msgid "Show notifications with song titles"
+msgstr "Afficher  les notifications pour les titres des chansons."
+
+#: src/custom.c:35 src/icecast.c:33 src/icecast.c:43 src/icecast.c:106
+#: src/main.c:164 src/main.c:171 src/main.c:176 src/main.c:185 src/main.c:190
+#: src/main.c:195 src/main.c:202 src/main.c:209 src/main.c:254 src/main.c:262
+#: src/main.c:269 src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981
+#: src/menu.c:996 src/sqlite.c:33
+msgid "Streamer Applet Error"
+msgstr "Erreur de l'applet Streamer"
+
+#: src/menu.c:424 src/menu.c:458 src/menu.c:498
+msgid "URL"
+msgstr "URL"
+
+#: src/sqlite.c:33
+msgid "Unable to connect to DB."
+msgstr "Impossible de se connecter à la base de données."
+
+#: src/main.c:202
+msgid "Unable to connect to DB. Exiting."
+msgstr "Impossible de se connecter à la base de données. Fermeture."
+
+#: src/icecast.c:43
+msgid "Unable to create temporary file."
+msgstr "Impossible de créer le fichier temporaire.\t"
+
+#: src/menu.c:955
+msgid "Unable to import file: check file format"
+msgstr "Impossible d'importer le fichier : vérifiez le format du fichier"
+
+#: src/custom.c:35 src/icecast.c:106
+msgid "Unable to parse XML file."
+msgstr "Impossible d'analyser le fichier XML."
+
+#: src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981 src/menu.c:996
+msgid "Unable to read DB."
+msgstr "Impossible de lire la base de données."
+
+#: src/icecast.c:33
+msgid "Unable to read remote XML file."
+msgstr "Impossible de lire le fichier XML distant."
