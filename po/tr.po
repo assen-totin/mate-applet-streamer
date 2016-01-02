@@ -35,7 +35,7 @@ msgstr "Ekle"
 
 #: src/applet.h:257
 msgid "All Stations"
-msgstr "Tüm istasyonları"
+msgstr "Tüm yayın istasyonları"
 
 #: src/menu.c:33
 msgid "An applet which lets you listen to online radio streams."
