@@ -30,7 +30,7 @@ gboolean icecast_dnld(streamer_applet *applet) {
 	fis = g_file_read(f, NULL, &err);
 
 	if (err != NULL) {
-		push_notification(_("Streamer Applet Error"), _("Unable to read remote XML file."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to read remote XML file."), NULL, DEFAULT_NOTIFICATION_DURATION);
 		g_object_unref(f);
 		return FALSE;
 	}
@@ -40,7 +40,7 @@ gboolean icecast_dnld(streamer_applet *applet) {
 	sprintf(&applet->xmlfile[0], "%s/%s/%s.XXXXXX", pw->pw_dir, APPLET_HOME_DIR, ICECAST_TMP_FILE);
 	int mkstempRes = g_mkstemp(&applet->xmlfile[0]);
 	if (mkstempRes == -1) {
-		push_notification(_("Streamer Applet Error"), _("Unable to create temporary file."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to create temporary file."), NULL, DEFAULT_NOTIFICATION_DURATION);
 		return FALSE;
 	}
 /*
@@ -52,7 +52,7 @@ gboolean icecast_dnld(streamer_applet *applet) {
 		if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_SIZE))
 			remote_size = g_file_info_get_size (info);
 		sprintf(&line[0], "%u", remote_size);
-		push_notification(_("Streamer Applet Error"), &line[0], NULL);
+		push_notification(_("Streamer Applet Error"), &line[0], NULL, DEFAULT_NOTIFICATION_DURATION);
 		g_object_unref (info);
 	}
 */
@@ -103,7 +103,7 @@ gboolean icecast_xml (streamer_applet *applet) {
 	/* parse the file and get the DOM */
 	doc = xmlReadFile(&applet->xmlfile[0], NULL, 0);
 	if (doc == NULL) {
-		push_notification(_("Streamer Applet Error"), _("Unable to parse XML file."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to parse XML file."), NULL, DEFAULT_NOTIFICATION_DURATION);
 		return FALSE;
 	}
 

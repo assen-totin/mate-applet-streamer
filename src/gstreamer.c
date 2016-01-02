@@ -73,8 +73,8 @@ gboolean gstreamer_tag(GstBus *bus, GstMessage *message, gpointer data) {
 				gtk_widget_set_tooltip_text (GTK_WIDGET (applet->applet), &msg[0]);
 
 				// Push notification
-				if (applet->options.show_notifications)
-					push_notification (_("Now Playing"), title, NULL);
+				if (applet->settings.show_notifications)
+					push_notification (_("Now Playing"), title, NULL, applet->settings.duration_notifications);
 			}
 
 			g_free (title);

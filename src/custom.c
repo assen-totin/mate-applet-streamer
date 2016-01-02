@@ -32,7 +32,7 @@ gboolean custom_xml (streamer_applet *applet) {
 	/* parse the file and get the DOM */
 	doc = xmlReadFile(&applet->xmlfile[0], NULL, 0);
 	if (doc == NULL) {
-		push_notification(_("Streamer Applet Error"), _("Unable to parse XML file."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to parse XML file."), NULL, DEFAULT_NOTIFICATION_DURATION);
 		return FALSE;
 	}
 

@@ -67,10 +67,12 @@
 #define APPLET_SQLITE_DB_VERSION "1"
 #define ICECAST_URL_XML "http://dir.xiph.org/yp.xml"
 #define ICECAST_TMP_FILE "icecast_dnld"
+#define DEFAULT_NOTIFICATION_DURATION 5
 // GSettings
 #define APPLET_GSETTINGS_SCHEMA "org.mate.panel.applet.StreamerApplet"
 #define APPLET_GSETTINGS_PATH "/org/mate/panel/objects/streamer/"
 #define APPLET_KEY_OPTION_1 "show-notifications"
+#define APPLET_KEY_OPTION_2 "duration-notifications"
 
 enum {
 	TAB_FAVOURITES = 0,
@@ -107,7 +109,8 @@ struct url_hash {
 
 typedef struct {
 	int show_notifications;
-} streamer_options;
+	int duration_notifications;
+} streamer_settings;
 
 #ifdef HAVE_MATE
 	typedef MatePanelApplet MyPanelApplet;
@@ -130,7 +133,7 @@ typedef struct {
 	GtkWidget *text_custom;
 	GtkWidget *butt_search_icecast;
 	GtkWidget *butt_search_custom;
-	streamer_options options;
+	streamer_settings settings;
 	int db_version;
 	char url[1024];
 	char name[1024];
@@ -169,7 +172,7 @@ typedef struct {
 } streamer_applet;
 
 // util.c
-void push_notification (gchar *, gchar *, gchar *);
+void push_notification (gchar *, gchar *, gchar *, int);
 gboolean cp(const char *, const char *);
 void debug(char *);
 
@@ -238,8 +241,9 @@ void play_menu_mate (GtkAction *, streamer_applet *);
 void play_menu_gnome (BonoboUIComponent *, gpointer, char *);
 #endif
 
-// options.c
-void option_set (GtkWidget *, gpointer);
+// settings.c
+void settings_notifications_toggle (GtkWidget *, gpointer);
+void menu_cb_settings (GtkAction *, streamer_applet *);
 
 // main.c
 #ifdef HAVE_GTK2
@@ -255,6 +259,7 @@ static const GtkActionEntry applet_menu_actions_mate[] = {
         { "Favourites", GTK_STOCK_GO_FORWARD, N_("Favourites"), NULL, NULL, NULL },
         { "Recent", GTK_STOCK_GO_FORWARD, N_("Recent"), NULL, NULL, NULL },
         { "All", GTK_STOCK_EXECUTE, N_("All Stations"), NULL, NULL, G_CALLBACK (menu_cb_all) },
+        { "Settings", GTK_STOCK_EXECUTE, N_("Settings"), NULL, NULL, G_CALLBACK (menu_cb_settings) },
         { "About", GTK_STOCK_ABOUT, N_("About"), NULL, NULL, G_CALLBACK (menu_cb_about) }
 };
 #endif

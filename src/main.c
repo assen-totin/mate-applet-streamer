@@ -33,7 +33,8 @@ static const gchar *ui2 =
 static const gchar *ui3 =
 "</menu>"
 "<menuitem name='MenuItem1' action='All' />"
-"<menuitem name='MenuItem2' action='About' />"
+"<menuitem name='MenuItem2' action='Settings' />"
+"<menuitem name='MenuItem3' action='About' />"
 ;
 #elif HAVE_GNOME_2
 static const gchar *ui1 =
@@ -145,7 +146,8 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 		memset(&applet->hash_recent[i].hash[0], '\0', 64);
 	}
 
-	applet->options.show_notifications = 0;
+	applet->settings.show_notifications = 0;
+	applet->settings.duration_notifications = 5;
 
 #ifdef HAVE_GNOME_2
 	applet->bonobo_counter = 0;
@@ -159,19 +161,19 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 	int stat_res = stat(&applet_home_dir[0], &stat_buf);
 	int errsv = errno;
 	if ((stat_res == 0) && (!S_ISDIR(stat_buf.st_mode))){
-			push_notification(_("Streamer Applet Error"), _("Cannot access configuration directory. Exiting."), NULL);
+			push_notification(_("Streamer Applet Error"), _("Cannot access configuration directory. Exiting."), NULL, DEFAULT_NOTIFICATION_DURATION);
 			return FALSE;
 	}
 	else if (stat_res == -1) {
 		if (errsv == ENOENT) {
 			int mkdir_res = mkdir(&applet_home_dir[0], 0755);
 			if (mkdir_res == 1) {
-				push_notification(_("Streamer Applet Error"), _("Cannot create configuration directory. Exiting."), NULL);
+				push_notification(_("Streamer Applet Error"), _("Cannot create configuration directory. Exiting."), NULL, DEFAULT_NOTIFICATION_DURATION);
 				return FALSE;
 			}
 		}
 		else {
-			push_notification(_("Streamer Applet Error"), _("Cannot verify configuration directory. Exiting."), NULL);
+			push_notification(_("Streamer Applet Error"), _("Cannot verify configuration directory. Exiting."), NULL, DEFAULT_NOTIFICATION_DURATION);
 			return FALSE;
 		}
 	}
@@ -180,31 +182,31 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 	stat_res = stat(&local_file[0], &stat_buf);
 	errsv = errno;
 	if ((stat_res == 0) && (!S_ISREG(stat_buf.st_mode))){
-		push_notification(_("Streamer Applet Error"), _("Database file is not a regular file. Exiting."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Database file is not a regular file. Exiting."), NULL, DEFAULT_NOTIFICATION_DURATION);
 	}
 	else if (stat_res == -1) {
 		if (errsv == ENOENT) {
 			if (!cp(&local_file[0], &skel_file[0])) {
-				push_notification(_("Streamer Applet Error"), _("Cannot copy database file to configuration directory. Exiting."), NULL);
+				push_notification(_("Streamer Applet Error"), _("Cannot copy database file to configuration directory. Exiting."), NULL, DEFAULT_NOTIFICATION_DURATION);
 				return FALSE;
 			}
 		}
 		else {
-			push_notification(_("Streamer Applet Error"), _("Cannot verify database file. Exiting."), NULL);
+			push_notification(_("Streamer Applet Error"), _("Cannot verify database file. Exiting."), NULL, DEFAULT_NOTIFICATION_DURATION);
 			return FALSE;
 		}
 	}
 	
 	// Test DB connection, upgrade DB if necessary
 	if (!sqlite_connect(applet)) {
-		push_notification(_("Streamer Applet Error"), _("Unable to connect to DB. Exiting."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to connect to DB. Exiting."), NULL, DEFAULT_NOTIFICATION_DURATION);
 		return FALSE;
 	}
 
 	zErrMsg = 0;
 	res = sqlite3_exec(applet->sqlite, "SELECT version FROM version", cb_sql_version, (void*) applet, &zErrMsg);
 	if (res != SQLITE_OK) {
-		push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
+		push_notification(_("Streamer Applet Error"), zErrMsg, NULL, DEFAULT_NOTIFICATION_DURATION);
 		sqlite3_free(zErrMsg);
 		return FALSE;
 	}
@@ -249,7 +251,7 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url FROM recent GROUP BY listen_url ORDER BY unix_timestamp DESC LIMIT 10", cb_sql_recent_10, (void*) applet, &zErrMsg);
 	if (res != SQLITE_OK) {
-		push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
+		push_notification(_("Streamer Applet Error"), zErrMsg, NULL, DEFAULT_NOTIFICATION_DURATION);
 		sqlite3_free(zErrMsg);
 		return FALSE;
 	}
@@ -257,14 +259,14 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 	memset(&applet->ui_fav[0], '\0', 1);
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url FROM favourites LIMIT 10", cb_sql_fav_10, (void*) applet, &zErrMsg);
 	if (res != SQLITE_OK) {
-		push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
+		push_notification(_("Streamer Applet Error"), zErrMsg, NULL, DEFAULT_NOTIFICATION_DURATION);
 		sqlite3_free(zErrMsg);
 		return FALSE;
 	}
 
 	res = sqlite3_exec(applet->sqlite, "SELECT * FROM recent ORDER BY unix_timestamp DESC LIMIT 1", cb_sql_recent, (void*) applet, &zErrMsg);
 	if (res != SQLITE_OK) {
-		push_notification(_("Streamer Applet Error"), zErrMsg, NULL);
+		push_notification(_("Streamer Applet Error"), zErrMsg, NULL, DEFAULT_NOTIFICATION_DURATION);
 		sqlite3_free(zErrMsg);
 		return FALSE;
 	}
@@ -295,20 +297,23 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 	//sprintf(&ui[0], "<menu action='SubMenu1'>\n<menuitem action='All'/>\n<menuitem action='All'/></menu>");
 	//guint merge_id = gtk_ui_manager_add_ui_from_string (applet->applet->priv->ui_manager, &ui[0], -1, error);
 
-	// Options: Prepare DConf - GNOME2 only
+	// Settings: Prepare DConf - GNOME2 only
 #ifdef HAVE_GNOME_2
 	if (!panel_applet_gconf_get_bool(PANEL_APPLET(applet->applet), "have_settings", NULL)) {
 		panel_applet_gconf_set_bool(PANEL_APPLET(applet->applet), "have_settings", TRUE, NULL);
-                panel_applet_gconf_set_int(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_1, 0, NULL);
+		panel_applet_gconf_set_int(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_1, 0, NULL);
+		panel_applet_gconf_set_int(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_2, 5, NULL);
 	}
 #endif
 
-	// Load options
+	// Load settings
 #ifdef HAVE_MATE
 	applet->gsettings = g_settings_new_with_path(APPLET_GSETTINGS_SCHEMA, APPLET_GSETTINGS_PATH);
-	applet->options.show_notifications = g_settings_get_int(applet->gsettings, APPLET_KEY_OPTION_1);
+	applet->settings.show_notifications = g_settings_get_int(applet->gsettings, APPLET_KEY_OPTION_1);
+	applet->settings.duration_notifications = g_settings_get_int(applet->gsettings, APPLET_KEY_OPTION_2);
 #elif HAVE_GNOME_2
-	applet->options.show_notifications = panel_applet_gconf_get_string(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_1, NULL);
+	applet->settings.show_notifications = panel_applet_gconf_get_int(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_1, NULL);
+	applet->settings.duration_notifications = panel_applet_gconf_get_int(PANEL_APPLET(applet->applet), APPLET_KEY_OPTION_2, NULL);
 #endif
 
 	// Signals

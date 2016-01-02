@@ -30,7 +30,7 @@ gboolean sqlite_connect(streamer_applet *applet) {
 	sprintf(&dbfile[0], "%s/%s/%s", pw->pw_dir, APPLET_HOME_DIR, APPLET_SQLITE_DB_FILENAME);
 	int res = sqlite3_open(&dbfile[0], &applet->sqlite);
 	if (res) {
-		push_notification(_("Streamer Applet Error"), _("Unable to connect to DB."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to connect to DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
 		return FALSE;
 	}
 	return TRUE;

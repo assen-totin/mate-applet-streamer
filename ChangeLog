@@ -1,4 +1,9 @@
-Jan 2, 2016 - Version 0.3.6
+Jan 2, 2016 - Version 0.3.7
+============================
+* Moved settings to their own menu entry.
+* Added setting for notification display duration.
+
+Jan 1, 2016 - Version 0.3.6
 ============================
 * Updated translations.
 

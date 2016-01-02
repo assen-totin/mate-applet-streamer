@@ -5,5 +5,10 @@
       <summary>Show song titles as notification</summary>
       <description>Show a new notification with the song title for each new song</description>
     </key>
+    <key name="duration-notifications" type="i">
+      <default>5</default>
+      <summary>Duration of notifications display</summary>
+      <description>Number of seconds to show the notification</description>
+    </key>
   </schema>
 </schemalist>

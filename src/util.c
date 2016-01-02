@@ -21,7 +21,7 @@
 #include "../config.h"
 #include "applet.h"
 
-void push_notification (gchar *title, gchar *body, gchar *icon) {
+void push_notification (gchar *title, gchar *body, gchar *icon, int duration) {
 	NotifyNotification* notification;
 	GError* error = NULL;
 
@@ -37,7 +37,7 @@ void push_notification (gchar *title, gchar *body, gchar *icon) {
 	notification = notify_notification_new (title, body, icon, NULL);
 #endif
 
-	notify_notification_set_timeout (notification, 5000);
+	notify_notification_set_timeout (notification, 1000 * duration);
 
 	notify_notification_show (notification, &error);
 

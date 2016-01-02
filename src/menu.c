@@ -302,23 +302,6 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_box_pack_start(GTK_BOX(custom_hbox_1), custom_vbox_2, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(custom_hbox_1), custom_vbox_1, FALSE, FALSE, 0);
 
-	// Prepare Options tab
-	GtkWidget *check_option_1 = gtk_check_button_new_with_label (_("Show notifications with song titles"));
-	gtk_widget_set_name(check_option_1, "option_1");
-	g_signal_connect (G_OBJECT(check_option_1), "clicked", G_CALLBACK (option_set), (gpointer) applet);
-
-	if (applet->options.show_notifications)
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(check_option_1), TRUE);
-
-	GtkWidget *options_hbox_1;
-#ifdef HAVE_GTK2
-	options_hbox_1 = gtk_vbox_new (FALSE, 0);
-#elif HAVE_GTK3
-	options_hbox_1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#endif
-
-	gtk_box_pack_start(GTK_BOX(options_hbox_1), check_option_1, TRUE, TRUE, 0);
-
 	// Create notebook widget
 	GtkWidget *notebook = gtk_notebook_new();
 	gtk_widget_set_size_request (notebook, 640, 480);
@@ -335,10 +318,6 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	// Third page - Custom
 	GtkWidget *tab_label_3 = gtk_label_new(_("Custom"));
 	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), custom_hbox_1, tab_label_3);
-
-	// Forth page - Options
-	GtkWidget *tab_label_4 = gtk_label_new(_("Options"));
-	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), options_hbox_1, tab_label_4);
 
 	// Assemble window
 	applet->quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
@@ -365,7 +344,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	res = sqlite3_exec(applet->sqlite, "SELECT * FROM favourites", cb_sql_fav, (void*) applet, &zErrMsg);
 	sqlite3_free(zErrMsg);
 	if (res != SQLITE_OK)
-		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
 	sqlite3_close(applet->sqlite);
 
 	GtkTreeModel *model_favourites = GTK_TREE_MODEL(applet->tree_store_favourites);
@@ -380,7 +359,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	zErrMsg2 = 0;
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url, genre FROM icecast_stations", cb_sql_icecast, (void*) applet, &zErrMsg2);
 	if (res != SQLITE_OK)
-		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
 	sqlite3_close(applet->sqlite);
 
 	GtkTreeModel *model_icecast = GTK_TREE_MODEL(applet->tree_store_icecast);
@@ -398,7 +377,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	zErrMsg3 = 0;
 	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url, genre FROM custom_stations", cb_sql_custom, (void*) applet, &zErrMsg3);
 	if (res != SQLITE_OK)
-		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
+		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
 	sqlite3_close(applet->sqlite);
 
 	GtkTreeModel *model_custom = GTK_TREE_MODEL(applet->tree_store_custom);
@@ -999,7 +978,7 @@ void search_station(GtkWidget *widget, gpointer data) {
 		sprintf(&sql[0], "SELECT server_name, listen_url, genre FROM icecast_stations WHERE server_name LIKE '%%%s%%' OR listen_url LIKE '%%%s%%' OR genre LIKE '%%%s%%'", &query[0], &query[0], &query[0]);
 		res = sqlite3_exec(applet->sqlite, &sql[0], cb_sql_icecast, (void*) applet, &zErrMsg2);
 		if (res != SQLITE_OK)
-			push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
+			push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
 
 		model = GTK_TREE_MODEL(applet->tree_store_icecast);
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_icecast));
@@ -1014,7 +993,7 @@ void search_station(GtkWidget *widget, gpointer data) {
 		sprintf(&sql[0], "SELECT server_name, listen_url, genre FROM custom_stations WHERE server_name LIKE '%%%s%%' OR listen_url LIKE '%%%s%%' OR genre LIKE '%%%s%%'", &query[0], &query[0], &query[0]);
 		res = sqlite3_exec(applet->sqlite, &sql[0], cb_sql_custom, (void*) applet, &zErrMsg2);
 		if (res != SQLITE_OK)
-			push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL);
+			push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
 
 		model = GTK_TREE_MODEL(applet->tree_store_custom);
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_custom));
@@ -1036,7 +1015,7 @@ gboolean on_left_click (GtkWidget *event_box, GdkEventButton *event, streamer_ap
 
 	// No URL loaded? 
 	if (strlen(applet->url) == 0) {
-		push_notification(_("No stream selected."), _("Right-click to load one."), NULL);
+		push_notification(_("No stream selected."), _("Right-click to load one."), NULL, DEFAULT_NOTIFICATION_DURATION);
 
 		return TRUE;
 	}
