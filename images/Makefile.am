@@ -10,7 +10,7 @@ pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = applet_streamer_play.png applet_streamer_pause.png applet_streamer.48.png
 EXTRA_DIST = $(pixmap_DATA)
 
-icons = applet_streamer.16.png applet_streamer.24.png applet_streamer.22.png applet_streamer.32.png
+icons = applet_streamer.16.png applet_streamer.24.png applet_streamer.22.png applet_streamer.32.png applet_streamer.48.png
 EXTRA_DIST += $(icons)
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons

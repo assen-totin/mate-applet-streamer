@@ -29,6 +29,7 @@ void quitDialogClose(GtkWidget *widget, gpointer data) {
 
 
 void menu_cb_about (GtkAction *action, streamer_applet *applet) {
+/*
 	char msg1[1024];
 	sprintf(&msg1[0], "%s\n\nVersion: %s\n\n%s\n\n%s", _("MATE Streamer Applet"), VERSION, _("An applet which lets you listen to online radio streams."), _("Assen Totin <assen.totin@gmail.com>"));
 	GtkWidget *label = gtk_label_new (&msg1[0]);
@@ -40,9 +41,46 @@ void menu_cb_about (GtkAction *action, streamer_applet *applet) {
 #elif HAVE_GTK3
 	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(applet->quitDialog))), label);
 #endif
+
+	g_object_set(GTK_DIALOG (applet->quitDialog), "border-width", 10, NULL);
+
 	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
+
 	gtk_widget_show_all (GTK_WIDGET(applet->quitDialog));
+*/
+
+	GtkWidget *about = gtk_about_dialog_new();
+
+	gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG(about), _("MATE Streamer Applet"));
+
+	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(about), VERSION);
+
+	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(about), "Copyleft 2013-1026. See License for details.");
+
+	const gchar *authors = "Assen Totin <assen.totin@gmail.com>";
+	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG(about),  &authors);
+
+	gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(about), _("translator-credits"));
+
+	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(about), _("An applet which lets you listen to online radio streams."));
+
+	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG(about), "http://www.zavedil.com/online-radio-applet");
+	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG(about), _("Home page"));
+
+	char image_file[1024];
+	snprintf(&image_file[0], 1023, "%s/%s", APPLET_ICON_PATH, "applet_streamer.48.png");
+	gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG(about), gtk_image_get_pixbuf(GTK_IMAGE(gtk_image_new_from_file (image_file))));
+
+#ifdef HAVE_GTK2
+	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG(about), "GPL v. 2 or later");
+#elif HAVE_GTK3
+	gtk_about_dialog_set_license_type (GTK_ABOUT_DIALOG(about), GTK_LICENSE_GPL_2_0);
+#endif
+
+	gtk_dialog_run (GTK_DIALOG(about));
+	gtk_widget_destroy(about);
 }
+
 
 void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkTreeIter iter, iter2;

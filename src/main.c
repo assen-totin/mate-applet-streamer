@@ -282,6 +282,9 @@ gboolean applet_main (MyPanelApplet *applet_widget, const gchar *iid, gpointer d
 	BonoboUIVerb bnb1 = BONOBO_UI_UNSAFE_VERB ("All", G_CALLBACK (menu_cb_all));
 	applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb1;
 	applet->bonobo_counter++;
+	BonoboUIVerb bnb1a = BONOBO_UI_UNSAFE_VERB ("Settings", G_CALLBACK (menu_cb_settings));
+	applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb1a;
+	applet->bonobo_counter++;
 	BonoboUIVerb bnb2 = BONOBO_UI_UNSAFE_VERB ("About", G_CALLBACK (menu_cb_about));
 	applet->applet_menu_actions_gnome[applet->bonobo_counter] = bnb2;
 	applet->bonobo_counter++;

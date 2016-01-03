@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-02 20:16+0200\n"
+"POT-Creation-Date: 2016-01-03 14:41+0200\n"
 "PO-Revision-Date: 2013-09-01 18:19+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Bulgarian\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/menu.c:647
+#: src/menu.c:664
 msgid "<enter name>"
 msgstr "<въведете име>"
 
-#: src/menu.c:647
+#: src/menu.c:664
 msgid "<enter url>"
 msgstr "<въведете URL>"
 
@@ -30,7 +30,7 @@ msgstr "<въведете URL>"
 msgid "About"
 msgstr "За аплета"
 
-#: src/menu.c:62
+#: src/menu.c:79
 msgid "Add"
 msgstr "Добавяне"
 
@@ -38,13 +38,9 @@ msgstr "Добавяне"
 msgid "All Stations"
 msgstr "Всички станции"
 
-#: src/menu.c:33
+#: src/menu.c:45
 msgid "An applet which lets you listen to online radio streams."
 msgstr "Аплет за слушане на онлайн радио."
-
-#: src/menu.c:33
-msgid "Assen Totin <assen.totin@gmail.com>"
-msgstr "Асен Тотин <assen.totin@gmail.com>"
 
 #: src/main.c:164
 msgid "Cannot access configuration directory. Exiting."
@@ -73,11 +69,11 @@ msgstr ""
 msgid "Cannot verify database file. Exiting."
 msgstr "Базата данни не може да бъде прочетена. Аплетът не може да стартира."
 
-#: src/menu.c:121 src/menu.c:218
+#: src/menu.c:138 src/menu.c:235
 msgid "Copy"
 msgstr "Копиране"
 
-#: src/menu.c:319
+#: src/menu.c:336
 msgid "Custom"
 msgstr "Моите"
 
@@ -85,63 +81,71 @@ msgstr "Моите"
 msgid "Database file is not a regular file. Exiting."
 msgstr "Базата данни е повредена. Аплетът не може да стартира."
 
-#: src/menu.c:881
+#: src/menu.c:898
 #, c-format
 msgid "Downloading directory..."
 msgstr "Получаване на списъка..."
 
-#: src/menu.c:956
+#: src/settings.c:82
+msgid "Duration of notification (seconds)"
+msgstr "Времетраене на съобщението в секунди"
+
+#: src/menu.c:973
 msgid "Error"
 msgstr "Грешка"
 
-#: src/menu.c:311 src/applet.h:259
+#: src/menu.c:328 src/applet.h:259
 msgid "Favourites"
 msgstr "Любими"
 
-#: src/menu.c:464 src/menu.c:504
+#: src/menu.c:481 src/menu.c:521
 msgid "Genre"
 msgstr "Жанр"
 
-#: src/menu.c:315
+#: src/menu.c:48
+msgid "Home page"
+msgstr ""
+
+#: src/menu.c:332
 msgid "Icecast"
 msgstr "Icecast"
 
-#: src/menu.c:928
+#: src/menu.c:945
 #, c-format
 msgid "Importing file..."
 msgstr "Обработка..."
 
-#: src/menu.c:216
+#: src/menu.c:233
 msgid "Load"
 msgstr "Отваряне"
 
-#: src/menu.c:33 src/menu.c:35 src/menu.c:323
+#: src/menu.c:34 src/menu.c:340
 msgid "MATE Streamer Applet"
 msgstr "MATE радио аплет"
 
-#: src/menu.c:418 src/menu.c:450 src/menu.c:490
+#: src/menu.c:435 src/menu.c:467 src/menu.c:507
 msgid "Name"
 msgstr "Име"
 
-#: src/menu.c:68
+#: src/menu.c:85
 msgid "Next"
 msgstr "Следващ"
 
-#: src/menu.c:389
+#: src/menu.c:406
 #, fuzzy, c-format
 msgid "No stations found. Press Open button to load from file."
 msgstr "Списъкът е празен. Натиснете Refresh за обновяване."
 
-#: src/menu.c:371
+#: src/menu.c:388
 #, c-format
 msgid "No stations found. Press Refresh button to download stations."
 msgstr "Списъкът е празен. Натиснете Refresh за обновяване."
 
-#: src/menu.c:1018
+#: src/menu.c:1035
 msgid "No stream selected."
 msgstr "Не е избрано радио."
 
-#: src/main.c:325
+#: src/main.c:328
 msgid "No stream selected. Right-click to load one."
 msgstr "Не е избрано радио. Щракнете с десен бутон на мишката."
 
@@ -149,28 +153,28 @@ msgstr "Не е избрано радио. Щракнете с десен бут
 msgid "Now Playing"
 msgstr "Слушате"
 
-#: src/gstreamer.c:29 src/menu.c:1027 src/sqlite.c:79
+#: src/gstreamer.c:29 src/menu.c:1044 src/sqlite.c:79
 msgid "PAUSED: "
 msgstr "ПАУЗА: "
 
-#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1039
+#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1056
 msgid "PLAYING: "
 msgstr "СЛУШАТЕ: "
 
-#: src/menu.c:70 src/menu.c:123 src/menu.c:220
+#: src/menu.c:87 src/menu.c:140 src/menu.c:237
 msgid "Play"
 msgstr "Слушай"
 
-#: src/menu.c:66
+#: src/menu.c:83
 msgid "Previous"
 msgstr "Предишен"
 
-#: src/menu.c:888
+#: src/menu.c:905
 #, c-format
 msgid "Processing directory..."
 msgstr "Обработване на списъка..."
 
-#: src/menu.c:159 src/menu.c:256 src/menu.c:901 src/menu.c:936
+#: src/menu.c:176 src/menu.c:273 src/menu.c:918 src/menu.c:953
 #, c-format
 msgid "Ready"
 msgstr "Готово"
@@ -179,28 +183,28 @@ msgstr "Готово"
 msgid "Recent"
 msgstr "Последни"
 
-#: src/menu.c:119
+#: src/menu.c:136
 msgid "Refresh"
 msgstr "Сваляне"
 
-#: src/menu.c:64
+#: src/menu.c:81
 msgid "Remove"
 msgstr "Премахване"
 
-#: src/menu.c:1018
+#: src/menu.c:1035
 msgid "Right-click to load one."
 msgstr "Щракнете с десен бутон на мишката."
 
-#: src/menu.c:895
+#: src/menu.c:912
 #, c-format
 msgid "Saving entries..."
 msgstr "Записване..."
 
-#: src/menu.c:171 src/menu.c:268
+#: src/menu.c:188 src/menu.c:285
 msgid "Search"
 msgstr "Търсене"
 
-#: src/settings.c:95 src/applet.h:262
+#: src/settings.c:106 src/applet.h:262
 msgid "Settings"
 msgstr "Настройки"
 
@@ -211,12 +215,12 @@ msgstr "Показване заглавията на всяка песен"
 #: src/custom.c:35 src/icecast.c:33 src/icecast.c:43 src/icecast.c:106
 #: src/main.c:164 src/main.c:171 src/main.c:176 src/main.c:185 src/main.c:190
 #: src/main.c:195 src/main.c:202 src/main.c:209 src/main.c:254 src/main.c:262
-#: src/main.c:269 src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981
-#: src/menu.c:996 src/sqlite.c:33
+#: src/main.c:269 src/menu.c:364 src/menu.c:379 src/menu.c:397 src/menu.c:998
+#: src/menu.c:1013 src/sqlite.c:33
 msgid "Streamer Applet Error"
 msgstr "Грешка на радио аплета"
 
-#: src/menu.c:424 src/menu.c:458 src/menu.c:498
+#: src/menu.c:441 src/menu.c:475 src/menu.c:515
 msgid "URL"
 msgstr "URL"
 
@@ -232,7 +236,7 @@ msgstr "Unable to connect to DB. Аплетът не може да старти�
 msgid "Unable to create temporary file."
 msgstr "Не може да се създаде временен файл."
 
-#: src/menu.c:955
+#: src/menu.c:972
 msgid "Unable to import file: check file format"
 msgstr "Файлът не може да бъде прочетен; провевете формата му"
 
@@ -240,13 +244,20 @@ msgstr "Файлът не може да бъде прочетен; провев�
 msgid "Unable to parse XML file."
 msgstr "XML файлът не се чете."
 
-#: src/menu.c:347 src/menu.c:362 src/menu.c:380 src/menu.c:981 src/menu.c:996
+#: src/menu.c:364 src/menu.c:379 src/menu.c:397 src/menu.c:998 src/menu.c:1013
 msgid "Unable to read DB."
 msgstr "Базата данни е недостъпна."
 
 #: src/icecast.c:33
 msgid "Unable to read remote XML file."
 msgstr "XML файлът не може да бъде свален."
+
+#: src/menu.c:43
+msgid "translator-credits"
+msgstr "Асен Тотин <assen.totin@gmail.com>"
+
+#~ msgid "Assen Totin <assen.totin@gmail.com>"
+#~ msgstr "Асен Тотин <assen.totin@gmail.com>"
 
 #~ msgid "Options"
 #~ msgstr "Настройки"

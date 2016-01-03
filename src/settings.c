@@ -71,14 +71,31 @@ void menu_cb_settings (GtkAction *action, streamer_applet *applet) {
 
 	// Setting to set duration of notifications
 	int initial_duration = (applet->settings.duration_notifications) ? applet->settings.duration_notifications : DEFAULT_NOTIFICATION_DURATION;
-	GtkObject *adjustment = gtk_adjustment_new (initial_duration, 1, 60, 1, 10, 10);
 
-	GtkWidget *butt_setting_2 = gtk_spin_button_new (GTK_ADJUSTMENT(adjustment), 1.0, 0);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON(butt_setting_2), applet->settings.duration_notifications);
-	g_signal_connect (G_OBJECT(butt_setting_2), "value-changed", G_CALLBACK (settings_notifications_time), (gpointer) applet);
+#ifdef HAVE_GTK2
+	GtkObject *adjustment;
+#elif HAVE_GTK3
+	GtkAdjustment *adjustment;
+#endif
+	adjustment = gtk_adjustment_new (initial_duration, 1, 60, 1, 10, 10);
 
+	GtkWidget *butt_setting_spin = gtk_spin_button_new (GTK_ADJUSTMENT(adjustment), 1.0, 0);
+	gtk_spin_button_set_value (GTK_SPIN_BUTTON(butt_setting_spin), applet->settings.duration_notifications);
+	g_signal_connect (G_OBJECT(butt_setting_spin), "value-changed", G_CALLBACK (settings_notifications_time), (gpointer) applet);
 	// NB: GTK has NO way to disable the arrows of the spin button; setting the EDIATABLE property to OFF does not disable the arrows.
 	//g_object_set(butt_setting_2, "editable", FALSE, NULL);
+
+	GtkWidget *butt_setting_label = gtk_label_new(_("Duration of notification (seconds)"));
+
+	GtkWidget *butt_setting_2;
+#ifdef HAVE_GTK2
+	butt_setting_2 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	butt_setting_2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
+	gtk_box_pack_start(GTK_BOX(butt_setting_2), butt_setting_spin, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(butt_setting_2), butt_setting_label, FALSE, FALSE, 5);
 
 	// Pack settings widgets
 	GtkWidget *settings_vbox;
@@ -88,8 +105,8 @@ void menu_cb_settings (GtkAction *action, streamer_applet *applet) {
 	settings_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 #endif
 
-	gtk_box_pack_start(GTK_BOX(settings_vbox), check_setting_1, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(settings_vbox), butt_setting_2, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(settings_vbox), check_setting_1, TRUE, TRUE, 5);
+	gtk_box_pack_start(GTK_BOX(settings_vbox), butt_setting_2, FALSE, FALSE, 5);
 
 	// Assemble window
 	applet->quitDialog = gtk_dialog_new_with_buttons (_("Settings"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
@@ -101,6 +118,8 @@ void menu_cb_settings (GtkAction *action, streamer_applet *applet) {
 #elif HAVE_GTK3
 	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(applet->quitDialog))), settings_vbox);
 #endif
+
+	g_object_set(GTK_DIALOG (applet->quitDialog), "border-width", 10, NULL);
 
 	g_signal_connect (G_OBJECT(buttonClose), "clicked", G_CALLBACK (quitDialogClose), (gpointer) applet);
 
