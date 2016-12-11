@@ -1,6 +1,11 @@
+Dec 11, 2016 - Version 0.3.11
+============================
+* Added GTK-2 autoconf macro to allow mainter configuration without GTK2 
+development files.
+
 Jan 3, 2016 - Version 0.3.10
 ============================
-* Fancier Abount and Settings screens.
+* Fancier About and Settings screens.
 
 Jan 2, 2016 - Version 0.3.9
 ============================
