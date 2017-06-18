@@ -45,14 +45,8 @@ gboolean rbrowser_xml (streamer_applet *applet) {
 	// Clear table
 	clear_store(applet, TAB_RBROWSER);
 
-	// Process recursively
-	rbrowser_print_elements(root_element, applet);
-
-	// Flush last entry
-	if (strlen(&applet->xml_listen_url[0]) > 2){
-		gtk_list_store_append (applet->tree_store_rbrowser, &iter);
-		gtk_list_store_set (applet->tree_store_rbrowser, &iter, RBROWSER_COL_NAME, &applet->xml_server_name[0], RBROWSER_COL_URL, &applet->xml_listen_url[0], RBROWSER_COL_GENRE, &applet->xml_genre[0], -1);
-	}
+	// Process nodes; start at the first child of the root node
+	rbrowser_print_elements(root_element->xmlChildrenNode, applet);
 
 	/* free the document, close transaction */
 	xmlFreeDoc(doc);
@@ -84,7 +78,12 @@ void rbrowser_print_elements(xmlNode * a_node, streamer_applet *applet) {
 			snprintf(&applet->xml_genre[0], 1024, "%s", xml_char);
 			xmlFree(xml_char);
 
-			rbrowser_print_elements(cur_node->children, applet);
+			// Flush to store and SQL
+			gtk_list_store_append (applet->tree_store_rbrowser, &iter);
+			gtk_list_store_set (applet->tree_store_rbrowser, &iter, RBROWSER_COL_NAME, &applet->xml_server_name[0], RBROWSER_COL_URL, &applet->xml_listen_url[0], RBROWSER_COL_GENRE, &applet->xml_genre[0], -1);
+			applet->xml_curr_entries ++;
+			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_rbrowser), applet->xml_curr_entries / ((double)applet->xml_total_entries));
+
 		}
 	}
 }

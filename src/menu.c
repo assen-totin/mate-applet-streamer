@@ -434,7 +434,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	// Third page - Radio Browser
 	GtkWidget *tab_label_3 = gtk_label_new(_("Radio Browser"));
-	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), icecast_hbox_1, tab_label_3);
+	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), rbrowser_hbox_1, tab_label_3);
 
 	// Forth page - Custom
 	GtkWidget *tab_label_4 = gtk_label_new(_("Custom"));
@@ -457,6 +457,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 
 	clear_store(applet, TAB_FAVOURITES);
 	clear_store(applet, TAB_ICECAST);
+	clear_store(applet, TAB_RBROWSER);
 	clear_store(applet, TAB_CUSTOM);
 
 	// SQL query to fill the favourites page
@@ -842,6 +843,13 @@ void row_copy (GtkWidget *widget, gpointer data) {
 		gtk_tree_selection_get_selected(selection, &model, &iter2);
 		gtk_tree_model_get(model, &iter2, ICECAST_COL_NAME, &name, ICECAST_COL_URL, &url, -1);
 	}
+	else if (!strcmp(gtk_widget_get_name(widget), "copy_rbrowser")) {
+		// Read from icecast tab
+		model = GTK_TREE_MODEL(applet->tree_store_rbrowser);
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_rbrowser));
+		gtk_tree_selection_get_selected(selection, &model, &iter2);
+		gtk_tree_model_get(model, &iter2, RBROWSER_COL_NAME, &name, RBROWSER_COL_URL, &url, -1);
+	}
 	else if (!strcmp(gtk_widget_get_name(widget), "copy_custom")) {
 		// Read from icecast tab
 		model = GTK_TREE_MODEL(applet->tree_store_custom);
@@ -891,6 +899,12 @@ void row_play (GtkWidget *widget, gpointer data) {
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_icecast));
 		gtk_tree_selection_get_selected(selection, &model, &iter);
 		gtk_tree_model_get(model, &iter, ICECAST_COL_NAME, &name, ICECAST_COL_URL, &url, -1);
+	}
+	else if (!strcmp(gtk_widget_get_name(widget), "play_rbrowser")) {
+		model = GTK_TREE_MODEL(applet->tree_store_rbrowser);
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_rbrowser));
+		gtk_tree_selection_get_selected(selection, &model, &iter);
+		gtk_tree_model_get(model, &iter, RBROWSER_COL_NAME, &name, RBROWSER_COL_URL, &url, -1);
 	}
 	else if (!strcmp(gtk_widget_get_name(widget), "play_custom")) {
 		model = GTK_TREE_MODEL(applet->tree_store_custom);
@@ -1037,6 +1051,12 @@ void clear_store(streamer_applet *applet, int tab) {
 			gtk_tree_model_get_iter_first(model, &iter);
 			while (flag)
 				flag = gtk_list_store_remove (applet->tree_store_icecast, &iter);
+			break;
+		case TAB_RBROWSER:
+			model = GTK_TREE_MODEL(applet->tree_store_rbrowser);
+			gtk_tree_model_get_iter_first(model, &iter);
+			while (flag)
+				flag = gtk_list_store_remove (applet->tree_store_rbrowser, &iter);
 			break;
 		case TAB_CUSTOM:
 			model = GTK_TREE_MODEL(applet->tree_store_custom);

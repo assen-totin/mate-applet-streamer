@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: assen.totin@gmail.com\n"
-"POT-Creation-Date: 2017-06-18 13:07+0300\n"
+"POT-Creation-Date: 2017-06-18 14:06+0300\n"
 "PO-Revision-Date: 2013-09-01 18:19+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -145,6 +145,7 @@ msgid "No stations found. Press Refresh button to download stations."
 msgstr "Список пуст. Нажмите Refresh для скачивания списка."
 
 #: src/menu.c:528
+#, c-format
 msgid "No stations found. Press Open button to load from file."
 msgstr "Список пуст. Нажмите Open и выберите файл."
 
@@ -226,7 +227,9 @@ msgstr "База данных не читается. Запуск прекращ
 
 #: src/main.c:190
 msgid "Cannot copy database file to configuration directory. Exiting."
-msgstr "Не удалось скопировать базу в конфигурационную директорию. Запуск прекращается."
+msgstr ""
+"Не удалось скопировать базу в конфигурационную директорию. Запуск "
+"прекращается."
 
 #: src/main.c:195
 msgid "Cannot verify database file. Exiting."

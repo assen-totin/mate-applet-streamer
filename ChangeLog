@@ -1,5 +1,9 @@
-Dec 11, 2016 - Version 0.3.11
+Jun 18, 2017 - Version 0.4.0
 ============================
+* Added support for Radio Browser directory of online radio stations.
+
+Dec 11, 2016 - Version 0.3.11
+=============================
 * Added GTK-2 autoconf macro to allow mainter configuration without GTK2 
 development files.
 
