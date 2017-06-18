@@ -37,7 +37,7 @@ void menu_cb_about (GtkAction *action, streamer_applet *applet) {
 
 	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(about), "Copyleft 2013-2017. See License for details.");
 
-	gchar[2] *authors;
+	gchar *authors[2];
 	authors[0] = "Assen Totin <assen.totin@gmail.com>";
 	authors[1] = NULL;
 	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG(about),  &authors[0]);
@@ -1089,7 +1089,7 @@ void rbrowser_refresh (GtkWidget *widget, gpointer data) {
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_rbrowser), &line[0]);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_rbrowser), 0.01);
 	applet->progress_ratio = 0.01;
-	file_dnld(applet, rbrowser_URL_XML);
+	file_dnld(applet, RBROWSER_URL_XML);
 
 	// Process XML
 	sprintf(&line[0], _("Processing directory..."));

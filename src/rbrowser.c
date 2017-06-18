@@ -67,25 +67,25 @@ void rbrowser_print_elements(xmlNode * a_node, streamer_applet *applet) {
 	GtkTreeIter iter;
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next) {
-		if ((cur_node->type == XML_ELEMENT_NODE) && (!xmlStrcmp(cur_node->name, (const xmlChar *)"station")) {
+		if ((cur_node->type == XML_ELEMENT_NODE) && (!xmlStrcmp(cur_node->name, (const xmlChar *)"station"))) {
+			xml_char = xmlGetProp(cur_node, "name");
+			snprintf(&applet->xml_server_name[0], 1024, "%s", xml_char);
+			xmlFree(xml_char);
 
-		xml_char = xmlGetProp(cur_node, "name");
-		snprintf(&applet->xml_server_name[0], 1024, "%s", xml_char);
-		xmlFree(xml_char);
+			xml_char = xmlGetProp(cur_node, "bitrate");
+			snprintf(&applet->xml_bitrate[0], 1024, "%s", xml_char);
+			xmlFree(xml_char);
 
-		xml_char = xmlGetProp(cur_node, "bitrate");
-		snprintf(&applet->xml_bitrate[0], 1024, "%s", xml_char);
-		xmlFree(xml_char);
+			xml_char = xmlGetProp(cur_node, "url");
+			snprintf(&applet->xml_listen_url[0], 1024, "%s", xml_char);
+			xmlFree(xml_char);
 
-		xml_char = xmlGetProp(cur_node, "url");
-		snprintf(&applet->listen_url[0], 1024, "%s", xml_char);
-		xmlFree(xml_char);
+			xml_char = xmlGetProp(cur_node, "tags");
+			snprintf(&applet->xml_genre[0], 1024, "%s", xml_char);
+			xmlFree(xml_char);
 
-		xml_char = xmlGetProp(cur_node, "tags");
-		snprintf(&applet->xml_genre[0], 1024, "%s", xml_char);
-		xmlFree(xml_char);
-
-		rbrowser_print_elements(cur_node->children, applet);
+			rbrowser_print_elements(cur_node->children, applet);
+		}
 	}
 }
 

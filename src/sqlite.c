@@ -222,6 +222,18 @@ int cb_sql_icecast(void *data, int argc, char **argv, char **azColName) {
 }
 
 
+int cb_sql_rbrowser(void *data, int argc, char **argv, char **azColName) {
+	streamer_applet *applet = data;
+	GtkTreeIter iter;
+
+	gtk_list_store_append (applet->tree_store_rbrowser, &iter);
+	gtk_list_store_set (applet->tree_store_rbrowser, &iter, RBROWSER_COL_NAME, argv[0], RBROWSER_COL_URL, argv[1], RBROWSER_COL_GENRE, argv[2], -1);
+
+	applet->rbrowser_total_entries ++;
+
+	return 0;
+}
+
 int cb_sql_custom(void *data, int argc, char **argv, char **azColName) {
 	streamer_applet *applet = data;
 	GtkTreeIter iter;
