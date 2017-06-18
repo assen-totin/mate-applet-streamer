@@ -65,9 +65,10 @@
 #define APPLET_HOME_DIR ".streamer_applet"
 #define APPLET_SQLITE_DB_FILENAME "streamer.sqlite"
 #define APPLET_SQLITE_DB_VERSION "1"
-#define ICECAST_URL_XML "http://dir.xiph.org/yp.xml"
-#define ICECAST_TMP_FILE "icecast_dnld"
 #define DEFAULT_NOTIFICATION_DURATION 5
+#define ICECAST_URL_XML "http://dir.xiph.org/yp.xml"
+#define RBROWSER_URL_XML "http://www.radio-browser.info/webservice/xml/stations"
+#define DNLD_TMP_FILE "dnld.xml"
 // GSettings
 #define APPLET_GSETTINGS_SCHEMA "org.mate.panel.applet.StreamerApplet"
 #define APPLET_GSETTINGS_PATH "/org/mate/panel/objects/streamer/"
@@ -76,7 +77,8 @@
 
 enum {
 	TAB_FAVOURITES = 0,
-	TAB_ICECAST, 
+	TAB_ICECAST,
+	TAB_RBROWSER,
 	TAB_CUSTOM
 };
 
@@ -92,6 +94,13 @@ enum {
 	ICECAST_COL_NAME,
 	ICECAST_COL_GENRE,
 	ICECAST_NUM_COLS
+};
+
+enum {
+	RBROWSER_COL_URL = 0,
+	RBROWSER_COL_NAME,
+	RBROWSER_COL_GENRE,
+	RBROWSER_NUM_COLS
 };
 
 enum {
@@ -128,10 +137,13 @@ typedef struct {
 	GtkWidget *event_box;
 	GtkWidget *quitDialog;
 	GtkWidget *progress_icecast;
+	GtkWidget *progress_rbrowser;
 	GtkWidget *progress_custom;
 	GtkWidget *text_icecast;
+	GtkWidget *text_rbrowser;
 	GtkWidget *text_custom;
 	GtkWidget *butt_search_icecast;
+	GtkWidget *butt_search_rbrowser;
 	GtkWidget *butt_search_custom;
 	streamer_settings settings;
 	int db_version;
@@ -147,6 +159,8 @@ typedef struct {
 	GtkWidget *tree_view_favourites;
 	GtkListStore *tree_store_icecast;
 	GtkWidget *tree_view_icecast;
+	GtkListStore *tree_store_rbrowser;
+	GtkWidget *tree_view_rbrowser;
 	GtkListStore *tree_store_custom;
 	GtkWidget *tree_view_custom;
 #ifdef HAVE_MATE
@@ -159,6 +173,7 @@ typedef struct {
 	int xml_total_entries;
 	int xml_curr_entries;
 	int icecast_total_entries;
+	int rbrowser_total_entries;
 	int custom_total_entries;
 	gdouble progress_ratio;
 	char ui_fav[10240];
@@ -175,6 +190,8 @@ typedef struct {
 void push_notification (gchar *, gchar *, gchar *, int);
 gboolean cp(const char *, const char *);
 void debug(char *);
+gboolean file_dnld(streamer_applet *, char *);
+int xml_count_elements(xmlNode *, int);
 
 // gstreamer.c
 void gstreamer_pause(streamer_applet *);
@@ -192,16 +209,21 @@ int cb_sql_recent_10(void *, int, char **, char **);
 int cb_sql_fav(void *, int, char **, char **);
 int cb_sql_fav_10(void *, int, char **, char **);
 int cb_sql_icecast(void *, int, char **, char **);
+int cb_sql_rbrowser(void *, int, char **, char **);
 int cb_sql_custom(void *, int, char **, char **);
 int cb_sql_version(void *, int, char **, char **);
 
 // icecast.c
-gboolean icecast_dnld(streamer_applet *);
 gboolean icecast_xml(streamer_applet *);
 void icecast_print_elements(xmlNode *, streamer_applet *);
-int icecast_count_elements(xmlNode *, int);
 void icecast_save(streamer_applet *);
 gboolean icecast_write(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+
+// rbrowser.c
+gboolean rbrowser_xml(streamer_applet *);
+void rbrowser_print_elements(xmlNode *, streamer_applet *);
+void rbrowser_save(streamer_applet *);
+gboolean rbrowser_write(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 
 // custom.c
 gboolean custom_xml(streamer_applet *);
@@ -216,6 +238,7 @@ void menu_cb_all(GtkAction *, streamer_applet *);
 void menu_cb_about(GtkAction *, streamer_applet *);
 void create_view_and_model_favourites (streamer_applet *);
 void create_view_and_model_icecast (streamer_applet *);
+void create_view_and_model_rbrowser (streamer_applet *);
 void create_view_and_model_custom (streamer_applet *);
 void cell_edit_name(GtkCellRendererText *, gchar *, gchar *, gpointer);
 void cell_edit_url(GtkCellRendererText *, gchar *, gchar *, gpointer);
@@ -229,6 +252,7 @@ void row_copy(GtkWidget *, gpointer);
 void save_favourites(streamer_applet *);
 gboolean write_favourites(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 void icecast_refresh(GtkWidget *, gpointer);
+void rbrowser_refresh(GtkWidget *, gpointer);
 void custom_refresh(GtkWidget *, gpointer);
 void custom_warning_import (GtkWidget *widget, gpointer window);
 void search_station(GtkWidget *, gpointer);

@@ -27,7 +27,7 @@ LDADD = @GTK_LIBS@ @APPLET_LIBS@ @GSTREAMER_DASH_LIBS@ -lsqlite3
 
 libexec_PROGRAMS = streamer_applet
 
-streamer_applet_SOURCES = applet.h util.c icecast.c custom.c gstreamer.c sqlite.c menu.c settings.c main.c
+streamer_applet_SOURCES = applet.h util.c icecast.c rbrowser.c custom.c gstreamer.c sqlite.c menu.c settings.c main.c
 
 appletdir = $(datadir)/mate-panel/applets
 applet_DATA = org.mate.applets.StreamerApplet.mate-panel-applet

@@ -35,7 +35,7 @@ void menu_cb_about (GtkAction *action, streamer_applet *applet) {
 
 	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(about), VERSION);
 
-	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(about), "Copyleft 2013-1026. See License for details.");
+	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(about), "Copyleft 2013-2017. See License for details.");
 
 	gchar[2] *authors;
 	authors[0] = "Assen Totin <assen.totin@gmail.com>";
@@ -226,6 +226,103 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	gtk_box_pack_start(GTK_BOX(icecast_hbox_1), icecast_vbox_2, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(icecast_hbox_1), icecast_vbox_1, FALSE, FALSE, 0);
 
+	// Prepare Radio Browser tab
+#ifdef HAVE_GTK2
+	GtkWidget *butt_rbrowser_refresh = gtk_button_new_from_stock(GTK_STOCK_REFRESH);
+	GtkWidget *butt_rbrowser_copy = gtk_button_new_from_stock(GTK_STOCK_COPY);
+	GtkWidget *butt_rbrowser_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
+#elif HAVE_GTK3
+	GtkWidget *butt_rbrowser_refresh = gtk_button_new_from_icon_name("view-refresh", 16);
+	gtk_button_set_label (butt_rbrowser_refresh, _("Refresh"));
+	GtkWidget *butt_rbrowser_copy = gtk_button_new_from_icon_name("edit-copy", 16);
+	gtk_button_set_label (butt_rbrowser_copy, _("Copy"));
+	GtkWidget *butt_rbrowser_play = gtk_button_new_from_icon_name("media-playback-start", 16);
+	gtk_button_set_label (butt_rbrowser_play, _("Play"));
+#endif
+	gtk_widget_set_name(butt_rbrowser_copy, "copy_rbrowser");
+	gtk_widget_set_name(butt_rbrowser_play, "play_rbrowser");
+
+	GtkWidget *rbrowser_vbox_1;
+#ifdef HAVE_GTK2
+	rbrowser_vbox_1 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	rbrowser_vbox_1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
+
+	gtk_box_pack_start(GTK_BOX(rbrowser_vbox_1), butt_rbrowser_refresh, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(rbrowser_vbox_1), butt_rbrowser_copy, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(rbrowser_vbox_1), butt_rbrowser_play, FALSE, FALSE, 0);
+
+	g_signal_connect (G_OBJECT(butt_rbrowser_refresh), "clicked", G_CALLBACK (rbrowser_refresh), (gpointer) applet);
+	g_signal_connect (G_OBJECT(butt_rbrowser_copy), "clicked", G_CALLBACK (row_copy), (gpointer) applet);
+	g_signal_connect (G_OBJECT(butt_rbrowser_play), "clicked", G_CALLBACK (row_play), (gpointer) applet);
+
+	create_view_and_model_rbrowser(applet);
+
+	GtkTreeSelection *selection_rbrowser = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_rbrowser));
+	gtk_tree_selection_set_mode(selection_rbrowser, GTK_SELECTION_SINGLE);
+	
+	GtkWidget *table_rbrowser = gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(table_rbrowser), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+	gtk_container_add (GTK_CONTAINER (table_rbrowser), applet->tree_view_rbrowser);
+
+	// Progress-bar
+	applet->progress_rbrowser = gtk_progress_bar_new();
+#ifdef HAVE_GTK2
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(applet->progress_rbrowser), GTK_PROGRESS_LEFT_TO_RIGHT);
+#elif HAVE_GTK3
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(applet->progress_rbrowser), GTK_ORIENTATION_HORIZONTAL);
+#endif
+	sprintf(&line[0], _("Ready"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_rbrowser), &line[0]);
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_rbrowser), 0);
+
+	// Search field and button
+	applet->text_rbrowser = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(applet->text_rbrowser), TRUE);
+#ifdef HAVE_GTK2
+	applet->butt_search_rbrowser = gtk_button_new_from_stock(GTK_STOCK_FIND);
+	GTK_WIDGET_SET_FLAGS(applet->butt_search_rbrowser, GTK_CAN_DEFAULT);
+#elif HAVE_GTK3
+	applet->butt_search_rbrowser = gtk_button_new_from_icon_name("system-search", 16);
+	gtk_button_set_label (applet->butt_search_rbrowser, _("Search"));
+	gtk_widget_set_can_default (applet->butt_search_rbrowser, TRUE);
+#endif
+	gtk_widget_set_name(applet->butt_search_rbrowser, "search_rbrowser");
+	g_signal_connect (G_OBJECT(applet->butt_search_rbrowser), "clicked", G_CALLBACK (search_station), (gpointer) applet);
+	g_signal_connect (G_OBJECT(applet->butt_search_rbrowser), "activate", G_CALLBACK (search_station), (gpointer) applet);
+
+	GtkWidget *rbrowser_hbox_2;
+#ifdef HAVE_GTK2
+	rbrowser_hbox_2 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	rbrowser_hbox_2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
+	gtk_box_pack_start(GTK_BOX(rbrowser_hbox_2), applet->text_rbrowser, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(rbrowser_hbox_2), applet->butt_search_rbrowser, FALSE, FALSE, 0);
+
+	GtkWidget *rbrowser_vbox_2;
+#ifdef HAVE_GTK2
+	rbrowser_vbox_2 = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	rbrowser_vbox_2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#endif
+
+	gtk_box_pack_start(GTK_BOX(rbrowser_vbox_2), applet->progress_rbrowser, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(rbrowser_vbox_2), rbrowser_hbox_2, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(rbrowser_vbox_2), table_rbrowser, TRUE, TRUE, 0);
+
+	GtkWidget *rbrowser_hbox_1;
+#ifdef HAVE_GTK2
+	rbrowser_hbox_1 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	rbrowser_hbox_1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
+	gtk_box_pack_start(GTK_BOX(rbrowser_hbox_1), rbrowser_vbox_2, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(rbrowser_hbox_1), rbrowser_vbox_1, FALSE, FALSE, 0);
+
 	// Prepare Custom tab
 #ifdef HAVE_GTK2
 	GtkWidget *butt_custom_load = gtk_button_new_from_stock(GTK_STOCK_OPEN);
@@ -335,9 +432,13 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkWidget *tab_label_2 = gtk_label_new(_("Icecast"));
 	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), icecast_hbox_1, tab_label_2);
 
-	// Third page - Custom
-	GtkWidget *tab_label_3 = gtk_label_new(_("Custom"));
-	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), custom_hbox_1, tab_label_3);
+	// Third page - Radio Browser
+	GtkWidget *tab_label_3 = gtk_label_new(_("Radio Browser"));
+	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), icecast_hbox_1, tab_label_3);
+
+	// Forth page - Custom
+	GtkWidget *tab_label_4 = gtk_label_new(_("Custom"));
+	gtk_notebook_append_page (GTK_NOTEBOOK(notebook), custom_hbox_1, tab_label_4);
 
 	// Assemble window
 	applet->quitDialog = gtk_dialog_new_with_buttons (_("MATE Streamer Applet"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
@@ -390,6 +491,24 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	if (applet->icecast_total_entries == 0) {
 			sprintf(&line[0], _("No stations found. Press Refresh button to download stations."));
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_icecast), &line[0]);
+	}
+
+	// SQL query to fill the Radio Browser page
+	sqlite_connect(applet);
+	zErrMsg2 = 0;
+	res = sqlite3_exec(applet->sqlite, "SELECT server_name, listen_url, genre FROM rbrowser_stations", cb_sql_rbrowser, (void*) applet, &zErrMsg2);
+	if (res != SQLITE_OK)
+		push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
+	sqlite3_close(applet->sqlite);
+
+	GtkTreeModel *model_rbrowser = GTK_TREE_MODEL(applet->tree_store_rbrowser);
+	selection_rbrowser = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_rbrowser));
+	gtk_tree_model_get_iter_first(model_rbrowser, &iter2);
+	gtk_tree_selection_select_iter(selection_rbrowser, &iter2);
+
+	if (applet->rbrowser_total_entries == 0) {
+			sprintf(&line[0], _("No stations found. Press Refresh button to download stations."));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_rbrowser), &line[0]);
 	}
 
 	// SQL query to fill the Custom page
@@ -496,6 +615,44 @@ void create_view_and_model_icecast (streamer_applet *applet){
 	g_object_unref (model);
 }
 
+void create_view_and_model_rbrowser (streamer_applet *applet){
+	GtkCellRenderer *renderer1, *renderer2, *renderer3;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+
+	applet->tree_view_rbrowser = gtk_tree_view_new();
+	applet->tree_store_rbrowser = gtk_list_store_new(RBROWSER_NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+	// Column 1
+	renderer1 = gtk_cell_renderer_text_new();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view_rbrowser), -1, _("Name"), renderer1, "text", RBROWSER_COL_NAME, NULL);
+	//column = gtk_tree_view_get_column (GTK_TREE_VIEW (applet->tree_view2), 0);
+	//gtk_tree_view_column_set_cell_data_func(column, renderer, NULL, NULL, NULL);
+	//g_object_set(renderer1, "editable", TRUE, NULL);
+	//g_signal_connect(renderer1, "edited", (GCallback) cell_edit_name, applet);
+
+	// Column 2
+	renderer2 = gtk_cell_renderer_text_new();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view_rbrowser), -1, _("URL"), renderer2, "text", RBROWSER_COL_URL, NULL);
+	//g_object_set(renderer2, "editable", TRUE, NULL);
+	//g_signal_connect(renderer2, "edited", (GCallback) cell_edit_url, applet);
+
+	// Column 3
+	renderer3 = gtk_cell_renderer_text_new();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (applet->tree_view_rbrowser), -1, _("Genre"), renderer3, "text", RBROWSER_COL_GENRE, NULL);
+	//g_object_set(renderer3, "editable", TRUE, NULL);
+	//g_signal_connect(renderer3, "edited", (GCallback) cell_edit_url, applet);
+
+	gtk_list_store_append (applet->tree_store_rbrowser, &iter);
+	gtk_list_store_set (applet->tree_store_rbrowser, &iter, RBROWSER_COL_NAME, " ", RBROWSER_COL_URL, " ", -1);
+
+	model = GTK_TREE_MODEL(applet->tree_store_rbrowser);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (applet->tree_view_rbrowser), model);
+
+	// The tree view has acquired its own reference to the model, so we can drop ours. 
+	// That way the model will be freed automatically when the tree view is destroyed 
+	g_object_unref (model);
+}
 
 void create_view_and_model_custom (streamer_applet *applet){
 	GtkCellRenderer *renderer1, *renderer2, *renderer3;
@@ -902,7 +1059,7 @@ void icecast_refresh (GtkWidget *widget, gpointer data) {
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_icecast), &line[0]);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_icecast), 0.01);
 	applet->progress_ratio = 0.01;
-	icecast_dnld(applet);
+	file_dnld(applet, ICECAST_URL_XML);
 
 	// Process XML
 	sprintf(&line[0], _("Processing directory..."));
@@ -923,6 +1080,35 @@ void icecast_refresh (GtkWidget *widget, gpointer data) {
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_icecast), 0);
 }
 
+void rbrowser_refresh (GtkWidget *widget, gpointer data) {
+	streamer_applet *applet = data;
+	char line[1024];
+
+	// Fetch new XML from rbrowser server
+	sprintf(&line[0], _("Downloading directory..."));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_rbrowser), &line[0]);
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_rbrowser), 0.01);
+	applet->progress_ratio = 0.01;
+	file_dnld(applet, rbrowser_URL_XML);
+
+	// Process XML
+	sprintf(&line[0], _("Processing directory..."));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_rbrowser), &line[0]);
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_rbrowser), 0.01);
+	applet->progress_ratio = 0.01;
+	rbrowser_xml(applet);
+
+	// Save to DB
+	sprintf(&line[0], _("Saving entries..."));
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_rbrowser), 0);
+	rbrowser_save(applet);
+
+	// Clean-up
+	unlink(&applet->xmlfile[0]);
+	sprintf(&line[0], _("Ready"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(applet->progress_rbrowser), &line[0]);
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(applet->progress_rbrowser), 0);
+}
 
 void custom_refresh (GtkWidget *widget, gpointer data) {
 	streamer_applet *applet = data;
@@ -1005,6 +1191,21 @@ void search_station(GtkWidget *widget, gpointer data) {
 		gtk_tree_model_get_iter_first(model, &iter2);
 		gtk_tree_selection_select_iter(selection, &iter2);
 		gtk_tree_view_columns_autosize(GTK_TREE_VIEW(applet->tree_view_icecast));
+	}
+
+	else if (!strcmp(gtk_widget_get_name(widget), "search_rbrowser")) {
+		strcpy(&query[0], (char *) gtk_entry_get_text(GTK_ENTRY(applet->text_rbrowser)));
+		clear_store(applet, TAB_RBROWSER);
+		sprintf(&sql[0], "SELECT server_name, listen_url, genre FROM rbrowser_stations WHERE server_name LIKE '%%%s%%' OR listen_url LIKE '%%%s%%' OR genre LIKE '%%%s%%'", &query[0], &query[0], &query[0]);
+		res = sqlite3_exec(applet->sqlite, &sql[0], cb_sql_rbrowser, (void*) applet, &zErrMsg2);
+		if (res != SQLITE_OK)
+			push_notification(_("Streamer Applet Error"), _("Unable to read DB."), NULL, DEFAULT_NOTIFICATION_DURATION);
+
+		model = GTK_TREE_MODEL(applet->tree_store_rbrowser);
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(applet->tree_view_rbrowser));
+		gtk_tree_model_get_iter_first(model, &iter2);
+		gtk_tree_selection_select_iter(selection, &iter2);
+		gtk_tree_view_columns_autosize(GTK_TREE_VIEW(applet->tree_view_rbrowser));
 	}
 
 	else if (!strcmp(gtk_widget_get_name(widget), "search_custom")) {
