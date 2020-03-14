@@ -114,12 +114,12 @@ struct url_hash {
 	char hash[64];
 	char url[1024];
 	char name[1024];
-} url_hash;
+};
 
-typedef struct {
+struct streamer_settings {
 	int show_notifications;
 	int duration_notifications;
-} streamer_settings;
+};
 
 #ifdef HAVE_MATE
 	typedef MatePanelApplet MyPanelApplet;
@@ -145,7 +145,7 @@ typedef struct {
 	GtkWidget *butt_search_icecast;
 	GtkWidget *butt_search_rbrowser;
 	GtkWidget *butt_search_custom;
-	streamer_settings settings;
+	struct streamer_settings settings;
 	int db_version;
 	char url[1024];
 	char name[1024];
