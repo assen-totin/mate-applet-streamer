@@ -1,0 +1,249 @@
+# Georgian translation for streamer.
+# Copyright (C) 2026 streamer's authors.
+# This file is distributed under the same license as the streamer package.
+# Ekaterine Papava <papava.e@gtu.ge>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: streamer\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-03 14:41+0200\n"
+"PO-Revision-Date: 2026-04-11 11:14+0200\n"
+"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
+
+#: src/menu.c:664
+msgid "<enter name>"
+msgstr "<შეიყვანეთ სახელი>"
+
+#: src/menu.c:664
+msgid "<enter url>"
+msgstr "<შეიყვანეთ URL>"
+
+#: src/applet.h:263
+msgid "About"
+msgstr "შესახებ"
+
+#: src/menu.c:79
+msgid "Add"
+msgstr "დამატება"
+
+#: src/applet.h:261
+msgid "All Stations"
+msgstr "ყველა სადგური"
+
+#: src/menu.c:45
+msgid "An applet which lets you listen to online radio streams."
+msgstr "აპლეტი, რომელიც საშუალებას გაძლევთ, ინტერნეტრადიოს ნაკადებს უსმინოთ."
+
+#: src/main.c:164
+msgid "Cannot access configuration directory. Exiting."
+msgstr "კონფიგურაციის საქაღალდესთან წვდომა აკრძალულია. გასვლა."
+
+#: src/main.c:190
+msgid "Cannot copy database file to configuration directory. Exiting."
+msgstr "მონაცემთა ბაზის კონფიგურაციის საქაღალდეში კოპირება შეუძლებელია. გასვლა."
+
+#: src/main.c:171
+msgid "Cannot create configuration directory. Exiting."
+msgstr "კონფიგურაციის საქაღალდის შექმნა შეუძლებელია. გასვლა."
+
+#: src/main.c:176
+msgid "Cannot verify configuration directory. Exiting."
+msgstr "კონფიგურაციის საქაღალდის გადამოწმება შეუძლებელია. გასვლა."
+
+#: src/main.c:195
+msgid "Cannot verify database file. Exiting."
+msgstr "მონაცემთა ბაზის ფაილის გადამოწმება შეუძლებელია. გასვლა."
+
+#: src/menu.c:138 src/menu.c:235
+msgid "Copy"
+msgstr "კოპირება"
+
+#: src/menu.c:336
+msgid "Custom"
+msgstr "ხელით"
+
+#: src/main.c:185
+msgid "Database file is not a regular file. Exiting."
+msgstr "მონაცემთა ბაზის ფაილი ჩვეულებრივი ფაილი არაა. გასვლა."
+
+#: src/menu.c:898
+#, c-format
+msgid "Downloading directory..."
+msgstr "კატალოგის გადმოწერა..."
+
+#: src/settings.c:82
+msgid "Duration of notification (seconds)"
+msgstr "გაფრთხილების ხანგრძლივობა (წამი)"
+
+#: src/menu.c:973
+msgid "Error"
+msgstr "შეცდომა"
+
+#: src/menu.c:328 src/applet.h:259
+msgid "Favourites"
+msgstr "რჩეულები"
+
+#: src/menu.c:481 src/menu.c:521
+msgid "Genre"
+msgstr "ჟანრი"
+
+#: src/menu.c:48
+msgid "Home page"
+msgstr "საწყისი გვერდი"
+
+#: src/menu.c:332
+msgid "Icecast"
+msgstr "Icecast"
+
+#: src/menu.c:945
+#, c-format
+msgid "Importing file..."
+msgstr "ფაილის შემოტანა..."
+
+#: src/menu.c:233
+msgid "Load"
+msgstr "ჩატვირთვა"
+
+#: src/menu.c:34 src/menu.c:340
+msgid "MATE Streamer Applet"
+msgstr "აპლეტი MATE Streamer"
+
+#: src/menu.c:435 src/menu.c:467 src/menu.c:507
+msgid "Name"
+msgstr "სახელი"
+
+#: src/menu.c:85
+msgid "Next"
+msgstr "შემდეგი"
+
+#: src/menu.c:406
+#, c-format
+msgid "No stations found. Press Open button to load from file."
+msgstr "სადგურები აღმოჩენილი არაა. ფაილიდან ჩასატვირთად დააჭირეთ ღილაკს 'გახსნა'."
+
+#: src/menu.c:388
+#, c-format
+msgid "No stations found. Press Refresh button to download stations."
+msgstr "სადგურები აღმოჩენილი არაა. სადგურების გადმოსაწერად დააჭირეთ ღილაკს 'განახლება'."
+
+#: src/menu.c:1035
+msgid "No stream selected."
+msgstr "ნაკადი არჩეული არაა."
+
+#: src/main.c:328
+msgid "No stream selected. Right-click to load one."
+msgstr "ნაკადი არჩეული არაა. მარჯვენა წკაპი მის ჩასატვირთად."
+
+#: src/gstreamer.c:77
+msgid "Now Playing"
+msgstr "მიმდინარეობს დაკვრა"
+
+#: src/gstreamer.c:29 src/menu.c:1044 src/sqlite.c:79
+msgid "PAUSED: "
+msgstr "შეჩერებულია: "
+
+#: src/gstreamer.c:41 src/gstreamer.c:72 src/menu.c:1056
+msgid "PLAYING: "
+msgstr "მიმდინარეობს დაკვრა: "
+
+#: src/menu.c:87 src/menu.c:140 src/menu.c:237
+msgid "Play"
+msgstr "დაკვრა"
+
+#: src/menu.c:83
+msgid "Previous"
+msgstr "წინა"
+
+#: src/menu.c:905
+#, c-format
+msgid "Processing directory..."
+msgstr "საქაღალდის დამუშავება..."
+
+#: src/menu.c:176 src/menu.c:273 src/menu.c:918 src/menu.c:953
+#, c-format
+msgid "Ready"
+msgstr "მზადაა"
+
+#: src/applet.h:260
+msgid "Recent"
+msgstr "უახლესი"
+
+#: src/menu.c:136
+msgid "Refresh"
+msgstr "განახლება"
+
+#: src/menu.c:81
+msgid "Remove"
+msgstr "წაშლა"
+
+#: src/menu.c:1035
+msgid "Right-click to load one."
+msgstr "მარჯვენა წკაპი მის ჩასატვირთად."
+
+#: src/menu.c:912
+#, c-format
+msgid "Saving entries..."
+msgstr "ჩანაწერების შენახვა..."
+
+#: src/menu.c:188 src/menu.c:285
+msgid "Search"
+msgstr "ძებნა"
+
+#: src/settings.c:106 src/applet.h:262
+msgid "Settings"
+msgstr "მორგება"
+
+#: src/settings.c:64
+msgid "Show notifications with song titles"
+msgstr "გაფრთხილებების ჩვენება სიმღერის სახელებით"
+
+#: src/custom.c:35 src/icecast.c:33 src/icecast.c:43 src/icecast.c:106
+#: src/main.c:164 src/main.c:171 src/main.c:176 src/main.c:185 src/main.c:190
+#: src/main.c:195 src/main.c:202 src/main.c:209 src/main.c:254 src/main.c:262
+#: src/main.c:269 src/menu.c:364 src/menu.c:379 src/menu.c:397 src/menu.c:998
+#: src/menu.c:1013 src/sqlite.c:33
+msgid "Streamer Applet Error"
+msgstr "აპლეტის Streamer შეცდომა"
+
+#: src/menu.c:441 src/menu.c:475 src/menu.c:515
+msgid "URL"
+msgstr "URL"
+
+#: src/sqlite.c:33
+msgid "Unable to connect to DB."
+msgstr "მონაცემთა ბაზასთან დაკავშირება შეუძლებელია."
+
+#: src/main.c:202
+msgid "Unable to connect to DB. Exiting."
+msgstr "მონაცემთა ბაზასთან დაკავშირება შეუძლებელია. მუშაობის დასრულება."
+
+#: src/icecast.c:43
+msgid "Unable to create temporary file."
+msgstr "დროებითი ფაილის შექმნის შეცდომა."
+
+#: src/menu.c:972
+msgid "Unable to import file: check file format"
+msgstr "ფაილის შემოტანა შეუძლებელია: შეამოწმეთ ფაილის ფორმატი"
+
+#: src/custom.c:35 src/icecast.c:106
+msgid "Unable to parse XML file."
+msgstr "XML ფაილის დამუშავება შეუძლებელია."
+
+#: src/menu.c:364 src/menu.c:379 src/menu.c:397 src/menu.c:998 src/menu.c:1013
+msgid "Unable to read DB."
+msgstr "მონაცემთა ბაზის წაკითხვა შეუძლებელია."
+
+#: src/icecast.c:33
+msgid "Unable to read remote XML file."
+msgstr "დაშორებული XML ფაილის წაკითხვა შეუძლებელია."
+
+#: src/menu.c:43
+msgid "translator-credits"
+msgstr "ეკატერინე პაპავა"
