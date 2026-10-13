@@ -66,8 +66,8 @@
 #define APPLET_SQLITE_DB_FILENAME "streamer.sqlite"
 #define APPLET_SQLITE_DB_VERSION "1"
 #define DEFAULT_NOTIFICATION_DURATION 5
-#define ICECAST_URL_XML "http://dir.xiph.org/yp.xml"
-#define RBROWSER_URL_XML "http://www.radio-browser.info/webservice/xml/stations"
+#define ICECAST_URL_XML "https://dir.xiph.org/yp.xml"
+#define RBROWSER_URL_XML "https://de1.api.radio-browser.info/xml/stations"
 #define DNLD_TMP_FILE "dnld.xml"
 // GSettings
 #define APPLET_GSETTINGS_SCHEMA "org.mate.panel.applet.StreamerApplet"
