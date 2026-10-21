@@ -37,7 +37,7 @@ void menu_cb_about (GtkAction *action, streamer_applet *applet) {
 
 	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(about), "Copyleft 2013-2017. See License for details.");
 
-	gchar *authors[2];
+	const gchar *authors[2];
 	authors[0] = "Assen Totin <assen.totin@gmail.com>";
 	authors[1] = NULL;
 	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG(about),  &authors[0]);
@@ -79,15 +79,15 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkWidget *butt_favourites_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
 #elif HAVE_GTK3
 	GtkWidget *butt_favourites_add = gtk_button_new_from_icon_name("list-add", 16);
-	gtk_button_set_label (butt_favourites_add, _("Add"));
+	gtk_button_set_label (GTK_BUTTON(butt_favourites_add), _("Add"));
 	GtkWidget *butt_favourites_del = gtk_button_new_from_icon_name("list-remove", 16);
-	gtk_button_set_label (butt_favourites_del, _("Remove"));
+	gtk_button_set_label (GTK_BUTTON(butt_favourites_del), _("Remove"));
 	GtkWidget *butt_favourites_up = gtk_button_new_from_icon_name("go-previous", 16);
-	gtk_button_set_label (butt_favourites_up, _("Previous"));
+	gtk_button_set_label (GTK_BUTTON(butt_favourites_up), _("Previous"));
 	GtkWidget *butt_favourites_down = gtk_button_new_from_icon_name("go-next", 16);
-	gtk_button_set_label (butt_favourites_down, _("Next"));
+	gtk_button_set_label (GTK_BUTTON(butt_favourites_down), _("Next"));
 	GtkWidget *butt_favourites_play = gtk_button_new_from_icon_name("media-playback-start", 16);
-	gtk_button_set_label (butt_favourites_play, _("Play"));
+	gtk_button_set_label (GTK_BUTTON(butt_favourites_play), _("Play"));
 #endif
 	gtk_widget_set_name(butt_favourites_play, "play_favourites");
 
@@ -136,11 +136,11 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkWidget *butt_icecast_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
 #elif HAVE_GTK3
 	GtkWidget *butt_icecast_refresh = gtk_button_new_from_icon_name("view-refresh", 16);
-	gtk_button_set_label (butt_icecast_refresh, _("Refresh"));
+	gtk_button_set_label (GTK_BUTTON(butt_icecast_refresh), _("Refresh"));
 	GtkWidget *butt_icecast_copy = gtk_button_new_from_icon_name("edit-copy", 16);
-	gtk_button_set_label (butt_icecast_copy, _("Copy"));
+	gtk_button_set_label (GTK_BUTTON(butt_icecast_copy), _("Copy"));
 	GtkWidget *butt_icecast_play = gtk_button_new_from_icon_name("media-playback-start", 16);
-	gtk_button_set_label (butt_icecast_play, _("Play"));
+	gtk_button_set_label (GTK_BUTTON(butt_icecast_play), _("Play"));
 #endif
 	gtk_widget_set_name(butt_icecast_copy, "copy_icecast");
 	gtk_widget_set_name(butt_icecast_play, "play_icecast");
@@ -188,7 +188,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GTK_WIDGET_SET_FLAGS(applet->butt_search_icecast, GTK_CAN_DEFAULT);
 #elif HAVE_GTK3
 	applet->butt_search_icecast = gtk_button_new_from_icon_name("system-search", 16);
-	gtk_button_set_label (applet->butt_search_icecast, _("Search"));
+	gtk_button_set_label (GTK_BUTTON(applet->butt_search_icecast), _("Search"));
 	gtk_widget_set_can_default (applet->butt_search_icecast, TRUE);
 #endif
 	gtk_widget_set_name(applet->butt_search_icecast, "search_icecast");
@@ -233,11 +233,11 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkWidget *butt_rbrowser_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
 #elif HAVE_GTK3
 	GtkWidget *butt_rbrowser_refresh = gtk_button_new_from_icon_name("view-refresh", 16);
-	gtk_button_set_label (butt_rbrowser_refresh, _("Refresh"));
+	gtk_button_set_label (GTK_BUTTON(butt_rbrowser_refresh), _("Refresh"));
 	GtkWidget *butt_rbrowser_copy = gtk_button_new_from_icon_name("edit-copy", 16);
-	gtk_button_set_label (butt_rbrowser_copy, _("Copy"));
+	gtk_button_set_label (GTK_BUTTON(butt_rbrowser_copy), _("Copy"));
 	GtkWidget *butt_rbrowser_play = gtk_button_new_from_icon_name("media-playback-start", 16);
-	gtk_button_set_label (butt_rbrowser_play, _("Play"));
+	gtk_button_set_label (GTK_BUTTON(butt_rbrowser_play), _("Play"));
 #endif
 	gtk_widget_set_name(butt_rbrowser_copy, "copy_rbrowser");
 	gtk_widget_set_name(butt_rbrowser_play, "play_rbrowser");
@@ -285,7 +285,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GTK_WIDGET_SET_FLAGS(applet->butt_search_rbrowser, GTK_CAN_DEFAULT);
 #elif HAVE_GTK3
 	applet->butt_search_rbrowser = gtk_button_new_from_icon_name("system-search", 16);
-	gtk_button_set_label (applet->butt_search_rbrowser, _("Search"));
+	gtk_button_set_label (GTK_BUTTON(applet->butt_search_rbrowser), _("Search"));
 	gtk_widget_set_can_default (applet->butt_search_rbrowser, TRUE);
 #endif
 	gtk_widget_set_name(applet->butt_search_rbrowser, "search_rbrowser");
@@ -330,11 +330,11 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GtkWidget *butt_custom_play = gtk_button_new_from_stock(GTK_STOCK_MEDIA_PLAY);
 #elif HAVE_GTK3
 	GtkWidget *butt_custom_load = gtk_button_new_from_icon_name("document-open", 16);
-	gtk_button_set_label (butt_custom_load, _("Load"));
+	gtk_button_set_label (GTK_BUTTON(butt_custom_load), _("Load"));
 	GtkWidget *butt_custom_copy = gtk_button_new_from_icon_name("edit-copy", 16);
-	gtk_button_set_label (butt_custom_copy, _("Copy"));
+	gtk_button_set_label (GTK_BUTTON(butt_custom_copy), _("Copy"));
 	GtkWidget *butt_custom_play = gtk_button_new_from_icon_name("media-playback-start", 16);
-	gtk_button_set_label (butt_custom_play, _("Play"));
+	gtk_button_set_label (GTK_BUTTON(butt_custom_play), _("Play"));
 #endif
 	gtk_widget_set_name(butt_custom_copy, "copy_custom");
 	gtk_widget_set_name(butt_custom_play, "play_custom");
@@ -382,7 +382,7 @@ void menu_cb_all (GtkAction *action, streamer_applet *applet) {
 	GTK_WIDGET_SET_FLAGS(applet->butt_search_custom, GTK_CAN_DEFAULT);
 #elif HAVE_GTK3
 	applet->butt_search_custom = gtk_button_new_from_icon_name("system-search", 16);
-	gtk_button_set_label (applet->butt_search_custom, _("Search"));
+	gtk_button_set_label (GTK_BUTTON(applet->butt_search_custom), _("Search"));
 	gtk_widget_set_can_default (applet->butt_search_custom, TRUE);
 #endif
 	gtk_widget_set_name(applet->butt_search_custom, "search_custom");
